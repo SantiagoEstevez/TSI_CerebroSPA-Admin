@@ -40,4 +40,9 @@ export class CiudadesComponent implements OnInit {
         //    });
         //});
     }
+
+    agregarCiudad() {
+        this.ciudades.push({ nombre: document.getElementById("mapsearch").innerText , pais: 'Uruguay' });
+        console.log(this.ciudades);
+    }
 }

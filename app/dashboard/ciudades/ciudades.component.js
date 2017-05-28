@@ -32,6 +32,10 @@ var CiudadesComponent = (function () {
         //    });
         //});
     };
+    CiudadesComponent.prototype.agregarCiudad = function () {
+        this.ciudades.push({ nombre: document.getElementById("mapsearch").innerText, pais: 'Uruguay' });
+        console.log(this.ciudades);
+    };
     CiudadesComponent = __decorate([
         core_1.Component({
             selector: 'ciudades-cmp',
