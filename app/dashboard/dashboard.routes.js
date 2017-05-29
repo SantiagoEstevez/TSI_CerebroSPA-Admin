@@ -14,17 +14,17 @@ var sensores_component_1 = require('./sensores/sensores.component');
 exports.MODULE_ROUTES = [
     { path: 'dashboard', component: home_component_1.HomeComponent },
     { path: 'maps', component: maps_component_1.MapsComponent },
-    { path: 'user', component: user_component_1.UserComponent },
-    //{ path: 'table', component: TableComponent },
     { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent },
     { path: 'TipoSensores', component: tipo_sensores_component_1.TipoSensoresComponent },
     { path: 'Sensores', component: sensores_component_1.SensoresComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
-    //{ path: 'icons', component: IconsComponent },
     { path: 'notifications', component: notifications_component_1.NotificationsComponent },
+    //{ path: 'user', component: UserComponent },
+    //{ path: 'table', component: TableComponent },
+    //{ path: 'icons', component: IconsComponent },
     //{ path: 'typography', component: TypographyComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: 'maps', pathMatch: 'full' }
 ];
 exports.MODULE_COMPONENTS = [
     home_component_1.HomeComponent,

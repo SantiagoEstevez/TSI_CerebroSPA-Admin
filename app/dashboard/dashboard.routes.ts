@@ -16,17 +16,17 @@ import { SensoresComponent } from './sensores/sensores.component';
 export const MODULE_ROUTES: Route[] =[
     { path: 'dashboard', component: HomeComponent },
     { path: 'maps', component: MapsComponent },
-    { path: 'user', component: UserComponent },
-    //{ path: 'table', component: TableComponent },
     { path: 'Ciudades', component: CiudadesComponent },
     { path: 'TipoSensores', component: TipoSensoresComponent },
     { path: 'Sensores', component: SensoresComponent },
     { path: 'Eventos', component: EventosComponent },
-    //{ path: 'icons', component: IconsComponent },
     { path: 'notifications', component: NotificationsComponent },
+    //{ path: 'user', component: UserComponent },
+    //{ path: 'table', component: TableComponent },
+    //{ path: 'icons', component: IconsComponent },
     //{ path: 'typography', component: TypographyComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: 'maps', pathMatch: 'full' }
 ]
 
 export const MODULE_COMPONENTS = [
