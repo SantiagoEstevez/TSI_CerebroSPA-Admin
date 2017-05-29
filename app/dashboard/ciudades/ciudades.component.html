@@ -1,34 +1,25 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="card-header" data-background-color="red">
                         <h4 class="title">Agregar ciudad</h4>
-                        <p class="category">Seleccione la ciudad a agregar</p>
                     </div>
                     <div class="card-content">
                         <div class="row">
-                            <form class="left" role="search">
-                                <div class="col-md-6">
-                                    <div class="form-group form-black label-floating is-empty">
-                                        <!--<label class="control-label">City</label>-->
-                                        <input id="mapsearch" type="text" class="form-control">
-                                    </div>
+                            <div class="col-md-8">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <input [(ngModel)]="nombreCiudad" id="mapsearch" type="text" class="form-control">
                                 </div>
-                                <!--<div class="col-md-6">
-                                    <div class="form-group form-black is-empty">
-                                        <input type="text" class="form-control" placeholder="Search">
-                                        <span class="material-input"></span>
-                                    </div>
-                                </div>-->
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-danger pull-left" (click)="agregarCiudad()">Agregar ciudad</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
+                        <button type="button" class="btn btn-danger pull-left" (click)="agregarCiudad()">Agregar ciudad</button>
+                        <div class="clearfix"></div>
                         <div class="row" style="height:400px;">
-                            <maps-cmp></maps-cmp>
+                            <div id="map">
+                            </div>
+                            <!--<maps-cmp></maps-cmp>-->
                         </div>
                     </div>
                 </div>
@@ -38,21 +29,23 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header" data-background-color="red">
-                        <h4 class="title">Simple Table</h4>
-                        <p class="category">Here is a subtitle for this table</p>
+                        <h4 class="title">Mis ciudades</h4>
+                        <!--<p class="category">lista de </p>-->
                     </div>
                     <div class="card-content table-responsive">
                         <table class="table">
                             <thead class="text-danger">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Country</th>
+                                    <th>latitud</th>
+                                    <th>longitud</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let ciudad of ciudades">
                                     <td>{{ciudad.nombre}}</td>
-                                    <td>{{ciudad.pais}}</td>
+                                    <td>{{ciudad.lat}}</td>
+                                    <td>{{ciudad.lon}}</td>
                                 </tr>
                             </tbody>
                         </table>

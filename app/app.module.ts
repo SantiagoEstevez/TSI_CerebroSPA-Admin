@@ -2,6 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent }   from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -14,7 +15,8 @@ import { NavbarModule} from './shared/navbar/navbar.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
-    imports:      [
+    imports: [
+        FormsModule,
         BrowserModule,
         DashboardModule,
         SidebarModule,

@@ -1,0 +1,73 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header" data-background-color="red">
+                        <h4 class="title">Agregar tipo sensor</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <label class="control-label">Nombre</label>
+                                    <input [(ngModel)]="nombre" id="mapsearch" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <label class="control-label">Frecuencia lectura</label>
+                                    <input [(ngModel)]="frecuencia" id="mapsearch" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
+                                            <span>{{tipoBase}}</span>
+                                            <span class="caret">  </span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="z-index: 1;">
+                                            <li *ngFor="let tipoBaseSensor of tipoBaseSensores">
+                                                <a (click)="dropdownChange(tipoBaseSensor)" style="cursor: pointer;">{{tipoBaseSensor}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger pull-left" (click)="agregarTipoSensor()"> Agregar sensor</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Lista de tipo de sensores-->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header" data-background-color="red">
+                        <h4 class="title">Mis tipos de sensores</h4>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <table class="table">
+                            <thead class="text-danger">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Frecuencia lectura datos</th>
+                                    <th>Tipo sensor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let tipoSensor of tipoSensores">
+                                    <td>{{tipoSensor.nombre}}</td>
+                                    <td>{{tipoSensor.frecuencia}}</td>
+                                    <td>{{tipoSensor.tipo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

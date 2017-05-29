@@ -9,18 +9,19 @@ var maps_component_1 = require('./maps/maps.component');
 var upgrade_component_1 = require('./upgrade/upgrade.component');
 var ciudades_component_1 = require('./ciudades/ciudades.component');
 var eventos_component_1 = require('./eventos/eventos.component');
+var tipo_sensores_component_1 = require('./tipo-sensores/tipo-sensores.component');
 exports.MODULE_ROUTES = [
     { path: 'dashboard', component: home_component_1.HomeComponent },
-    //{ path: 'user', component: UserComponent },
+    { path: 'maps', component: maps_component_1.MapsComponent },
+    { path: 'user', component: user_component_1.UserComponent },
     //{ path: 'table', component: TableComponent },
     { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent },
-    { path: 'TipoSensores', component: table_component_1.TableComponent },
+    { path: 'TipoSensores', component: tipo_sensores_component_1.TipoSensoresComponent },
     { path: 'Sensores', component: table_component_1.TableComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
     //{ path: 'icons', component: IconsComponent },
     { path: 'notifications', component: notifications_component_1.NotificationsComponent },
     //{ path: 'typography', component: TypographyComponent },
-    { path: 'maps', component: maps_component_1.MapsComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
@@ -34,6 +35,7 @@ exports.MODULE_COMPONENTS = [
     maps_component_1.MapsComponent,
     upgrade_component_1.UpgradeComponent,
     ciudades_component_1.CiudadesComponent,
-    eventos_component_1.EventosComponent
+    eventos_component_1.EventosComponent,
+    tipo_sensores_component_1.TipoSensoresComponent
 ];
 //# sourceMappingURL=dashboard.routes.js.map

@@ -10,19 +10,21 @@ import { MapsComponent } from './maps/maps.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
 import { CiudadesComponent } from './ciudades/ciudades.component';
 import { EventosComponent } from './eventos/eventos.component';
+import { TipoSensoresComponent } from './tipo-sensores/tipo-sensores.component';
 
 export const MODULE_ROUTES: Route[] =[
     { path: 'dashboard', component: HomeComponent },
-    //{ path: 'user', component: UserComponent },
+    { path: 'maps', component: MapsComponent },
+    { path: 'user', component: UserComponent },
     //{ path: 'table', component: TableComponent },
     { path: 'Ciudades', component: CiudadesComponent },
-    { path: 'TipoSensores', component: TableComponent },
+    { path: 'TipoSensores', component: TipoSensoresComponent },
     { path: 'Sensores', component: TableComponent },
     { path: 'Eventos', component: EventosComponent },
     //{ path: 'icons', component: IconsComponent },
     { path: 'notifications', component: NotificationsComponent },
     //{ path: 'typography', component: TypographyComponent },
-    { path: 'maps', component: MapsComponent },
+    
     //{ path: 'upgrade', component: UpgradeComponent },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ]
@@ -37,5 +39,6 @@ export const MODULE_COMPONENTS = [
     MapsComponent,
     UpgradeComponent,
     CiudadesComponent,
-    EventosComponent
+    EventosComponent,
+    TipoSensoresComponent
 ]

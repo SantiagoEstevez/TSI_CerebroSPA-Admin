@@ -11,30 +11,69 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var CiudadesComponent = (function () {
     function CiudadesComponent() {
-        //constructor(private _zone: NgZone, private _mapa: MapsComponent) {}
-        this.ciudades = [
-            { nombre: 'Montevideo', pais: 'Uruguay' },
-            { nombre: 'Ciudad de la costa', pais: 'Uruguay' },
-            { nombre: 'Ciudad de florida', pais: 'Uruguay' }
-        ];
+        this.nombreCiudad = '';
+        this.ciudades = [];
     }
     CiudadesComponent.prototype.ngOnInit = function () {
-        var items = ['sss', 'ppp'];
+        //Cargo autocompletar del search
         var options = {
-            types: ['(cities)']
+            types: ['(cities)'],
+            componentRestrictions: { country: 'uy' }
         };
-        var autocomplete = new google.maps.places.Autocomplete(document.getElementById("mapsearch"), options);
-        //google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        this.autocomplete = new google.maps.places.Autocomplete(document.getElementById("mapsearch"), options);
+        //Cargo mapa
+        var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
+        var mapOptions = {
+            zoom: 13,
+            center: myLatlng,
+            scrollwheel: true,
+            styles: []
+        };
+        this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        //Agrego el evento
+        //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
         //    this._zone.run(() => {
-        //        var place = autocomplete.getPlace();
-        //        //this._mapa. .lat = place.geometry.location.lat();
+        //        var place = this.autocomplete.getPlace();
+        //        alert(place.geometry.location.lat());
         //        //this.lng = place.geometry.location.lng();
         //    });
         //});
     };
     CiudadesComponent.prototype.agregarCiudad = function () {
-        this.ciudades.push({ nombre: document.getElementById("mapsearch").innerText, pais: 'Uruguay' });
-        console.log(this.ciudades);
+        var place = this.autocomplete.getPlace();
+        var ciudad = place.name;
+        var lat = place.geometry.location.lat();
+        var lon = place.geometry.location.lng();
+        this.ciudades.push({ nombre: ciudad, lat: lat, lon: lon });
+        var latlng = new google.maps.LatLng(lat, lon);
+        this.map.setCenter(latlng);
+        //var geocoder = new google.maps.Geocoder();
+        //        alert(place.geometry.location.lat());
+        //        //this.lng = place.geometry.location.lng();
+        //var latlng = new google.maps.LatLng(-34.9114282, -34.9114282);
+        //this.map.setCenter(latlng);
+        //geocoder.geocode({ 'address': this.nombreCiudad }, function (results, status) {
+        //    if (status == 'OK') {
+        //        var latlng = new google.maps.LatLng(-34.9114282, -34.9114282);
+        //        this.map.setCenter(latlng);
+        //        //this.map.setCenter(results[0].geometry.location);
+        //        var marker = new google.maps.Marker({
+        //            map: this.map,
+        //            position: results[0].geometry.location
+        //        });
+        //    } else {
+        //        alert('Geocode was not successful for the following reason: ' + status);
+        //    }
+        //});
+        //Posiciono mapa
+        //any map = document.getElementById("map")
+        //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
+        //    this._zone.run(() => {
+        //        var place = this.autocomplete.getPlace();
+        //        mapa.la = place.geometry.location.lat();
+        //        mapa.lon = place.geometry.location.lng();
+        //    });
+        //});
     };
     CiudadesComponent = __decorate([
         core_1.Component({

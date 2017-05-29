@@ -9,8 +9,12 @@ declare var google: any;
 })
 
 export class MapsComponent implements OnInit {
+    public lat: number = -34.9114282;
+    public lon: number = -56.1725558;
+    public map: any;
+
     ngOnInit() {
-        var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
+        var myLatlng = new google.maps.LatLng(this.lat, this.lon);
         var mapOptions = {
           zoom: 13,
           center: myLatlng,
@@ -60,7 +64,7 @@ export class MapsComponent implements OnInit {
               //}
           ]
         }
-        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
         var marker = new google.maps.Marker({
             position: myLatlng,
@@ -68,6 +72,6 @@ export class MapsComponent implements OnInit {
         });
 
         // To add the marker to the map, call setMap();
-        marker.setMap(map);
+        marker.setMap(this.map);
     }
 }

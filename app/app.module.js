@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var router_1 = require('@angular/router');
+var forms_1 = require('@angular/forms');
 var app_component_1 = require('./app.component');
 var dashboard_component_1 = require('./dashboard/dashboard.component');
 var dashboard_module_1 = require('./dashboard/dashboard.module');
@@ -24,6 +25,7 @@ var AppModule = (function () {
     AppModule = __decorate([
         core_1.NgModule({
             imports: [
+                forms_1.FormsModule,
                 platform_browser_1.BrowserModule,
                 dashboard_module_1.DashboardModule,
                 sidebar_module_1.SidebarModule,
