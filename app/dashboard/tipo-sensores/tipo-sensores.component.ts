@@ -26,6 +26,14 @@ export class TipoSensoresComponent implements OnInit {
     agregarTipoSensor() {
         if (this.tipoBase != this.dropdownBase && this.nombre != '' && this.frecuencia != '') {
             this.tipoSensores.push({ nombre: this.nombre, frecuencia: this.frecuencia, tipo: this.tipoBase });
+
+            this.inicializar();
         }
+    }
+
+    inicializar() {
+        this.nombre = '';
+        this.frecuencia = '';
+        this.tipoBase = this.dropdownBase;
     }
 }

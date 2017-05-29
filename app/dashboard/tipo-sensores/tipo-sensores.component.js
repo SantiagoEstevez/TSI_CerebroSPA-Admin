@@ -26,7 +26,13 @@ var TipoSensoresComponent = (function () {
     TipoSensoresComponent.prototype.agregarTipoSensor = function () {
         if (this.tipoBase != this.dropdownBase && this.nombre != '' && this.frecuencia != '') {
             this.tipoSensores.push({ nombre: this.nombre, frecuencia: this.frecuencia, tipo: this.tipoBase });
+            this.inicializar();
         }
+    };
+    TipoSensoresComponent.prototype.inicializar = function () {
+        this.nombre = '';
+        this.frecuencia = '';
+        this.tipoBase = this.dropdownBase;
     };
     TipoSensoresComponent = __decorate([
         core_1.Component({
