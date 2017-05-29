@@ -1,0 +1,78 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header" data-background-color="red">
+                        <h4 class="title">Agregar sensor</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
+                                        <span>{{tipo}}</span>
+                                        <span class="caret">  </span>
+                                    </button>
+                                    <ul class="dropdown-menu" style="z-index: 1;">
+                                        <li *ngFor="let tipoSensor of tipoSensores">
+                                            <a (click)="dropdownChange(tipoSensor)" style="cursor: pointer;">{{tipoSensor}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <!--<label class="control-label">Latitud (disabled)</label>-->
+                                    <input [(ngModel)]="lat" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <!--<label class="control-label">Longitud (disabled)</label>-->
+                                    <input [(ngModel)]="lon" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="">
+                            <div class="col-md-12">
+                                <div id="map" style="margin-top: 0px; height:300px;">
+                                </div>
+                                <!--<maps-cmp></maps-cmp>-->
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger pull-left" (click)="agregarSensor()">Agregar sensor</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Lista de sensores-->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header" data-background-color="red">
+                        <h4 class="title">Mis sensores</h4>
+                    </div>
+                    <div class="card-content table-responsive">
+                        <table class="table">
+                            <thead class="text-danger">
+                                <tr>
+                                    <th>Tipo de sensor</th>
+                                    <th>latitud</th>
+                                    <th>longitud</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let sensor of sensores">
+                                    <td>{{sensor.tipo}}</td>
+                                    <td>{{sensor.lat}}</td>
+                                    <td>{{sensor.lon}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

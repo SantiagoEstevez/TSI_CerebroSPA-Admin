@@ -10,6 +10,7 @@ var upgrade_component_1 = require('./upgrade/upgrade.component');
 var ciudades_component_1 = require('./ciudades/ciudades.component');
 var eventos_component_1 = require('./eventos/eventos.component');
 var tipo_sensores_component_1 = require('./tipo-sensores/tipo-sensores.component');
+var sensores_component_1 = require('./sensores/sensores.component');
 exports.MODULE_ROUTES = [
     { path: 'dashboard', component: home_component_1.HomeComponent },
     { path: 'maps', component: maps_component_1.MapsComponent },
@@ -17,7 +18,7 @@ exports.MODULE_ROUTES = [
     //{ path: 'table', component: TableComponent },
     { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent },
     { path: 'TipoSensores', component: tipo_sensores_component_1.TipoSensoresComponent },
-    { path: 'Sensores', component: table_component_1.TableComponent },
+    { path: 'Sensores', component: sensores_component_1.SensoresComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
     //{ path: 'icons', component: IconsComponent },
     { path: 'notifications', component: notifications_component_1.NotificationsComponent },
@@ -36,6 +37,7 @@ exports.MODULE_COMPONENTS = [
     upgrade_component_1.UpgradeComponent,
     ciudades_component_1.CiudadesComponent,
     eventos_component_1.EventosComponent,
-    tipo_sensores_component_1.TipoSensoresComponent
+    tipo_sensores_component_1.TipoSensoresComponent,
+    sensores_component_1.SensoresComponent
 ];
 //# sourceMappingURL=dashboard.routes.js.map
