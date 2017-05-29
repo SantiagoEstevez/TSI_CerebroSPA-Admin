@@ -11,7 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var EventosComponent = (function () {
     function EventosComponent() {
+        this.nombre = '';
+        this.regla = '';
     }
+    EventosComponent.prototype.agregarEvento = function () {
+        alert("Agregando evento >D");
+    };
     EventosComponent = __decorate([
         core_1.Component({
             selector: 'eventos-cmp',

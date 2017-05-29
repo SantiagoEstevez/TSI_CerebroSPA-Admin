@@ -6,4 +6,11 @@ import { Component } from '@angular/core';
     templateUrl: 'eventos.component.html'
 })
 
-export class EventosComponent{}
+export class EventosComponent {
+    nombre: string = '';
+    regla: string = '';
+
+    agregarEvento() {
+        alert("Agregando evento >D");
+    }
+}
