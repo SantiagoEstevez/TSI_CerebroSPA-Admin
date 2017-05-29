@@ -30,6 +30,20 @@ var CiudadesComponent = (function () {
             styles: []
         };
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        //Agregar evento
+        //this.map.addListener(this.autocomplete, 'place_changed', (e) => {
+        //    var place = this.autocomplete.getPlace();
+        //    var ciudad = place.name;
+        //    var lat = place.geometry.location.lat();
+        //    var lon = place.geometry.location.lng();
+        //    var latlng = new google.maps.LatLng(lat, lon);
+        //    this.map.setCenter(latlng);
+        //    //this.marker.setMap();
+        //    //var marker = new google.maps.Marker({
+        //    //    position: e.latLng,
+        //    //    map: this.map
+        //    //});
+        //});
         //Agrego el evento
         //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
         //    this._zone.run(() => {
@@ -41,12 +55,15 @@ var CiudadesComponent = (function () {
     };
     CiudadesComponent.prototype.agregarCiudad = function () {
         var place = this.autocomplete.getPlace();
-        var ciudad = place.name;
-        var lat = place.geometry.location.lat();
-        var lon = place.geometry.location.lng();
-        this.ciudades.push({ nombre: ciudad, lat: lat, lon: lon });
-        var latlng = new google.maps.LatLng(lat, lon);
-        this.map.setCenter(latlng);
+        this.nombreCiudad = place.name;
+        if (this.nombreCiudad != '') {
+            var lat = place.geometry.location.lat();
+            var lon = place.geometry.location.lng();
+            this.ciudades.push({ nombre: this.nombreCiudad, lat: lat, lon: lon });
+            var latlng = new google.maps.LatLng(lat, lon);
+            this.map.setCenter(latlng);
+            this.inicializar();
+        }
         //var geocoder = new google.maps.Geocoder();
         //        alert(place.geometry.location.lat());
         //        //this.lng = place.geometry.location.lng();
@@ -74,6 +91,9 @@ var CiudadesComponent = (function () {
         //        mapa.lon = place.geometry.location.lng();
         //    });
         //});
+    };
+    CiudadesComponent.prototype.inicializar = function () {
+        this.nombreCiudad = '';
     };
     CiudadesComponent = __decorate([
         core_1.Component({
