@@ -1,4 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
+import { Ciudad } from './Ciudad';
+import { CiudadesService } from './ciudades.service';
+
 //import { MapsComponent } from '../maps/maps.component';
 //import {
 //    MapsAPILoader,
@@ -15,13 +18,13 @@ declare var google: any;
 })
 
 export class CiudadesComponent implements OnInit {
-    _zone: NgZone;
 
-    //constructor(private _zone: NgZone, private _mapa: MapsComponent) {}
+    constructor(private ciudadesService: CiudadesService) { }
+
     autocomplete: any;
     map: any;
     nombreCiudad: string = '';
-    ciudades = [];
+    ciudades: Ciudad[];
 
     ngOnInit() {
 
@@ -66,6 +69,8 @@ export class CiudadesComponent implements OnInit {
         //        //this.lng = place.geometry.location.lng();
         //    });
         //});
+
+        this.getCiudades();
         
     }
 
@@ -82,6 +87,7 @@ export class CiudadesComponent implements OnInit {
             var latlng = new google.maps.LatLng(lat, lon);
             this.map.setCenter(latlng);
 
+            this.add(this.nombreCiudad, lat, lon);
             this.inicializar();
         }
         
@@ -122,5 +128,23 @@ export class CiudadesComponent implements OnInit {
 
     inicializar() {
         this.nombreCiudad = '';
+    }
+
+    getCiudades(): void {
+        this.ciudadesService
+            .getCiudades()
+            .then(ciudades => this.ciudades = ciudades);
+    }
+
+    add(nombre: string, lat: string, lon: string): void {
+        nombre = nombre.trim();
+        //lat = lat.trim();
+        //lon = lon.trim();
+
+        if (!nombre) { return; }
+        this.ciudadesService.create(nombre, lat, lon)
+            .then(ciudad => {
+                //this.ciudades.push(ciudad);
+            });
     }
 }

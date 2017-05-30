@@ -9,10 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var ciudades_service_1 = require('./ciudades.service');
 var CiudadesComponent = (function () {
-    function CiudadesComponent() {
+    function CiudadesComponent(ciudadesService) {
+        this.ciudadesService = ciudadesService;
         this.nombreCiudad = '';
-        this.ciudades = [];
     }
     CiudadesComponent.prototype.ngOnInit = function () {
         //Cargo autocompletar del search
@@ -52,6 +53,7 @@ var CiudadesComponent = (function () {
         //        //this.lng = place.geometry.location.lng();
         //    });
         //});
+        this.getCiudades();
     };
     CiudadesComponent.prototype.agregarCiudad = function () {
         var place = this.autocomplete.getPlace();
@@ -62,6 +64,7 @@ var CiudadesComponent = (function () {
             this.ciudades.push({ nombre: this.nombreCiudad, lat: lat, lon: lon });
             var latlng = new google.maps.LatLng(lat, lon);
             this.map.setCenter(latlng);
+            this.add(this.nombreCiudad, lat, lon);
             this.inicializar();
         }
         //var geocoder = new google.maps.Geocoder();
@@ -95,13 +98,31 @@ var CiudadesComponent = (function () {
     CiudadesComponent.prototype.inicializar = function () {
         this.nombreCiudad = '';
     };
+    CiudadesComponent.prototype.getCiudades = function () {
+        var _this = this;
+        this.ciudadesService
+            .getCiudades()
+            .then(function (ciudades) { return _this.ciudades = ciudades; });
+    };
+    CiudadesComponent.prototype.add = function (nombre, lat, lon) {
+        nombre = nombre.trim();
+        //lat = lat.trim();
+        //lon = lon.trim();
+        if (!nombre) {
+            return;
+        }
+        this.ciudadesService.create(nombre, lat, lon)
+            .then(function (ciudad) {
+            //this.ciudades.push(ciudad);
+        });
+    };
     CiudadesComponent = __decorate([
         core_1.Component({
             selector: 'ciudades-cmp',
             moduleId: module.id,
             templateUrl: 'ciudades.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService])
     ], CiudadesComponent);
     return CiudadesComponent;
 }());
