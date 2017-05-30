@@ -45,11 +45,6 @@ var SensoresComponent = (function () {
             _this.lat = e.latLng.lat();
             _this.lon = e.latLng.lng();
             _this.marker.setPosition(e.latLng);
-            //this.marker.setMap();
-            //var marker = new google.maps.Marker({
-            //    position: e.latLng,
-            //    map: this.map
-            //});
         });
     };
     SensoresComponent.prototype.dropdownChange = function (value) {

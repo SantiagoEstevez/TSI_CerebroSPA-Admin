@@ -26,7 +26,7 @@ var CiudadesComponent = (function () {
         var mapOptions = {
             zoom: 13,
             center: myLatlng,
-            scrollwheel: true,
+            scrollwheel: false,
             styles: []
         };
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);

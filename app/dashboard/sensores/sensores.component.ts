@@ -49,12 +49,6 @@ export class SensoresComponent implements OnInit {
             this.lat = e.latLng.lat();
             this.lon = e.latLng.lng();
             this.marker.setPosition(e.latLng);
-
-            //this.marker.setMap();
-            //var marker = new google.maps.Marker({
-            //    position: e.latLng,
-            //    map: this.map
-            //});
         });
     }
 
