@@ -47,7 +47,7 @@
                             <div class="col-md-2">
                                 <div class="form-group form-black label-floating is-empty">
                                     <label class="control-label">Frecuencia lectura /s</label>
-                                    <input [(ngModel)]="nuevoTipoSensor.frecuencia" type="number" class="form-control" data-min="3" data-max="10">
+                                    <input [(ngModel)]="nuevoTipoSensor.frecuencia" type="number" class="form-control" min="3" max="10">
                                 </div>
                             </div>
                         </div>
@@ -67,16 +67,18 @@
                         <table class="table">
                             <thead class="text-danger">
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Frecuencia lectura datos</th>
+                                    <th>Ciudad</th>
                                     <th>Tipo sensor</th>
+                                    <th>Nombre sensor</th>
+                                    <th>Lectura datos en s</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let tipoSensor of tipoSensores">
+                                    <td>{{tipoSensor.ciudadSensor}}</td>
+                                    <td>{{tipoSensor.tipo}}</td>
                                     <td>{{tipoSensor.nombre}}</td>
                                     <td>{{tipoSensor.frecuencia}}</td>
-                                    <td>{{tipoSensor.tipo}}</td>
                                 </tr>
                             </tbody>
                         </table>
