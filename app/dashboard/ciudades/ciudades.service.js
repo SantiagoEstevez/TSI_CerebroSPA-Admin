@@ -11,27 +11,64 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var http_1 = require('@angular/http');
 var core_1 = require('@angular/core');
 require('rxjs/add/operator/toPromise');
+require('rxjs/add/operator/catch');
+require('rxjs/add/operator/map');
 var CiudadesService = (function () {
     function CiudadesService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.heroesUrl = 'api/ciudades'; // URL to web api
+        this.Url = 'api/ciudades'; // URL to web api
     }
+    CiudadesService.prototype.getUsuarios = function () {
+        return this.http.get('http://localhost:6346/api/usuario/')
+            .toPromise()
+            .then(function (response) { return response.json(); })
+            .catch(this.handleError);
+    };
+    CiudadesService.prototype.getAll = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            // Simulate server latency with 2 second delay
+            setTimeout(function () { return resolve(_this.getUsuarios()); }, 4000);
+        });
+    };
+    //getUsuarios(): Observable<Ciudad[]> {
+    //    return this.http.get('http://localhost:6346/api/usuario')
+    //        .map(response => response.json().data as Ciudad[])
+    //        .catch(this.handleError);
+    //}
+    //private extractData(res: Response) {
+    //    let body = res.json();
+    //    return body.data || {};
+    //}
+    //private handleError(error: Response | any) {
+    //    // In a real world app, you might use a remote logging infrastructure
+    //    let errMsg: string;
+    //    if (error instanceof Response) {
+    //        const body = error.json() || '';
+    //        const err = body.error || JSON.stringify(body);
+    //        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    //    } else {
+    //        errMsg = error.message ? error.message : error.toString();
+    //    }
+    //    console.error(errMsg);
+    //    return Observable.throw(errMsg);
+    //}
     CiudadesService.prototype.getCiudades = function () {
-        return this.http.get(this.heroesUrl)
+        return this.http.get(this.Url)
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
     CiudadesService.prototype.getHero = function (id) {
-        var url = this.heroesUrl + "/" + id;
+        var url = this.Url + "/" + id;
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
     CiudadesService.prototype.delete = function (id) {
-        var url = this.heroesUrl + "/" + id;
+        var url = this.Url + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
@@ -39,7 +76,7 @@ var CiudadesService = (function () {
     };
     CiudadesService.prototype.create = function (nombre, lat, lon) {
         return this.http
-            .post(this.heroesUrl, JSON.stringify({ nombre: nombre, lat: lat, lon: lon }), { headers: this.headers })
+            .post(this.Url, JSON.stringify({ nombre: nombre, lat: lat, lon: lon }), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);

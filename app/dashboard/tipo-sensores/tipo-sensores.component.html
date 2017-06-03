@@ -1,38 +1,53 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-11">
                 <div class="card" style="z-index:1;">
                     <div class="card-header" data-background-color="red">
                         <h4 class="title">Agregar tipo sensor</h4>
                     </div>
                     <div class="card-content">
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Nombre</label>
-                                    <input [(ngModel)]="nombre" type="text" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Frecuencia lectura</label>
-                                    <input [(ngModel)]="frecuencia" type="text" class="form-control">
-                                </div>
-                            </div>
                             <div class="col-md-3">
                                 <div class="form-group form-black label-floating is-empty">
                                     <div class="dropdown">
                                         <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
-                                            <span>{{tipoBase}}</span>
+                                            <span>{{CampoCiudad}}</span>
+                                            <span class="caret">  </span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="z-index: 1;">
+                                            <li *ngFor="let ciudad of ciudades">
+                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.nombre}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
+                                            <span>{{CampoTS}}</span>
                                             <span class="caret">  </span>
                                         </button>
                                         <ul class="dropdown-menu" style="z-index: 1;">
                                             <li *ngFor="let tipoBaseSensor of tipoBaseSensores">
-                                                <a (click)="dropdownChange(tipoBaseSensor)" style="cursor: pointer;">{{tipoBaseSensor}}</a>
+                                                <a (click)="changeTipoBase(tipoBaseSensor)" style="cursor: pointer;">{{tipoBaseSensor.nombre}}</a>
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <label class="control-label">Nombre</label>
+                                    <input [(ngModel)]="nuevoTipoSensor.nombre" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <label class="control-label">Frecuencia lectura /s</label>
+                                    <input [(ngModel)]="nuevoTipoSensor.frecuencia" type="number" class="form-control" data-min="3" data-max="10">
                                 </div>
                             </div>
                         </div>

@@ -16,6 +16,8 @@ var CiudadesComponent = (function () {
         this.nombreCiudad = '';
     }
     CiudadesComponent.prototype.ngOnInit = function () {
+        //this.getUsuarios();
+        var _this = this;
         //Cargo autocompletar del search
         var options = {
             types: ['(cities)'],
@@ -31,80 +33,53 @@ var CiudadesComponent = (function () {
             styles: []
         };
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        //Agregar evento
-        //this.map.addListener(this.autocomplete, 'place_changed', (e) => {
-        //    var place = this.autocomplete.getPlace();
-        //    var ciudad = place.name;
-        //    var lat = place.geometry.location.lat();
-        //    var lon = place.geometry.location.lng();
-        //    var latlng = new google.maps.LatLng(lat, lon);
-        //    this.map.setCenter(latlng);
-        //    //this.marker.setMap();
-        //    //var marker = new google.maps.Marker({
-        //    //    position: e.latLng,
-        //    //    map: this.map
-        //    //});
-        //});
-        //Agrego el evento
-        //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
-        //    this._zone.run(() => {
-        //        var place = this.autocomplete.getPlace();
-        //        alert(place.geometry.location.lat());
-        //        //this.lng = place.geometry.location.lng();
-        //    });
-        //});
-        this.getCiudades();
+        //Agrega evento - posicionamiento mapa
+        this.autocomplete.addListener('place_changed', function (e) {
+            var place = _this.autocomplete.getPlace();
+            if (place.name != '') {
+                var lat = place.geometry.location.lat();
+                var lon = place.geometry.location.lng();
+                var latlng = new google.maps.LatLng(lat, lon);
+                _this.map.setCenter(latlng);
+            }
+        });
+        this.inicializar();
     };
-    CiudadesComponent.prototype.agregarCiudad = function () {
-        var place = this.autocomplete.getPlace();
-        this.nombreCiudad = place.name;
-        if (this.nombreCiudad != '') {
-            var lat = place.geometry.location.lat();
-            var lon = place.geometry.location.lng();
-            this.ciudades.push({ nombre: this.nombreCiudad, lat: lat, lon: lon });
-            var latlng = new google.maps.LatLng(lat, lon);
-            this.map.setCenter(latlng);
-            this.add(this.nombreCiudad, lat, lon);
-            this.inicializar();
-        }
-        //var geocoder = new google.maps.Geocoder();
-        //        alert(place.geometry.location.lat());
-        //        //this.lng = place.geometry.location.lng();
-        //var latlng = new google.maps.LatLng(-34.9114282, -34.9114282);
-        //this.map.setCenter(latlng);
-        //geocoder.geocode({ 'address': this.nombreCiudad }, function (results, status) {
-        //    if (status == 'OK') {
-        //        var latlng = new google.maps.LatLng(-34.9114282, -34.9114282);
-        //        this.map.setCenter(latlng);
-        //        //this.map.setCenter(results[0].geometry.location);
-        //        var marker = new google.maps.Marker({
-        //            map: this.map,
-        //            position: results[0].geometry.location
-        //        });
-        //    } else {
-        //        alert('Geocode was not successful for the following reason: ' + status);
-        //    }
-        //});
-        //Posiciono mapa
-        //any map = document.getElementById("map")
-        //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
-        //    this._zone.run(() => {
-        //        var place = this.autocomplete.getPlace();
-        //        mapa.la = place.geometry.location.lat();
-        //        mapa.lon = place.geometry.location.lng();
-        //    });
-        //});
-    };
+    //---> Funciones de uso interno <---
     CiudadesComponent.prototype.inicializar = function () {
+        this.getCiudades();
         this.nombreCiudad = '';
     };
+    //---> Funciones de eventos <---
+    CiudadesComponent.prototype.agregarCiudad = function () {
+        var place = this.autocomplete.getPlace();
+        if (place.name != '') {
+            var lat = place.geometry.location.lat();
+            var lon = place.geometry.location.lng();
+            if (!this.ciudades.find(function (item) { return item.lat == lat && item.lon == lon; })) {
+                this.setCiudad(place.name, lat, lon);
+                this.inicializar();
+            }
+            else {
+                alert("Esta ciudad ya esta en uso.");
+            }
+        }
+    };
+    //---> Funciones de servicios <---
     CiudadesComponent.prototype.getCiudades = function () {
         var _this = this;
         this.ciudadesService
             .getCiudades()
             .then(function (ciudades) { return _this.ciudades = ciudades; });
     };
-    CiudadesComponent.prototype.add = function (nombre, lat, lon) {
+    CiudadesComponent.prototype.getUsuarios = function () {
+        var _this = this;
+        //this.ciudadesService
+        //    .getAll()
+        //    .then(ciudades => this.ciudades = ciudades);
+        this.ciudadesService.getUsuarios().then(function (ciudades) { return _this.ciudades = ciudades; });
+    };
+    CiudadesComponent.prototype.setCiudad = function (nombre, lat, lon) {
         nombre = nombre.trim();
         //lat = lat.trim();
         //lon = lon.trim();

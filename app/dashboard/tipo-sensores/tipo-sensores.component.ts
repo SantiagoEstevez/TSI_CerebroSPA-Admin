@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Ciudad } from '../ciudades/Ciudad';
+import { CiudadesService } from '../ciudades/ciudades.service';
+import { TipoSensoresService } from './tipo-sensor.service';
+import { TipoSensor } from './tipo-sensor';
+import { TipoBaseSensor } from './tipo-base-sensor';
 
 @Component({
     selector: 'tipo-sensores-cmp',
@@ -7,33 +12,92 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class TipoSensoresComponent implements OnInit {
-    dropdownBase: string = 'Tipo de sensor';
 
-    tipoBaseSensores = ['Fuego', 'Trafico', 'Meteorologia', 'Terremoto'];
-    tipoSensores = [];
+    constructor(
+        private ciudadesService: CiudadesService,
+        private tipoSensoresService: TipoSensoresService,
+        private nuevoTipoSensor: TipoSensor
+    ){ }
 
-    nombre: string = '';
-    frecuencia: string = '';
-    tipoBase: string = this.dropdownBase;
+    nombreCampoTS: string = 'Tipo de sensor';
+    nombreCampoCiudad: string = 'Ciudad del sensor';
+
+    CampoTS: string = '';
+    CampoCiudad: string = '';
+    tipoBaseSensores: TipoBaseSensor[];
+    tipoSensores: TipoSensor[];
+    ciudades: Ciudad[];
 
     ngOnInit() {
+        this.inicializar();
     }
 
-    dropdownChange(value) {
-        this.tipoBase = value;
+
+    //---> Funciones internas <---
+    inicializar() {
+        this.CampoTS = this.nombreCampoTS;
+        this.CampoCiudad = this.nombreCampoCiudad;
+
+        this.nuevoTipoSensor.nombre = '';
+        this.nuevoTipoSensor.frecuencia = '';
+        this.nuevoTipoSensor.tipo = this.nombreCampoTS;
+        this.nuevoTipoSensor.ciudadSensor = this.nombreCampoCiudad;
+
+        this.getCiudades();
+        this.getTipoSensores();
+        this.getTipoBaseSensor();
+    }
+
+
+    //---> Funciones de eventos <---
+    changeCiudad(value) {
+        this.CampoCiudad = value.nombre;
+        this.nuevoTipoSensor.ciudadSensor = value.nombre;
+    }
+
+    changeTipoBase(value) {
+        this.CampoTS = value.nombre;
+        this.nuevoTipoSensor.tipo = value.nombre;
     }
 
     agregarTipoSensor() {
-        if (this.tipoBase != this.dropdownBase && this.nombre != '' && this.frecuencia != '') {
-            this.tipoSensores.push({ nombre: this.nombre, frecuencia: this.frecuencia, tipo: this.tipoBase });
+        var tipo = this.nuevoTipoSensor.tipo;
+        var nombre = this.nuevoTipoSensor.nombre;
+        var frecuencia = this.nuevoTipoSensor.frecuencia;
+
+        if (tipo != this.nombreCampoTS && nombre != '' && frecuencia != '') {
+            this.setTipoSensor(this.nuevoTipoSensor);
 
             this.inicializar();
         }
     }
 
-    inicializar() {
-        this.nombre = '';
-        this.frecuencia = '';
-        this.tipoBase = this.dropdownBase;
+
+    //---> Funciones de servicios <---
+    getCiudades(): void {
+        this.ciudadesService
+            .getCiudades()
+            .then(ciudades => this.ciudades = ciudades);
+    }
+
+    getTipoSensores(): void {
+        this.tipoSensoresService
+            .getTipoSensores()
+            .then(tipoSensores => this.tipoSensores = tipoSensores);
+    }
+
+    setTipoSensor(nuevo: TipoSensor): void {
+        nuevo.nombre = nuevo.nombre.trim();
+
+        //if (!nombre) { return; }
+        this.tipoSensoresService.setTipoSensor(nuevo)
+            .then(t => {//this.ciudades.push(ciudad);
+            });
+    }
+
+    getTipoBaseSensor(): void {
+        this.tipoSensoresService
+            .getTipoBaseSensor()
+            .then(tipoBaseSensores => this.tipoBaseSensores = tipoBaseSensores);
     }
 }

@@ -2,13 +2,6 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { Ciudad } from './Ciudad';
 import { CiudadesService } from './ciudades.service';
 
-//import { MapsComponent } from '../maps/maps.component';
-//import {
-//    MapsAPILoader,
-//    NoOpMapsAPILoader,
-//    MouseEvent,
-//} from 'angular2-google-maps/core';
-
 declare var google: any;
 
 @Component({
@@ -24,9 +17,11 @@ export class CiudadesComponent implements OnInit {
     autocomplete: any;
     map: any;
     nombreCiudad: string = '';
-    ciudades: Ciudad[];
+    public ciudades: Ciudad[];
+    usuarios: string[];
 
     ngOnInit() {
+        //this.getUsuarios();
 
         //Cargo autocompletar del search
         var options = {
@@ -45,98 +40,63 @@ export class CiudadesComponent implements OnInit {
         }
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-        //Agregar evento
-        //this.map.addListener(this.autocomplete, 'place_changed', (e) => {
-        //    var place = this.autocomplete.getPlace();
-        //    var ciudad = place.name;
-        //    var lat = place.geometry.location.lat();
-        //    var lon = place.geometry.location.lng();
-        //    var latlng = new google.maps.LatLng(lat, lon);
-        //    this.map.setCenter(latlng);
+        //Agrega evento - posicionamiento mapa
+        this.autocomplete.addListener('place_changed', (e) => {
+            var place = this.autocomplete.getPlace();
 
-        //    //this.marker.setMap();
-        //    //var marker = new google.maps.Marker({
-        //    //    position: e.latLng,
-        //    //    map: this.map
-        //    //});
-        //});
+            if (place.name != '') {
+                var lat = place.geometry.location.lat();
+                var lon = place.geometry.location.lng();
 
-        //Agrego el evento
-        //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
-        //    this._zone.run(() => {
-        //        var place = this.autocomplete.getPlace();
-        //        alert(place.geometry.location.lat());
-        //        //this.lng = place.geometry.location.lng();
-        //    });
-        //});
+                var latlng = new google.maps.LatLng(lat, lon);
+                this.map.setCenter(latlng);
+            }
+        });
 
-        this.getCiudades();
-        
+        this.inicializar();
     }
 
-    agregarCiudad() {
-        var place = this.autocomplete.getPlace();   
-        this.nombreCiudad = place.name;
 
-        if (this.nombreCiudad != '') {
-            var lat = place.geometry.location.lat();
-            var lon = place.geometry.location.lng();
-
-
-            this.ciudades.push({ nombre: this.nombreCiudad, lat: lat, lon: lon });
-            var latlng = new google.maps.LatLng(lat, lon);
-            this.map.setCenter(latlng);
-
-            this.add(this.nombreCiudad, lat, lon);
-            this.inicializar();
-        }
-        
-
-        //var geocoder = new google.maps.Geocoder();
-        //        alert(place.geometry.location.lat());
-        //        //this.lng = place.geometry.location.lng();
-
-        //var latlng = new google.maps.LatLng(-34.9114282, -34.9114282);
-        //this.map.setCenter(latlng);
-
-        //geocoder.geocode({ 'address': this.nombreCiudad }, function (results, status) {
-        //    if (status == 'OK') {
-
-        //        var latlng = new google.maps.LatLng(-34.9114282, -34.9114282);
-        //        this.map.setCenter(latlng);
-
-        //        //this.map.setCenter(results[0].geometry.location);
-        //        var marker = new google.maps.Marker({
-        //            map: this.map,
-        //            position: results[0].geometry.location
-        //        });
-        //    } else {
-        //        alert('Geocode was not successful for the following reason: ' + status);
-        //    }
-        //});
-
-        //Posiciono mapa
-        //any map = document.getElementById("map")
-        //google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
-        //    this._zone.run(() => {
-        //        var place = this.autocomplete.getPlace();
-        //        mapa.la = place.geometry.location.lat();
-        //        mapa.lon = place.geometry.location.lng();
-        //    });
-        //});
-    }
-
+    //---> Funciones de uso interno <---
     inicializar() {
+        this.getCiudades();
         this.nombreCiudad = '';
     }
 
+
+    //---> Funciones de eventos <---
+    agregarCiudad() {
+        var place = this.autocomplete.getPlace();   
+
+        if (place.name != '') {
+            var lat = place.geometry.location.lat();
+            var lon = place.geometry.location.lng();
+
+            if (!this.ciudades.find(item => item.lat == lat && item.lon == lon)) {
+                this.setCiudad(place.name, lat, lon);
+                this.inicializar();
+            } else {
+                alert("Esta ciudad ya esta en uso.");
+            }
+        }
+    }    
+
+
+    //---> Funciones de servicios <---
     getCiudades(): void {
         this.ciudadesService
             .getCiudades()
             .then(ciudades => this.ciudades = ciudades);
     }
 
-    add(nombre: string, lat: string, lon: string): void {
+    getUsuarios(): void {
+        //this.ciudadesService
+        //    .getAll()
+        //    .then(ciudades => this.ciudades = ciudades);
+        this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
+    }
+
+    setCiudad(nombre: string, lat: string, lon: string): void {
         nombre = nombre.trim();
         //lat = lat.trim();
         //lon = lon.trim();
