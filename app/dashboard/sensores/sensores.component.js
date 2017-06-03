@@ -9,8 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var ciudades_service_1 = require('../ciudades/ciudades.service');
+var tipo_sensor_service_1 = require('../tipo-sensores/tipo-sensor.service');
 var SensoresComponent = (function () {
-    function SensoresComponent() {
+    function SensoresComponent(ciudadesService, tipoSensoresService, nuevoTipoSensor) {
+        this.ciudadesService = ciudadesService;
+        this.tipoSensoresService = tipoSensoresService;
+        this.nuevoTipoSensor = nuevoTipoSensor;
         this.tipoBase = 'Tipo sensor';
         //Datos que tendrian que ser servicios.
         this.tipoSensores = ['Tipo 1', 'Tipo 2', 'Tipo 3'];
@@ -20,6 +25,7 @@ var SensoresComponent = (function () {
         this.lat = '';
         this.lon = '';
     }
+    ;
     SensoresComponent.prototype.inicializo = function () {
         this.lat = '';
         this.lon = '';
@@ -62,7 +68,7 @@ var SensoresComponent = (function () {
             moduleId: module.id,
             templateUrl: 'sensores.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, Object])
     ], SensoresComponent);
     return SensoresComponent;
 }());

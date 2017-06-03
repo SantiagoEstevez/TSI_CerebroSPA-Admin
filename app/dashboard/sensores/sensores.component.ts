@@ -1,4 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
+import { CiudadesService } from '../ciudades/ciudades.service';
+import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
+import { Sensor } from './sensor';
 
 declare var google: any;
 
@@ -9,6 +12,13 @@ declare var google: any;
 })
 
 export class SensoresComponent implements OnInit {
+
+    constructor(
+        private ciudadesService: CiudadesService,
+        private tipoSensoresService: TipoSensoresService,
+        private nuevoTipoSensor: TipoSensor
+    ) { };
+
     tipoBase: string = 'Tipo sensor';
     map: any;
     marker: any;
