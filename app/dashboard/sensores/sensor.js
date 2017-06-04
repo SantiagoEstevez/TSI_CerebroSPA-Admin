@@ -1,8 +1,8 @@
 "use strict";
-var TipoBaseSensor = (function () {
-    function TipoBaseSensor() {
+var Sensor = (function () {
+    function Sensor() {
     }
-    return TipoBaseSensor;
+    return Sensor;
 }());
-exports.TipoBaseSensor = TipoBaseSensor;
+exports.Sensor = Sensor;
 //# sourceMappingURL=sensor.js.map

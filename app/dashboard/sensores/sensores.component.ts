@@ -1,7 +1,10 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { CiudadesService } from '../ciudades/ciudades.service';
 import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
+import { TipoSensor } from '../tipo-sensores/tipo-sensor';
+import { Ciudad } from '../ciudades/ciudad';
 import { Sensor } from './sensor';
+import { SensoresService } from './sensores.service';
 
 declare var google: any;
 
@@ -16,29 +19,24 @@ export class SensoresComponent implements OnInit {
     constructor(
         private ciudadesService: CiudadesService,
         private tipoSensoresService: TipoSensoresService,
-        private nuevoTipoSensor: TipoSensor
+        private SensoresService: SensoresService,
+        private nuevoSensor: Sensor
     ) { };
 
-    tipoBase: string = 'Tipo sensor';
+    nombreCampoTS: string = 'Tipo sensor';
+    nombreCampoCiudad: string = 'Ciudad del sensor';
+
+    CampoTS: string = '';
+    CampoCiudad: string = '';
     map: any;
     marker: any;
 
-    //Datos que tendrian que ser servicios.
-    tipoSensores = ['Tipo 1', 'Tipo 2', 'Tipo 3'];
-    sensores = [];
-
-    //Propiadades
-    tipo: string = this.tipoBase;
-    lat: string = '';
-    lon: string = '';
-
-    inicializo() {
-        this.lat = '';
-        this.lon = '';
-        this.tipo = this.tipoBase;
-    }
+    ciudades: Ciudad[];
+    tipoSensores: TipoSensor[];
+    sensores: Sensor[];
 
     ngOnInit() {
+
         //Cargo mapa
         var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
         var mapOptions = {
@@ -56,21 +54,76 @@ export class SensoresComponent implements OnInit {
 
         //Agregar evento
         this.map.addListener('click', (e) => {
-            this.lat = e.latLng.lat();
-            this.lon = e.latLng.lng();
+            this.nuevoSensor.lat = e.latLng.lat();
+            this.nuevoSensor.lon = e.latLng.lng();
             this.marker.setPosition(e.latLng);
         });
+
+        this.inicializo();
     }
 
-    dropdownChange(value) {
-        this.tipo = value;
+
+    //---> Funciones internas <---
+    inicializo() {
+        this.CampoTS = this.nombreCampoTS;
+        this.CampoCiudad = this.nombreCampoCiudad;
+
+        this.nuevoSensor.lat = '';
+        this.nuevoSensor.lon = '';
+        this.nuevoSensor.tipo = '';
+        this.nuevoSensor.ciudad = '';
+
+        this.getCiudades();
+        this.getTipoSensores();
+        this.getSensores();
+    }
+
+
+    //---> Funciones de eventos <---
+    changeTipoSensor(value) {
+        this.CampoTS = value.nombre;
+        this.nuevoSensor.tipo = value.nombre;
+    }
+
+    changeCiudad(value) {
+        this.CampoCiudad = value.nombre;
+        this.nuevoSensor.ciudad = value.nombre;
     }
 
     agregarSensor() {
-        if (this.tipo != this.tipoBase && this.lat != '' && this.lon != '') {
-            this.sensores.push({ tipo: this.tipo, lat: this.lat, lon: this.lon });
+        var ciudad = this.nuevoSensor.ciudad;
+        var tipo = this.nuevoSensor.tipo;
+        var lat = this.nuevoSensor.lat;
+        var lon = this.nuevoSensor.lon;
+
+        if (ciudad != '' && tipo != '' && lat != '' && lon != '') {
+            this.setSensor(this.nuevoSensor);
 
             this.inicializo();
         }
+    }
+
+
+    //---> Funciones de servicios <---
+    getCiudades(): void {
+        this.ciudadesService
+            .getCiudades()
+            .then(ciudades => this.ciudades = ciudades);
+    }
+
+    getTipoSensores(): void {
+        this.tipoSensoresService
+            .getTipoSensores()
+            .then(tipoSensores => this.tipoSensores = tipoSensores);
+    }
+
+    getSensores(): void {
+        this.SensoresService
+            .getSensores()
+            .then(sensores => this.sensores = sensores);
+    }
+
+    setSensor(nuevo: Sensor): void {
+        this.SensoresService.setSensor(nuevo);
     }
 }

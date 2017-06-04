@@ -4,21 +4,26 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MODULE_COMPONENTS, MODULE_ROUTES } from './dashboard.routes';
 
+import { Ciudad } from './ciudades/ciudad';
+import { TipoSensor } from './tipo-sensores/tipo-sensor';
+import { Sensor } from './sensores/sensor';
+
 import { CiudadesService } from './ciudades/ciudades.service';
 import { TipoSensoresService } from './tipo-sensores/tipo-sensor.service';
+import { SensoresService } from './sensores/sensores.service';
+
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { MemoriaService } from './ciudades/memoria.service';
-import { TipoSensor } from './tipo-sensores/tipo-sensor';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         RouterModule.forChild(MODULE_ROUTES),
-        InMemoryWebApiModule.forRoot(MemoriaService)
+        InMemoryWebApiModule.forRoot(MemoriaService) //comentar esta linea para desactivar la parte de memoria.
     ],
     declarations: [MODULE_COMPONENTS],
-    providers: [CiudadesService, TipoSensoresService, TipoSensor]
+    providers: [CiudadesService, TipoSensoresService, SensoresService, Ciudad, TipoSensor, Sensor]
 })
 
 export class DashboardModule{}

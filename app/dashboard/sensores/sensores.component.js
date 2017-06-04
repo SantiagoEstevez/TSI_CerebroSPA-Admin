@@ -11,26 +11,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var ciudades_service_1 = require('../ciudades/ciudades.service');
 var tipo_sensor_service_1 = require('../tipo-sensores/tipo-sensor.service');
+var sensor_1 = require('./sensor');
+var sensores_service_1 = require('./sensores.service');
 var SensoresComponent = (function () {
-    function SensoresComponent(ciudadesService, tipoSensoresService, nuevoTipoSensor) {
+    function SensoresComponent(ciudadesService, tipoSensoresService, SensoresService, nuevoSensor) {
         this.ciudadesService = ciudadesService;
         this.tipoSensoresService = tipoSensoresService;
-        this.nuevoTipoSensor = nuevoTipoSensor;
-        this.tipoBase = 'Tipo sensor';
-        //Datos que tendrian que ser servicios.
-        this.tipoSensores = ['Tipo 1', 'Tipo 2', 'Tipo 3'];
-        this.sensores = [];
-        //Propiadades
-        this.tipo = this.tipoBase;
-        this.lat = '';
-        this.lon = '';
+        this.SensoresService = SensoresService;
+        this.nuevoSensor = nuevoSensor;
+        this.nombreCampoTS = 'Tipo sensor';
+        this.nombreCampoCiudad = 'Ciudad del sensor';
+        this.CampoTS = '';
+        this.CampoCiudad = '';
     }
     ;
-    SensoresComponent.prototype.inicializo = function () {
-        this.lat = '';
-        this.lon = '';
-        this.tipo = this.tipoBase;
-    };
     SensoresComponent.prototype.ngOnInit = function () {
         var _this = this;
         //Cargo mapa
@@ -48,19 +42,64 @@ var SensoresComponent = (function () {
         });
         //Agregar evento
         this.map.addListener('click', function (e) {
-            _this.lat = e.latLng.lat();
-            _this.lon = e.latLng.lng();
+            _this.nuevoSensor.lat = e.latLng.lat();
+            _this.nuevoSensor.lon = e.latLng.lng();
             _this.marker.setPosition(e.latLng);
         });
+        this.inicializo();
     };
-    SensoresComponent.prototype.dropdownChange = function (value) {
-        this.tipo = value;
+    //---> Funciones internas <---
+    SensoresComponent.prototype.inicializo = function () {
+        this.CampoTS = this.nombreCampoTS;
+        this.CampoCiudad = this.nombreCampoCiudad;
+        this.nuevoSensor.lat = '';
+        this.nuevoSensor.lon = '';
+        this.nuevoSensor.tipo = '';
+        this.nuevoSensor.ciudad = '';
+        this.getCiudades();
+        this.getTipoSensores();
+        this.getSensores();
+    };
+    //---> Funciones de eventos <---
+    SensoresComponent.prototype.changeTipoSensor = function (value) {
+        this.CampoTS = value.nombre;
+        this.nuevoSensor.tipo = value.nombre;
+    };
+    SensoresComponent.prototype.changeCiudad = function (value) {
+        this.CampoCiudad = value.nombre;
+        this.nuevoSensor.ciudad = value.nombre;
     };
     SensoresComponent.prototype.agregarSensor = function () {
-        if (this.tipo != this.tipoBase && this.lat != '' && this.lon != '') {
-            this.sensores.push({ tipo: this.tipo, lat: this.lat, lon: this.lon });
+        var ciudad = this.nuevoSensor.ciudad;
+        var tipo = this.nuevoSensor.tipo;
+        var lat = this.nuevoSensor.lat;
+        var lon = this.nuevoSensor.lon;
+        if (ciudad != '' && tipo != '' && lat != '' && lon != '') {
+            this.setSensor(this.nuevoSensor);
             this.inicializo();
         }
+    };
+    //---> Funciones de servicios <---
+    SensoresComponent.prototype.getCiudades = function () {
+        var _this = this;
+        this.ciudadesService
+            .getCiudades()
+            .then(function (ciudades) { return _this.ciudades = ciudades; });
+    };
+    SensoresComponent.prototype.getTipoSensores = function () {
+        var _this = this;
+        this.tipoSensoresService
+            .getTipoSensores()
+            .then(function (tipoSensores) { return _this.tipoSensores = tipoSensores; });
+    };
+    SensoresComponent.prototype.getSensores = function () {
+        var _this = this;
+        this.SensoresService
+            .getSensores()
+            .then(function (sensores) { return _this.sensores = sensores; });
+    };
+    SensoresComponent.prototype.setSensor = function (nuevo) {
+        this.SensoresService.setSensor(nuevo);
     };
     SensoresComponent = __decorate([
         core_1.Component({
@@ -68,7 +107,7 @@ var SensoresComponent = (function () {
             moduleId: module.id,
             templateUrl: 'sensores.component.html'
         }), 
-        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, Object])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, sensores_service_1.SensoresService, sensor_1.Sensor])
     ], SensoresComponent);
     return SensoresComponent;
 }());

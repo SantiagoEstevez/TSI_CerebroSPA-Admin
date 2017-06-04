@@ -40,8 +40,8 @@ export class TipoSensoresComponent implements OnInit {
 
         this.nuevoTipoSensor.nombre = '';
         this.nuevoTipoSensor.frecuencia = '';
-        this.nuevoTipoSensor.tipo = this.nombreCampoTS;
-        this.nuevoTipoSensor.ciudadSensor = this.nombreCampoCiudad;
+        this.nuevoTipoSensor.tipo = '';
+        this.nuevoTipoSensor.ciudad = '';
 
         this.getCiudades();
         this.getTipoSensores();
@@ -52,7 +52,7 @@ export class TipoSensoresComponent implements OnInit {
     //---> Funciones de eventos <---
     changeCiudad(value) {
         this.CampoCiudad = value.nombre;
-        this.nuevoTipoSensor.ciudadSensor = value.nombre;
+        this.nuevoTipoSensor.ciudad = value.nombre;
     }
 
     changeTipoBase(value) {
@@ -61,11 +61,12 @@ export class TipoSensoresComponent implements OnInit {
     }
 
     agregarTipoSensor() {
+        var ciudad = this.nuevoTipoSensor.ciudad;
         var tipo = this.nuevoTipoSensor.tipo;
         var nombre = this.nuevoTipoSensor.nombre;
         var frecuencia = this.nuevoTipoSensor.frecuencia;
 
-        if (tipo != this.nombreCampoTS && nombre != '' && frecuencia != '') {
+        if (ciudad != '' && tipo != '' && nombre != '' && frecuencia != '') {
             this.setTipoSensor(this.nuevoTipoSensor);
 
             this.inicializar();

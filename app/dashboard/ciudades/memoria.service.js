@@ -6,7 +6,8 @@ var MemoriaService = (function () {
         var ciudades = [];
         var tiposensores = [];
         var tiposbaseensores = [{ nombre: 'Agua' }, { nombre: 'Fuego' }, { nombre: 'Tierra' }, { nombre: 'Aire' }, { nombre: 'Avatar maestro de los 4 elementos' }];
-        return { ciudades: ciudades, tiposensores: tiposensores, tiposbaseensores: tiposbaseensores };
+        var sensores = [];
+        return { ciudades: ciudades, tiposensores: tiposensores, tiposbaseensores: tiposbaseensores, sensores: sensores };
     };
     return MemoriaService;
 }());

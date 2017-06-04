@@ -31,8 +31,8 @@ var TipoSensoresComponent = (function () {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.nuevoTipoSensor.nombre = '';
         this.nuevoTipoSensor.frecuencia = '';
-        this.nuevoTipoSensor.tipo = this.nombreCampoTS;
-        this.nuevoTipoSensor.ciudadSensor = this.nombreCampoCiudad;
+        this.nuevoTipoSensor.tipo = '';
+        this.nuevoTipoSensor.ciudad = '';
         this.getCiudades();
         this.getTipoSensores();
         this.getTipoBaseSensor();
@@ -40,17 +40,18 @@ var TipoSensoresComponent = (function () {
     //---> Funciones de eventos <---
     TipoSensoresComponent.prototype.changeCiudad = function (value) {
         this.CampoCiudad = value.nombre;
-        this.nuevoTipoSensor.ciudadSensor = value.nombre;
+        this.nuevoTipoSensor.ciudad = value.nombre;
     };
     TipoSensoresComponent.prototype.changeTipoBase = function (value) {
         this.CampoTS = value.nombre;
         this.nuevoTipoSensor.tipo = value.nombre;
     };
     TipoSensoresComponent.prototype.agregarTipoSensor = function () {
+        var ciudad = this.nuevoTipoSensor.ciudad;
         var tipo = this.nuevoTipoSensor.tipo;
         var nombre = this.nuevoTipoSensor.nombre;
         var frecuencia = this.nuevoTipoSensor.frecuencia;
-        if (tipo != this.nombreCampoTS && nombre != '' && frecuencia != '') {
+        if (ciudad != '' && tipo != '' && nombre != '' && frecuencia != '') {
             this.setTipoSensor(this.nuevoTipoSensor);
             this.inicializar();
         }

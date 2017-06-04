@@ -8,29 +8,46 @@
                     </div>
                     <div class="card-content">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
-                                        <span>{{tipo}}</span>
-                                        <span class="caret">  </span>
-                                    </button>
-                                    <ul class="dropdown-menu" style="z-index: 1;">
-                                        <li *ngFor="let tipoSensor of tipoSensores">
-                                            <a (click)="dropdownChange(tipoSensor)" style="cursor: pointer;">{{tipoSensor}}</a>
-                                        </li>
-                                    </ul>
+                            <div class="col-md-5">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
+                                            <span>{{CampoCiudad}}</span>
+                                            <span class="caret">  </span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="z-index: 1;">
+                                            <li *ngFor="let ciudad of ciudades">
+                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.nombre}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
+                                            <span>{{CampoTS}}</span>
+                                            <span class="caret">  </span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="z-index: 1;">
+                                            <li *ngFor="let tipoSensor of tipoSensores">
+                                                <a (click)="changeTipoSensor(tipoSensor)" style="cursor: pointer;">{{tipoSensor.nombre}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
                                 <div class="form-group form-black label-floating is-empty">
                                     <!--<label class="control-label">Latitud (disabled)</label>-->
-                                    <input [(ngModel)]="lat" type="text" class="form-control" disabled>
+                                    <input [(ngModel)]="nuevoSensor.lat" type="text" class="form-control" disabled>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group form-black label-floating is-empty">
                                     <!--<label class="control-label">Longitud (disabled)</label>-->
-                                    <input [(ngModel)]="lon" type="text" class="form-control" disabled>
+                                    <input [(ngModel)]="nuevoSensor.lon" type="text" class="form-control" disabled>
                                 </div>
                             </div>
                         </div>
@@ -57,6 +74,7 @@
                         <table class="table">
                             <thead class="text-danger">
                                 <tr>
+                                    <th>Ciudad</th>
                                     <th>Tipo de sensor</th>
                                     <th>latitud</th>
                                     <th>longitud</th>
@@ -64,6 +82,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let sensor of sensores">
+                                    <td>{{sensor.ciudad}}</td>
                                     <td>{{sensor.tipo}}</td>
                                     <td>{{sensor.lat}}</td>
                                     <td>{{sensor.lon}}</td>
