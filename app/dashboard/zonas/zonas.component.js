@@ -78,7 +78,15 @@ var ZonasComponent = (function () {
             clickable: true,
             editable: true,
         });
-        //Agregar evento
+        //Eventos del circulo
+        //this.circle.addListener('center_changed', (c) => {
+        //    this.nuevaZona.lat = this.circle.;
+        //    //this.nuevaZona.lon = c.latLng.lng();
+        //});
+        //this.circle.addListener('radius_changed', (r) => {
+        //    this.nuevaZona.radio = r.getRadius.lat();
+        //});
+        //Agregar evento click del mapa
         this.map.addListener('click', function (e) {
             _this.circle.setCenter(e.latLng);
             _this.nuevaZona.lat = e.latLng.lat();
@@ -88,6 +96,8 @@ var ZonasComponent = (function () {
     };
     //---> Funciones internas <---
     ZonasComponent.prototype.inicializo = function () {
+        this.circle.setCenter(null);
+        this.circle.setRadius(1000);
         this.CampoCiudad = this.nombreCampoCiudad;
         this.nuevaZona.lat = '';
         this.nuevaZona.lon = '';
@@ -102,10 +112,10 @@ var ZonasComponent = (function () {
         this.nuevaZona.ciudad = value.nombre;
     };
     ZonasComponent.prototype.agregarZona = function () {
-        var ciudad = this.nuevaZona.ciudad;
-        var lat = this.nuevaZona.lat;
-        var lon = this.nuevaZona.lon;
-        if (ciudad != '' && lat != '' && lon != '') {
+        this.nuevaZona.lat = this.circle.getCenter().lat();
+        this.nuevaZona.lon = this.circle.getCenter().lng();
+        this.nuevaZona.radio = this.circle.getRadius();
+        if (this.nuevaZona.ciudad != '' && this.nuevaZona.lat != '' && this.nuevaZona.lon != '') {
             this.setZona(this.nuevaZona);
             this.inicializo();
         }

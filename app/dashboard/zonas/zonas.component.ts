@@ -92,7 +92,17 @@ export class ZonasComponent implements OnInit {
             editable: true,
         });
 
-        //Agregar evento
+        //Eventos del circulo
+        //this.circle.addListener('center_changed', (c) => {
+        //    this.nuevaZona.lat = this.circle.;
+        //    //this.nuevaZona.lon = c.latLng.lng();
+        //});
+
+        //this.circle.addListener('radius_changed', (r) => {
+        //    this.nuevaZona.radio = r.getRadius.lat();
+        //});
+
+        //Agregar evento click del mapa
         this.map.addListener('click', (e) => {
             this.circle.setCenter(e.latLng);
             this.nuevaZona.lat = e.latLng.lat();
@@ -105,6 +115,9 @@ export class ZonasComponent implements OnInit {
 
     //---> Funciones internas <---
     inicializo() {
+        this.circle.setCenter(null);
+        this.circle.setRadius(1000);
+
         this.CampoCiudad = this.nombreCampoCiudad;
 
         this.nuevaZona.lat = '';
@@ -124,11 +137,11 @@ export class ZonasComponent implements OnInit {
     }
 
     agregarZona() {
-        var ciudad = this.nuevaZona.ciudad;
-        var lat = this.nuevaZona.lat;
-        var lon = this.nuevaZona.lon;
+        this.nuevaZona.lat = this.circle.getCenter().lat();
+        this.nuevaZona.lon = this.circle.getCenter().lng();
+        this.nuevaZona.radio = this.circle.getRadius();
 
-        if (ciudad != '' && lat != '' && lon != '') {
+        if (this.nuevaZona.ciudad != '' && this.nuevaZona.lat != '' && this.nuevaZona.lon != '') {
             this.setZona(this.nuevaZona);
 
             this.inicializo();
