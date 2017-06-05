@@ -68,6 +68,7 @@ var SensoresComponent = (function () {
     SensoresComponent.prototype.changeCiudad = function (value) {
         this.CampoCiudad = value.nombre;
         this.nuevoSensor.ciudad = value.nombre;
+        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
     };
     SensoresComponent.prototype.agregarSensor = function () {
         var ciudad = this.nuevoSensor.ciudad;

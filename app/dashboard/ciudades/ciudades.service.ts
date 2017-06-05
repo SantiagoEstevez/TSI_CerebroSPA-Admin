@@ -63,7 +63,7 @@ export class CiudadesService {
             .catch(this.handleError);
     }
 
-    getHero(id: number): Promise<Ciudad> {
+    getCiudad(id: number): Promise<Ciudad> {
         const url = `${this.Url}/${id}`;
         return this.http.get(url)
             .toPromise()
@@ -79,9 +79,9 @@ export class CiudadesService {
             .catch(this.handleError);
     }
 
-    create(nombre: string, lat: string, lon: string): Promise<Ciudad> {
+    setCiudad(nuevaCiudad: Ciudad): Promise<Ciudad> {
         return this.http
-            .post(this.Url, JSON.stringify({ nombre: nombre, lat: lat, lon: lon }), { headers: this.headers })
+            .post(this.Url, JSON.stringify(nuevaCiudad), { headers: this.headers })
             .toPromise()
             .then(res => res.json().data as Ciudad)
             .catch(this.handleError);

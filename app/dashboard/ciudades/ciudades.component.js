@@ -9,12 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var Ciudad_1 = require('./Ciudad');
 var ciudades_service_1 = require('./ciudades.service');
 var CiudadesComponent = (function () {
     function CiudadesComponent(ciudadesService) {
         this.ciudadesService = ciudadesService;
-        this.nombreCiudad = '';
+        this.nuevaCiudad = new Ciudad_1.Ciudad();
     }
+    ;
     CiudadesComponent.prototype.ngOnInit = function () {
         //this.getUsuarios();
         var _this = this;
@@ -47,8 +49,11 @@ var CiudadesComponent = (function () {
     };
     //---> Funciones de uso interno <---
     CiudadesComponent.prototype.inicializar = function () {
+        this.nuevaCiudad.lat = '';
+        this.nuevaCiudad.lon = '';
+        this.nuevaCiudad.nombre = '';
+        this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
-        this.nombreCiudad = '';
     };
     //---> Funciones de eventos <---
     CiudadesComponent.prototype.agregarCiudad = function () {
@@ -57,7 +62,10 @@ var CiudadesComponent = (function () {
             var lat = place.geometry.location.lat();
             var lon = place.geometry.location.lng();
             if (!this.ciudades.find(function (item) { return item.lat == lat && item.lon == lon; })) {
-                this.setCiudad(place.name, lat, lon);
+                this.nuevaCiudad.nombre = place.name;
+                this.nuevaCiudad.lon = lat;
+                this.nuevaCiudad.lat = lon;
+                this.setCiudad(this.nuevaCiudad);
                 this.inicializar();
             }
             else {
@@ -79,14 +87,8 @@ var CiudadesComponent = (function () {
         //    .then(ciudades => this.ciudades = ciudades);
         this.ciudadesService.getUsuarios().then(function (ciudades) { return _this.ciudades = ciudades; });
     };
-    CiudadesComponent.prototype.setCiudad = function (nombre, lat, lon) {
-        nombre = nombre.trim();
-        //lat = lat.trim();
-        //lon = lon.trim();
-        if (!nombre) {
-            return;
-        }
-        this.ciudadesService.create(nombre, lat, lon)
+    CiudadesComponent.prototype.setCiudad = function (nueva) {
+        this.ciudadesService.setCiudad(nueva)
             .then(function (ciudad) {
             //this.ciudades.push(ciudad);
         });

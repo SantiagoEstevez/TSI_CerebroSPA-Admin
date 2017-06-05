@@ -60,7 +60,7 @@ var CiudadesService = (function () {
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    CiudadesService.prototype.getHero = function (id) {
+    CiudadesService.prototype.getCiudad = function (id) {
         var url = this.Url + "/" + id;
         return this.http.get(url)
             .toPromise()
@@ -74,9 +74,9 @@ var CiudadesService = (function () {
             .then(function () { return null; })
             .catch(this.handleError);
     };
-    CiudadesService.prototype.create = function (nombre, lat, lon) {
+    CiudadesService.prototype.setCiudad = function (nuevaCiudad) {
         return this.http
-            .post(this.Url, JSON.stringify({ nombre: nombre, lat: lat, lon: lon }), { headers: this.headers })
+            .post(this.Url, JSON.stringify(nuevaCiudad), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);

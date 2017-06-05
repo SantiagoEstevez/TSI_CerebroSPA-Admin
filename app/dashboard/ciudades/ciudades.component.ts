@@ -12,13 +12,16 @@ declare var google: any;
 
 export class CiudadesComponent implements OnInit {
 
-    constructor(private ciudadesService: CiudadesService) { }
+    constructor(
+        private ciudadesService: CiudadesService,
+        //private nuevaCiudad: Ciudad
+    ) { };
 
     autocomplete: any;
     map: any;
-    nombreCiudad: string = '';
-    public ciudades: Ciudad[];
+    ciudades: Ciudad[];
     usuarios: string[];
+    nuevaCiudad = new Ciudad();
 
     ngOnInit() {
         //this.getUsuarios();
@@ -59,8 +62,12 @@ export class CiudadesComponent implements OnInit {
 
     //---> Funciones de uso interno <---
     inicializar() {
+        this.nuevaCiudad.lat = '';
+        this.nuevaCiudad.lon = '';
+        this.nuevaCiudad.nombre = '';
+
+        this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
-        this.nombreCiudad = '';
     }
 
 
@@ -73,7 +80,11 @@ export class CiudadesComponent implements OnInit {
             var lon = place.geometry.location.lng();
 
             if (!this.ciudades.find(item => item.lat == lat && item.lon == lon)) {
-                this.setCiudad(place.name, lat, lon);
+                this.nuevaCiudad.nombre = place.name;
+                this.nuevaCiudad.lon = lat;
+                this.nuevaCiudad.lat = lon;
+
+                this.setCiudad(this.nuevaCiudad);
                 this.inicializar();
             } else {
                 alert("Esta ciudad ya esta en uso.");
@@ -96,13 +107,8 @@ export class CiudadesComponent implements OnInit {
         this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
     }
 
-    setCiudad(nombre: string, lat: string, lon: string): void {
-        nombre = nombre.trim();
-        //lat = lat.trim();
-        //lon = lon.trim();
-
-        if (!nombre) { return; }
-        this.ciudadesService.create(nombre, lat, lon)
+    setCiudad(nueva: Ciudad): void {
+        this.ciudadesService.setCiudad(nueva)
             .then(ciudad => {
                 //this.ciudades.push(ciudad);
             });

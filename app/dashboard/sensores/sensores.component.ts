@@ -88,6 +88,7 @@ export class SensoresComponent implements OnInit {
     changeCiudad(value) {
         this.CampoCiudad = value.nombre;
         this.nuevoSensor.ciudad = value.nombre;
+        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
     }
 
     agregarSensor() {
