@@ -2,29 +2,29 @@ import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import { Sensor } from './sensor';
+import { Zona } from './zona';
 
 @Injectable()
-export class SensoresService {
+export class ZonasService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    private url = 'api/sensores';  // URL to web api
+    private url = 'api/zonas';  // URL to web api
 
     constructor(private http: Http) { }
 
     //--> Tipo de sensores <--
-    getSensores(): Promise<Sensor[]> {
+    getZonas(): Promise<Zona[]> {
         return this.http.get(this.url)
             .toPromise()
-            .then(response => response.json().data as Sensor[])
+            .then(response => response.json().data as Zona[])
             .catch(this.handleError);
     }
 
-    getTipoSensor(id: number): Promise<Sensor> {
+    getZona(id: number): Promise<Zona> {
         const url = `${this.url}/${id}`;
         return this.http.get(url)
             .toPromise()
-            .then(response => response.json().data as Sensor)
+            .then(response => response.json().data as Zona)
             .catch(this.handleError);
     }
 
@@ -36,11 +36,11 @@ export class SensoresService {
             .catch(this.handleError);
     }
 
-    setSensor(nurevoSensor: Sensor): Promise<Sensor> {
+    setZona(nurevaZona: Zona): Promise<Zona> {
         return this.http
-            .post(this.url, JSON.stringify(nurevoSensor), { headers: this.headers })
+            .post(this.url, JSON.stringify(nurevaZona), { headers: this.headers })
             .toPromise()
-            .then(res => res.json().data as Sensor)
+            .then(res => res.json().data as Zona)
             .catch(this.handleError);
     }
 
@@ -55,10 +55,10 @@ export class SensoresService {
 
 
     //---> Tipo base de sensores <---
-    getTipoBaseSensor(): Promise<Sensor[]> {
+    getTipoBaseSensor(): Promise<Zona[]> {
         return this.http.get('api/tiposbaseensores')
             .toPromise()
-            .then(response => response.json().data as Sensor[])
+            .then(response => response.json().data as Zona[])
             .catch(this.handleError);
     }
 

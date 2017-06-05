@@ -10,22 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var ciudades_service_1 = require('../ciudades/ciudades.service');
-var tipo_sensor_service_1 = require('../tipo-sensores/tipo-sensor.service');
-var sensor_1 = require('./sensor');
-var sensores_service_1 = require('./sensores.service');
-var SensoresComponent = (function () {
-    function SensoresComponent(ciudadesService, tipoSensoresService, SensoresService, nuevoSensor) {
+var zona_1 = require('./zona');
+var zonas_service_1 = require('./zonas.service');
+var ZonasComponent = (function () {
+    function ZonasComponent(ciudadesService, zonasService, nuevaZona) {
         this.ciudadesService = ciudadesService;
-        this.tipoSensoresService = tipoSensoresService;
-        this.SensoresService = SensoresService;
-        this.nuevoSensor = nuevoSensor;
-        this.nombreCampoTS = 'Tipo sensor';
-        this.nombreCampoCiudad = 'Ciudad del sensor';
-        this.CampoTS = '';
+        this.zonasService = zonasService;
+        this.nuevaZona = nuevaZona;
+        this.nombreCampoCiudad = 'Ciudad de la zona';
         this.CampoCiudad = '';
     }
     ;
-    SensoresComponent.prototype.ngOnInit = function () {
+    ZonasComponent.prototype.ngOnInit = function () {
         var _this = this;
         //Cargo mapa
         var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
@@ -36,81 +32,109 @@ var SensoresComponent = (function () {
             styles: []
         };
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        //Cargo unico marcador
-        this.marker = new google.maps.Marker({
-            map: this.map
+        //Cargo controlador de zonas.
+        //this.capaZonas = new google.maps.drawing.DrawingManager({
+        //    drawingMode: google.maps.drawing.OverlayType.CIRCLE,
+        //    drawingControl: true,
+        //    drawingControlOptions: {
+        //        position: google.maps.ControlPosition.TOP_CENTER,
+        //        drawingModes: ['circle']
+        //        //drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+        //    },
+        //    circleOptions: {
+        //        //fillColor: '#ffff00',
+        //        //fillOpacity: 1,
+        //        //strokeWeight: 5,
+        //        clickable: true,
+        //        editable: true,
+        //        zIndex: 1
+        //    }
+        //});
+        //this.capaZonas.setMap(this.map);
+        //this.capaZonas.addListener('circlecomplete', (e) => {
+        //    e.addListener('click', (r) => {
+        //        alert("pos old" + e.getCenter().lat());
+        //    });
+        //    e.addListener('center_changed', (c) => {
+        //        alert(e.getCenter().lat());
+        //        var a = this.zonas.find(z => z.lat == e.getCenter().lat() && z.lon == e.getCenter().lng());
+        //        console.log(a);
+        //        //this.zonas.push(a);
+        //    });
+        //    this.nuevaZona.lat = e.getCenter().lat();
+        //    this.nuevaZona.lon = e.getCenter().lng();
+        //    this.nuevaZona.radio = e.getRadius();
+        //    this.zonas.push(this.nuevaZona);
+        //});
+        //Cargo unico circulo.
+        this.circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: this.map,
+            radius: 1000,
+            clickable: true,
+            editable: true,
         });
         //Agregar evento
         this.map.addListener('click', function (e) {
-            _this.nuevoSensor.lat = e.latLng.lat();
-            _this.nuevoSensor.lon = e.latLng.lng();
-            _this.marker.setPosition(e.latLng);
+            _this.circle.setCenter(e.latLng);
+            _this.nuevaZona.lat = e.latLng.lat();
+            _this.nuevaZona.lon = e.latLng.lng();
         });
         this.inicializo();
     };
     //---> Funciones internas <---
-    SensoresComponent.prototype.inicializo = function () {
-        this.CampoTS = this.nombreCampoTS;
+    ZonasComponent.prototype.inicializo = function () {
         this.CampoCiudad = this.nombreCampoCiudad;
-        this.nuevoSensor.lat = '';
-        this.nuevoSensor.lon = '';
-        this.nuevoSensor.tipo = '';
-        this.nuevoSensor.ciudad = '';
+        this.nuevaZona.lat = '';
+        this.nuevaZona.lon = '';
+        this.nuevaZona.radio = '';
+        this.nuevaZona.ciudad = '';
         this.getCiudades();
-        this.getTipoSensores();
-        this.getSensores();
+        this.getZonas();
     };
     //---> Funciones de eventos <---
-    SensoresComponent.prototype.changeTipoSensor = function (value) {
-        this.CampoTS = value.nombre;
-        this.nuevoSensor.tipo = value.nombre;
-    };
-    SensoresComponent.prototype.changeCiudad = function (value) {
+    ZonasComponent.prototype.changeCiudad = function (value) {
         this.CampoCiudad = value.nombre;
-        this.nuevoSensor.ciudad = value.nombre;
+        this.nuevaZona.ciudad = value.nombre;
     };
-    SensoresComponent.prototype.agregarSensor = function () {
-        var ciudad = this.nuevoSensor.ciudad;
-        var tipo = this.nuevoSensor.tipo;
-        var lat = this.nuevoSensor.lat;
-        var lon = this.nuevoSensor.lon;
-        if (ciudad != '' && tipo != '' && lat != '' && lon != '') {
-            this.setSensor(this.nuevoSensor);
+    ZonasComponent.prototype.agregarZona = function () {
+        var ciudad = this.nuevaZona.ciudad;
+        var lat = this.nuevaZona.lat;
+        var lon = this.nuevaZona.lon;
+        if (ciudad != '' && lat != '' && lon != '') {
+            this.setZona(this.nuevaZona);
             this.inicializo();
         }
     };
     //---> Funciones de servicios <---
-    SensoresComponent.prototype.getCiudades = function () {
+    ZonasComponent.prototype.getCiudades = function () {
         var _this = this;
         this.ciudadesService
             .getCiudades()
             .then(function (ciudades) { return _this.ciudades = ciudades; });
     };
-    SensoresComponent.prototype.getTipoSensores = function () {
+    ZonasComponent.prototype.getZonas = function () {
         var _this = this;
-        this.tipoSensoresService
-            .getTipoSensores()
-            .then(function (tipoSensores) { return _this.tipoSensores = tipoSensores; });
+        this.zonasService
+            .getZonas()
+            .then(function (zonas) { return _this.zonas = zonas; });
     };
-    SensoresComponent.prototype.getSensores = function () {
-        var _this = this;
-        this.SensoresService
-            .getSensores()
-            .then(function (sensores) { return _this.sensores = sensores; });
+    ZonasComponent.prototype.setZona = function (nueva) {
+        this.zonasService.setZona(nueva);
     };
-    SensoresComponent.prototype.setSensor = function (nuevo) {
-        this.SensoresService.setSensor(nuevo);
-    };
-    SensoresComponent = __decorate([
+    ZonasComponent = __decorate([
         core_1.Component({
-            selector: 'sensores-cmp',
+            selector: 'zonas-cmp',
             moduleId: module.id,
-            templateUrl: 'sensores.component.html'
+            templateUrl: 'zonas.component.html'
         }), 
-        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, (typeof (_a = typeof sensores_service_1.SensoresService !== 'undefined' && sensores_service_1.SensoresService) === 'function' && _a) || Object, (typeof (_b = typeof sensor_1.Sensor !== 'undefined' && sensor_1.Sensor) === 'function' && _b) || Object])
-    ], SensoresComponent);
-    return SensoresComponent;
-    var _a, _b;
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, zonas_service_1.ZonasService, zona_1.Zona])
+    ], ZonasComponent);
+    return ZonasComponent;
 }());
-exports.SensoresComponent = SensoresComponent;
+exports.ZonasComponent = ZonasComponent;
 //# sourceMappingURL=zonas.component.js.map

@@ -6,7 +6,8 @@ export class MemoriaService implements InMemoryDbService {
         let tiposensores = [];
         let tiposbaseensores = [{ nombre: 'Agua' }, { nombre: 'Fuego' }, { nombre: 'Tierra' }, { nombre: 'Aire' }, { nombre: 'Avatar maestro de los 4 elementos' }];
         let sensores = [];
+        let zonas = [];
 
-        return { ciudades, tiposensores, tiposbaseensores, sensores };
+        return { ciudades, tiposensores, tiposbaseensores, sensores, zonas };
     }
 }

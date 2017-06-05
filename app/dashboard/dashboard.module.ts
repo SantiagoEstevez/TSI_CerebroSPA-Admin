@@ -7,10 +7,12 @@ import { MODULE_COMPONENTS, MODULE_ROUTES } from './dashboard.routes';
 import { Ciudad } from './ciudades/ciudad';
 import { TipoSensor } from './tipo-sensores/tipo-sensor';
 import { Sensor } from './sensores/sensor';
+import { Zona } from './zonas/zona';
 
 import { CiudadesService } from './ciudades/ciudades.service';
 import { TipoSensoresService } from './tipo-sensores/tipo-sensor.service';
 import { SensoresService } from './sensores/sensores.service';
+import { ZonasService } from './zonas/zonas.service';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { MemoriaService } from './ciudades/memoria.service';
@@ -23,7 +25,7 @@ import { MemoriaService } from './ciudades/memoria.service';
         InMemoryWebApiModule.forRoot(MemoriaService) //comentar esta linea para desactivar la parte de memoria.
     ],
     declarations: [MODULE_COMPONENTS],
-    providers: [CiudadesService, TipoSensoresService, SensoresService, Ciudad, TipoSensor, Sensor]
+    providers: [CiudadesService, TipoSensoresService, SensoresService, ZonasService, Ciudad, TipoSensor, Sensor, Zona]
 })
 
 export class DashboardModule{}

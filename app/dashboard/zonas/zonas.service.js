@@ -11,36 +11,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var http_1 = require('@angular/http');
 var core_1 = require('@angular/core');
 require('rxjs/add/operator/toPromise');
-var SensoresService = (function () {
-    function SensoresService(http) {
+var ZonasService = (function () {
+    function ZonasService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.url = 'api/sensores'; // URL to web api
+        this.url = 'api/zonas'; // URL to web api
     }
     //--> Tipo de sensores <--
-    SensoresService.prototype.getSensores = function () {
+    ZonasService.prototype.getZonas = function () {
         return this.http.get(this.url)
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    SensoresService.prototype.getTipoSensor = function (id) {
+    ZonasService.prototype.getZona = function (id) {
         var url = this.url + "/" + id;
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    SensoresService.prototype.delete = function (id) {
+    ZonasService.prototype.delete = function (id) {
         var url = this.url + "/" + id;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
             .catch(this.handleError);
     };
-    SensoresService.prototype.setSensor = function (nurevoSensor) {
+    ZonasService.prototype.setZona = function (nurevaZona) {
         return this.http
-            .post(this.url, JSON.stringify(nurevoSensor), { headers: this.headers })
+            .post(this.url, JSON.stringify(nurevaZona), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
@@ -54,21 +54,21 @@ var SensoresService = (function () {
     //        .catch(this.handleError);
     //}
     //---> Tipo base de sensores <---
-    SensoresService.prototype.getTipoBaseSensor = function () {
+    ZonasService.prototype.getTipoBaseSensor = function () {
         return this.http.get('api/tiposbaseensores')
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    SensoresService.prototype.handleError = function (error) {
+    ZonasService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
     };
-    SensoresService = __decorate([
+    ZonasService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
-    ], SensoresService);
-    return SensoresService;
+    ], ZonasService);
+    return ZonasService;
 }());
-exports.SensoresService = SensoresService;
+exports.ZonasService = ZonasService;
 //# sourceMappingURL=zonas.service.js.map

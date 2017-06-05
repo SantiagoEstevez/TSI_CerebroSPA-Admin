@@ -11,12 +11,14 @@ var ciudades_component_1 = require('./ciudades/ciudades.component');
 var eventos_component_1 = require('./eventos/eventos.component');
 var tipo_sensores_component_1 = require('./tipo-sensores/tipo-sensores.component');
 var sensores_component_1 = require('./sensores/sensores.component');
+var zonas_component_1 = require('./zonas/zonas.component');
 exports.MODULE_ROUTES = [
     { path: 'dashboard', component: home_component_1.HomeComponent },
     { path: 'maps', component: maps_component_1.MapsComponent },
     { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent },
     { path: 'TipoSensores', component: tipo_sensores_component_1.TipoSensoresComponent },
     { path: 'Sensores', component: sensores_component_1.SensoresComponent },
+    { path: 'Zonas', component: zonas_component_1.ZonasComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
     { path: 'notifications', component: notifications_component_1.NotificationsComponent },
     //{ path: 'user', component: UserComponent },
@@ -38,6 +40,7 @@ exports.MODULE_COMPONENTS = [
     ciudades_component_1.CiudadesComponent,
     eventos_component_1.EventosComponent,
     tipo_sensores_component_1.TipoSensoresComponent,
-    sensores_component_1.SensoresComponent
+    sensores_component_1.SensoresComponent,
+    zonas_component_1.ZonasComponent
 ];
 //# sourceMappingURL=dashboard.routes.js.map

@@ -1,8 +1,8 @@
 "use strict";
-var Sensor = (function () {
-    function Sensor() {
+var Zona = (function () {
+    function Zona() {
     }
-    return Sensor;
+    return Zona;
 }());
-exports.Sensor = Sensor;
+exports.Zona = Zona;
 //# sourceMappingURL=zona.js.map

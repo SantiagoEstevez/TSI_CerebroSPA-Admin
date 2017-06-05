@@ -1,39 +1,34 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { CiudadesService } from '../ciudades/ciudades.service';
-import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
-import { TipoSensor } from '../tipo-sensores/tipo-sensor';
 import { Ciudad } from '../ciudades/ciudad';
-import { Sensor } from './sensor';
-import { SensoresService } from './sensores.service';
+import { Zona } from './zona';
+import { ZonasService } from './zonas.service';
 
 declare var google: any;
 
 @Component({
-    selector: 'sensores-cmp',
+    selector: 'zonas-cmp',
     moduleId: module.id,
-    templateUrl: 'sensores.component.html'
+    templateUrl: 'zonas.component.html'
 })
 
-export class SensoresComponent implements OnInit {
+export class ZonasComponent implements OnInit {
 
     constructor(
         private ciudadesService: CiudadesService,
-        private tipoSensoresService: TipoSensoresService,
-        private SensoresService: SensoresService,
-        private nuevoSensor: Sensor
+        private zonasService: ZonasService,
+        private nuevaZona: Zona
     ) { };
 
-    nombreCampoTS: string = 'Tipo sensor';
-    nombreCampoCiudad: string = 'Ciudad del sensor';
+    nombreCampoCiudad: string = 'Ciudad de la zona';
 
-    CampoTS: string = '';
     CampoCiudad: string = '';
     map: any;
-    marker: any;
+    capaZonas: any;
+    circle: any;
 
     ciudades: Ciudad[];
-    tipoSensores: TipoSensor[];
-    sensores: Sensor[];
+    zonas: Zona[];
 
     ngOnInit() {
 
@@ -47,16 +42,61 @@ export class SensoresComponent implements OnInit {
         }
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-        //Cargo unico marcador
-        this.marker = new google.maps.Marker({
-            map: this.map
+        //Cargo controlador de zonas.
+        //this.capaZonas = new google.maps.drawing.DrawingManager({
+        //    drawingMode: google.maps.drawing.OverlayType.CIRCLE,
+        //    drawingControl: true,
+        //    drawingControlOptions: {
+        //        position: google.maps.ControlPosition.TOP_CENTER,
+        //        drawingModes: ['circle']
+        //        //drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+        //    },
+        //    circleOptions: {
+        //        //fillColor: '#ffff00',
+        //        //fillOpacity: 1,
+        //        //strokeWeight: 5,
+        //        clickable: true,
+        //        editable: true,
+        //        zIndex: 1
+        //    }
+        //});
+        //this.capaZonas.setMap(this.map);
+
+        //this.capaZonas.addListener('circlecomplete', (e) => {
+        //    e.addListener('click', (r) => {
+        //        alert("pos old" + e.getCenter().lat());
+        //    });
+
+        //    e.addListener('center_changed', (c) => {
+        //        alert(e.getCenter().lat());
+        //        var a = this.zonas.find(z => z.lat == e.getCenter().lat() && z.lon == e.getCenter().lng());
+        //        console.log(a);
+        //        //this.zonas.push(a);
+        //    });
+        //    this.nuevaZona.lat = e.getCenter().lat();
+        //    this.nuevaZona.lon = e.getCenter().lng();
+        //    this.nuevaZona.radio = e.getRadius();
+        //    this.zonas.push(this.nuevaZona);
+        //});
+
+        //Cargo unico circulo.
+        this.circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: this.map,
+            radius: 1000,
+            clickable: true,
+            editable: true,
         });
 
         //Agregar evento
         this.map.addListener('click', (e) => {
-            this.nuevoSensor.lat = e.latLng.lat();
-            this.nuevoSensor.lon = e.latLng.lng();
-            this.marker.setPosition(e.latLng);
+            this.circle.setCenter(e.latLng);
+            this.nuevaZona.lat = e.latLng.lat();
+            this.nuevaZona.lon = e.latLng.lng();
         });
 
         this.inicializo();
@@ -65,39 +105,31 @@ export class SensoresComponent implements OnInit {
 
     //---> Funciones internas <---
     inicializo() {
-        this.CampoTS = this.nombreCampoTS;
         this.CampoCiudad = this.nombreCampoCiudad;
 
-        this.nuevoSensor.lat = '';
-        this.nuevoSensor.lon = '';
-        this.nuevoSensor.tipo = '';
-        this.nuevoSensor.ciudad = '';
+        this.nuevaZona.lat = '';
+        this.nuevaZona.lon = '';
+        this.nuevaZona.radio = '';
+        this.nuevaZona.ciudad = '';
 
         this.getCiudades();
-        this.getTipoSensores();
-        this.getSensores();
+        this.getZonas();
     }
 
 
     //---> Funciones de eventos <---
-    changeTipoSensor(value) {
-        this.CampoTS = value.nombre;
-        this.nuevoSensor.tipo = value.nombre;
-    }
-
     changeCiudad(value) {
         this.CampoCiudad = value.nombre;
-        this.nuevoSensor.ciudad = value.nombre;
+        this.nuevaZona.ciudad = value.nombre;
     }
 
-    agregarSensor() {
-        var ciudad = this.nuevoSensor.ciudad;
-        var tipo = this.nuevoSensor.tipo;
-        var lat = this.nuevoSensor.lat;
-        var lon = this.nuevoSensor.lon;
+    agregarZona() {
+        var ciudad = this.nuevaZona.ciudad;
+        var lat = this.nuevaZona.lat;
+        var lon = this.nuevaZona.lon;
 
-        if (ciudad != '' && tipo != '' && lat != '' && lon != '') {
-            this.setSensor(this.nuevoSensor);
+        if (ciudad != '' && lat != '' && lon != '') {
+            this.setZona(this.nuevaZona);
 
             this.inicializo();
         }
@@ -111,19 +143,13 @@ export class SensoresComponent implements OnInit {
             .then(ciudades => this.ciudades = ciudades);
     }
 
-    getTipoSensores(): void {
-        this.tipoSensoresService
-            .getTipoSensores()
-            .then(tipoSensores => this.tipoSensores = tipoSensores);
+    getZonas(): void {
+        this.zonasService
+            .getZonas()
+            .then(zonas => this.zonas = zonas);
     }
 
-    getSensores(): void {
-        this.SensoresService
-            .getSensores()
-            .then(sensores => this.sensores = sensores);
-    }
-
-    setSensor(nuevo: Sensor): void {
-        this.SensoresService.setSensor(nuevo);
+    setZona(nueva: Zona): void {
+        this.zonasService.setZona(nueva);
     }
 }
