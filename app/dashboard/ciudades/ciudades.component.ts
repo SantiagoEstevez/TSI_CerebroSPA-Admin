@@ -81,8 +81,8 @@ export class CiudadesComponent implements OnInit {
 
             if (!this.ciudades.find(item => item.lat == lat && item.lon == lon)) {
                 this.nuevaCiudad.nombre = place.name;
-                this.nuevaCiudad.lon = lat;
-                this.nuevaCiudad.lat = lon;
+                this.nuevaCiudad.lon = lon;
+                this.nuevaCiudad.lat = lat;
 
                 this.setCiudad(this.nuevaCiudad);
                 this.inicializar();

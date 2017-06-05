@@ -110,6 +110,7 @@ var ZonasComponent = (function () {
     ZonasComponent.prototype.changeCiudad = function (value) {
         this.CampoCiudad = value.nombre;
         this.nuevaZona.ciudad = value.nombre;
+        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
     };
     ZonasComponent.prototype.agregarZona = function () {
         this.nuevaZona.lat = this.circle.getCenter().lat();

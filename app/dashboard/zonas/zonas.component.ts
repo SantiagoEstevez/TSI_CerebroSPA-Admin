@@ -134,6 +134,7 @@ export class ZonasComponent implements OnInit {
     changeCiudad(value) {
         this.CampoCiudad = value.nombre;
         this.nuevaZona.ciudad = value.nombre;
+        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
     }
 
     agregarZona() {

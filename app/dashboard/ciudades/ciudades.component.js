@@ -63,8 +63,8 @@ var CiudadesComponent = (function () {
             var lon = place.geometry.location.lng();
             if (!this.ciudades.find(function (item) { return item.lat == lat && item.lon == lon; })) {
                 this.nuevaCiudad.nombre = place.name;
-                this.nuevaCiudad.lon = lat;
-                this.nuevaCiudad.lat = lon;
+                this.nuevaCiudad.lon = lon;
+                this.nuevaCiudad.lat = lat;
                 this.setCiudad(this.nuevaCiudad);
                 this.inicializar();
             }
