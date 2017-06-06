@@ -24,8 +24,8 @@ var ZonasService = (function () {
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    ZonasService.prototype.getZona = function (id) {
-        var url = this.url + "/" + id;
+    ZonasService.prototype.getZona = function (lat, lon) {
+        var url = this.url + "/" + lat;
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json().data; })
@@ -45,19 +45,12 @@ var ZonasService = (function () {
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
-    //update(hero: Ciudades): Promise<Ciudades> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
-    //---> Tipo base de sensores <---
-    ZonasService.prototype.getTipoBaseSensor = function () {
-        return this.http.get('api/tiposbaseensores')
+    ZonasService.prototype.update = function (zona) {
+        var url = this.url + "/" + zona.lat;
+        return this.http
+            .put(url, JSON.stringify(zona), { headers: this.headers })
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function () { return zona; })
             .catch(this.handleError);
     };
     ZonasService.prototype.handleError = function (error) {

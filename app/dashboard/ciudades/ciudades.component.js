@@ -11,9 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var Ciudad_1 = require('./Ciudad');
 var ciudades_service_1 = require('./ciudades.service');
+var sensores_service_1 = require('../sensores/sensores.service');
+var zonas_service_1 = require('../zonas/zonas.service');
 var CiudadesComponent = (function () {
-    function CiudadesComponent(ciudadesService) {
+    function CiudadesComponent(ciudadesService, sensoresService, zonasService) {
         this.ciudadesService = ciudadesService;
+        this.sensoresService = sensoresService;
+        this.zonasService = zonasService;
         this.nuevaCiudad = new Ciudad_1.Ciudad();
     }
     ;
@@ -54,6 +58,7 @@ var CiudadesComponent = (function () {
         this.nuevaCiudad.nombre = '';
         this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
+        this.getUsuarios();
     };
     //---> Funciones de eventos <---
     CiudadesComponent.prototype.agregarCiudad = function () {
@@ -73,6 +78,19 @@ var CiudadesComponent = (function () {
             }
         }
     };
+    CiudadesComponent.prototype.eliminarCiudad = function (ciudad) {
+        var cantSensores = 0;
+        var cantZonas = 0;
+        this.sensoresService.getSensores().then(function (s) { return cantSensores = s.length; });
+        this.zonasService.getZonas().then(function (z) { return cantZonas = z.length; });
+        if (cantSensores > 0 || cantZonas > 0) {
+            alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
+        }
+        else {
+            this.ciudadesService.delete(ciudad.lat);
+            this.inicializar();
+        }
+    };
     //---> Funciones de servicios <---
     CiudadesComponent.prototype.getCiudades = function () {
         var _this = this;
@@ -81,11 +99,10 @@ var CiudadesComponent = (function () {
             .then(function (ciudades) { return _this.ciudades = ciudades; });
     };
     CiudadesComponent.prototype.getUsuarios = function () {
-        var _this = this;
         //this.ciudadesService
         //    .getAll()
         //    .then(ciudades => this.ciudades = ciudades);
-        this.ciudadesService.getUsuarios().then(function (ciudades) { return _this.ciudades = ciudades; });
+        //this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
     };
     CiudadesComponent.prototype.setCiudad = function (nueva) {
         this.ciudadesService.setCiudad(nueva)
@@ -99,7 +116,7 @@ var CiudadesComponent = (function () {
             moduleId: module.id,
             templateUrl: 'ciudades.component.html'
         }), 
-        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, sensores_service_1.SensoresService, zonas_service_1.ZonasService])
     ], CiudadesComponent);
     return CiudadesComponent;
 }());

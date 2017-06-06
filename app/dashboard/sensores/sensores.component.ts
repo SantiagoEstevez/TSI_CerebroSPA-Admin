@@ -91,6 +91,14 @@ export class SensoresComponent implements OnInit {
         this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
     }
 
+    editarSensor(sensor) {
+        alert("editando");
+    }
+
+    eliminarSensor(sensor) {
+        alert("eliminando");
+    }
+
     agregarSensor() {
         var ciudad = this.nuevoSensor.ciudad;
         var tipo = this.nuevoSensor.tipo;

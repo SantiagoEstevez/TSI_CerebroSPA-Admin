@@ -20,8 +20,8 @@ export class ZonasService {
             .catch(this.handleError);
     }
 
-    getZona(id: number): Promise<Zona> {
-        const url = `${this.url}/${id}`;
+    getZona(lat: string, lon: string): Promise<Zona> {
+        const url = `${this.url}/${lat}`;
         return this.http.get(url)
             .toPromise()
             .then(response => response.json().data as Zona)
@@ -44,21 +44,12 @@ export class ZonasService {
             .catch(this.handleError);
     }
 
-    //update(hero: Ciudades): Promise<Ciudades> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
-
-
-    //---> Tipo base de sensores <---
-    getTipoBaseSensor(): Promise<Zona[]> {
-        return this.http.get('api/tiposbaseensores')
+    update(zona: Zona): Promise<Zona> {
+        const url = `${this.url}/${zona.lat}`;
+        return this.http
+            .put(url, JSON.stringify(zona), { headers: this.headers })
             .toPromise()
-            .then(response => response.json().data as Zona[])
+            .then(() => zona)
             .catch(this.handleError);
     }
 

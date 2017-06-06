@@ -71,6 +71,8 @@
                                     <th>Tipo sensor</th>
                                     <th>Nombre sensor</th>
                                     <th>Lectura datos en s</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,6 +81,8 @@
                                     <td>{{tipoSensor.tipo}}</td>
                                     <td>{{tipoSensor.nombre}}</td>
                                     <td>{{tipoSensor.frecuencia}}</td>
+                                    <td (click)="editarTipoSensor(tipoSensor)"><i class="material-icons link">mode_edit</i></td>
+                                    <td (click)="eliminarTipoSensor(tipoSensor)"><i class="material-icons link">delete</i></td>
                                 </tr>
                             </tbody>
                         </table>

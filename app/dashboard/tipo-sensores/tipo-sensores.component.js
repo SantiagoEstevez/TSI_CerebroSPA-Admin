@@ -12,13 +12,16 @@ var core_1 = require('@angular/core');
 var ciudades_service_1 = require('../ciudades/ciudades.service');
 var tipo_sensor_service_1 = require('./tipo-sensor.service');
 var tipo_sensor_1 = require('./tipo-sensor');
+var sensores_service_1 = require('../sensores/sensores.service');
 var TipoSensoresComponent = (function () {
-    function TipoSensoresComponent(ciudadesService, tipoSensoresService, nuevoTipoSensor) {
+    function TipoSensoresComponent(ciudadesService, tipoSensoresService, sensoresService, nuevoTipoSensor) {
         this.ciudadesService = ciudadesService;
         this.tipoSensoresService = tipoSensoresService;
+        this.sensoresService = sensoresService;
         this.nuevoTipoSensor = nuevoTipoSensor;
         this.nombreCampoTS = 'Tipo de sensor';
         this.nombreCampoCiudad = 'Ciudad del sensor';
+        this.Editado = false;
         this.CampoTS = '';
         this.CampoCiudad = '';
     }
@@ -46,13 +49,40 @@ var TipoSensoresComponent = (function () {
         this.CampoTS = value.nombre;
         this.nuevoTipoSensor.tipo = value.nombre;
     };
+    TipoSensoresComponent.prototype.editarTipoSensor = function (tiposensor) {
+        this.CampoCiudad = tiposensor.ciudad;
+        this.CampoTS = tiposensor.tipo;
+        this.nuevoTipoSensor.ciudad = tiposensor.ciudad;
+        this.nuevoTipoSensor.tipo = tiposensor.tipo;
+        this.nuevoTipoSensor.frecuencia = tiposensor.frecuencia;
+        this.nuevoTipoSensor.nombre = tiposensor.nombre;
+    };
+    TipoSensoresComponent.prototype.eliminarTipoSensor = function (tiposensor) {
+        var _this = this;
+        var sensores;
+        var existen = false;
+        this.sensoresService.getSensores().then(function (s) {
+            sensores = s;
+            if (!sensores.find(function (r) { return r.tipo == tiposensor.nombre; })) {
+                _this.tipoSensoresService.delete(tiposensor.nombre);
+            }
+            else {
+                alert("No se puede eliminar este tipo de sensor ya que tiene sensores asociados a el.");
+            }
+        });
+    };
     TipoSensoresComponent.prototype.agregarTipoSensor = function () {
         var ciudad = this.nuevoTipoSensor.ciudad;
         var tipo = this.nuevoTipoSensor.tipo;
         var nombre = this.nuevoTipoSensor.nombre;
         var frecuencia = this.nuevoTipoSensor.frecuencia;
         if (ciudad != '' && tipo != '' && nombre != '' && frecuencia != '') {
-            this.setTipoSensor(this.nuevoTipoSensor);
+            if (this.Editado) {
+                this.updateTipoSensor(this.nuevoTipoSensor);
+            }
+            else {
+                this.setTipoSensor(this.nuevoTipoSensor);
+            }
             this.inicializar();
         }
     };
@@ -76,6 +106,9 @@ var TipoSensoresComponent = (function () {
             .then(function (t) {
         });
     };
+    TipoSensoresComponent.prototype.updateTipoSensor = function (tiposensor) {
+        this.tipoSensoresService.updateTipoBaseSensor(tiposensor);
+    };
     TipoSensoresComponent.prototype.getTipoBaseSensor = function () {
         var _this = this;
         this.tipoSensoresService
@@ -88,7 +121,7 @@ var TipoSensoresComponent = (function () {
             moduleId: module.id,
             templateUrl: 'tipo-sensores.component.html'
         }), 
-        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, tipo_sensor_1.TipoSensor])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, sensores_service_1.SensoresService, tipo_sensor_1.TipoSensor])
     ], TipoSensoresComponent);
     return TipoSensoresComponent;
 }());

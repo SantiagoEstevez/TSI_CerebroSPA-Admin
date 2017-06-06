@@ -31,8 +31,8 @@ var TipoSensoresService = (function () {
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    TipoSensoresService.prototype.delete = function (id) {
-        var url = this.url + "/" + id;
+    TipoSensoresService.prototype.delete = function (nombre) {
+        var url = this.url + "/" + nombre;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
@@ -45,14 +45,14 @@ var TipoSensoresService = (function () {
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
-    //update(hero: Ciudades): Promise<Ciudades> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
+    TipoSensoresService.prototype.updateTipoBaseSensor = function (tiposensor) {
+        var url = this.url + "/" + tiposensor.nombre;
+        return this.http
+            .put(url, JSON.stringify(tiposensor), { headers: this.headers })
+            .toPromise()
+            .then(function () { return tiposensor; })
+            .catch(this.handleError);
+    };
     //---> Tipo base de sensores <---
     TipoSensoresService.prototype.getTipoBaseSensor = function () {
         return this.http.get('api/tiposbaseensores')

@@ -27,34 +27,7 @@ export class CiudadesService {
             // Simulate server latency with 2 second delay
             setTimeout(() => resolve(this.getUsuarios()), 4000);
         });
-    }
-
-    //getUsuarios(): Observable<Ciudad[]> {
-    //    return this.http.get('http://localhost:6346/api/usuario')
-    //        .map(response => response.json().data as Ciudad[])
-    //        .catch(this.handleError);
-    //}
-
-    //private extractData(res: Response) {
-    //    let body = res.json();
-    //    return body.data || {};
-    //}
-
-    //private handleError(error: Response | any) {
-    //    // In a real world app, you might use a remote logging infrastructure
-    //    let errMsg: string;
-    //    if (error instanceof Response) {
-    //        const body = error.json() || '';
-    //        const err = body.error || JSON.stringify(body);
-    //        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    //    } else {
-    //        errMsg = error.message ? error.message : error.toString();
-    //    }
-    //    console.error(errMsg);
-    //    return Observable.throw(errMsg);
-    //}
-
-    
+    }    
 
     getCiudades(): Promise<Ciudad[]> {
         return this.http.get(this.Url)
@@ -63,16 +36,16 @@ export class CiudadesService {
             .catch(this.handleError);
     }
 
-    getCiudad(id: number): Promise<Ciudad> {
-        const url = `${this.Url}/${id}`;
+    getCiudad(lat: string): Promise<Ciudad> {
+        const url = `${this.Url}/'Monte'`;
         return this.http.get(url)
             .toPromise()
             .then(response => response.json().data as Ciudad)
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
-        const url = `${this.Url}/${id}`;
+    delete(lat: string): Promise<void> {
+        const url = `${this.Url}/"${lat}"`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
@@ -86,15 +59,6 @@ export class CiudadesService {
             .then(res => res.json().data as Ciudad)
             .catch(this.handleError);
     }
-
-    //update(hero: Ciudades): Promise<Ciudades> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only

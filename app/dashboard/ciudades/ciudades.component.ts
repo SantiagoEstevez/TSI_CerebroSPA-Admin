@@ -1,6 +1,8 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Ciudad } from './Ciudad';
 import { CiudadesService } from './ciudades.service';
+import { SensoresService } from '../sensores/sensores.service';
+import { ZonasService } from '../zonas/zonas.service';
 
 declare var google: any;
 
@@ -14,13 +16,15 @@ export class CiudadesComponent implements OnInit {
 
     constructor(
         private ciudadesService: CiudadesService,
+        private sensoresService: SensoresService,
+        private zonasService: ZonasService
         //private nuevaCiudad: Ciudad
     ) { };
 
     autocomplete: any;
     map: any;
     ciudades: Ciudad[];
-    usuarios: string[];
+    usuarios: any[];
     nuevaCiudad = new Ciudad();
 
     ngOnInit() {
@@ -68,6 +72,7 @@ export class CiudadesComponent implements OnInit {
 
         this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
+        this.getUsuarios();
     }
 
 
@@ -92,6 +97,21 @@ export class CiudadesComponent implements OnInit {
         }
     }    
 
+    eliminarCiudad(ciudad: Ciudad) {
+        var cantSensores: number = 0;
+        var cantZonas: number = 0;
+
+        this.sensoresService.getSensores().then(s => cantSensores = s.length);
+        this.zonasService.getZonas().then(z => cantZonas = z.length);
+
+        if (cantSensores > 0 || cantZonas > 0) {
+            alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
+        } else {
+            this.ciudadesService.delete(ciudad.lat);
+            this.inicializar();
+        }
+    }
+
 
     //---> Funciones de servicios <---
     getCiudades(): void {
@@ -104,7 +124,7 @@ export class CiudadesComponent implements OnInit {
         //this.ciudadesService
         //    .getAll()
         //    .then(ciudades => this.ciudades = ciudades);
-        this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
+        //this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
     }
 
     setCiudad(nueva: Ciudad): void {

@@ -26,6 +26,7 @@ export class ZonasComponent implements OnInit {
     map: any;
     capaZonas: any;
     circle: any;
+    editar: boolean = false;
 
     ciudades: Ciudad[];
     zonas: Zona[];
@@ -119,6 +120,7 @@ export class ZonasComponent implements OnInit {
         this.circle.setRadius(1000);
 
         this.CampoCiudad = this.nombreCampoCiudad;
+        this.editar = false;
 
         this.nuevaZona.lat = '';
         this.nuevaZona.lon = '';
@@ -143,10 +145,29 @@ export class ZonasComponent implements OnInit {
         this.nuevaZona.radio = this.circle.getRadius();
 
         if (this.nuevaZona.ciudad != '' && this.nuevaZona.lat != '' && this.nuevaZona.lon != '') {
+            if (this.editar) {
+                this.updateZona(this.nuevaZona);
+            }
             this.setZona(this.nuevaZona);
 
             this.inicializo();
         }
+    }
+
+    editarZona(zona: Zona) {
+        this.CampoCiudad = zona.ciudad;
+        this.circle.setCenter(new google.maps.LatLng(zona.lat, zona.lon));
+        this.circle.setRadius(zona.radio);
+
+        this.nuevaZona.lat = zona.lat;
+        this.nuevaZona.lon = zona.lon;
+        this.nuevaZona.radio = zona.radio;
+
+        this.editar = true;
+    }
+
+    eliminarZona(zona) {
+        alert("eliminar");
     }
 
 
@@ -165,5 +186,9 @@ export class ZonasComponent implements OnInit {
 
     setZona(nueva: Zona): void {
         this.zonasService.setZona(nueva);
+    }
+
+    updateZona(zona: Zona): void {
+        this.zonasService.update(zona);
     }
 }

@@ -32,43 +32,21 @@ var CiudadesService = (function () {
             setTimeout(function () { return resolve(_this.getUsuarios()); }, 4000);
         });
     };
-    //getUsuarios(): Observable<Ciudad[]> {
-    //    return this.http.get('http://localhost:6346/api/usuario')
-    //        .map(response => response.json().data as Ciudad[])
-    //        .catch(this.handleError);
-    //}
-    //private extractData(res: Response) {
-    //    let body = res.json();
-    //    return body.data || {};
-    //}
-    //private handleError(error: Response | any) {
-    //    // In a real world app, you might use a remote logging infrastructure
-    //    let errMsg: string;
-    //    if (error instanceof Response) {
-    //        const body = error.json() || '';
-    //        const err = body.error || JSON.stringify(body);
-    //        errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    //    } else {
-    //        errMsg = error.message ? error.message : error.toString();
-    //    }
-    //    console.error(errMsg);
-    //    return Observable.throw(errMsg);
-    //}
     CiudadesService.prototype.getCiudades = function () {
         return this.http.get(this.Url)
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    CiudadesService.prototype.getCiudad = function (id) {
-        var url = this.Url + "/" + id;
+    CiudadesService.prototype.getCiudad = function (lat) {
+        var url = this.Url + "/'Monte'";
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    CiudadesService.prototype.delete = function (id) {
-        var url = this.Url + "/" + id;
+    CiudadesService.prototype.delete = function (lat) {
+        var url = this.Url + "/\"" + lat + "\"";
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(function () { return null; })
@@ -81,14 +59,6 @@ var CiudadesService = (function () {
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
-    //update(hero: Ciudades): Promise<Ciudades> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
     CiudadesService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);

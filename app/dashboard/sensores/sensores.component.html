@@ -78,6 +78,8 @@
                                     <th>Tipo de sensor</th>
                                     <th>latitud</th>
                                     <th>longitud</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,6 +88,8 @@
                                     <td>{{sensor.tipo}}</td>
                                     <td>{{sensor.lat}}</td>
                                     <td>{{sensor.lon}}</td>
+                                    <td (click)="editarSensor(sensor)"><i class="material-icons link">mode_edit</i></td>
+                                    <td (click)="eliminarSensor(sensor)"><i class="material-icons link">delete</i></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -19,6 +19,7 @@ var ZonasComponent = (function () {
         this.nuevaZona = nuevaZona;
         this.nombreCampoCiudad = 'Ciudad de la zona';
         this.CampoCiudad = '';
+        this.editar = false;
     }
     ;
     ZonasComponent.prototype.ngOnInit = function () {
@@ -99,6 +100,7 @@ var ZonasComponent = (function () {
         this.circle.setCenter(null);
         this.circle.setRadius(1000);
         this.CampoCiudad = this.nombreCampoCiudad;
+        this.editar = false;
         this.nuevaZona.lat = '';
         this.nuevaZona.lon = '';
         this.nuevaZona.radio = '';
@@ -117,9 +119,24 @@ var ZonasComponent = (function () {
         this.nuevaZona.lon = this.circle.getCenter().lng();
         this.nuevaZona.radio = this.circle.getRadius();
         if (this.nuevaZona.ciudad != '' && this.nuevaZona.lat != '' && this.nuevaZona.lon != '') {
+            if (this.editar) {
+                this.updateZona(this.nuevaZona);
+            }
             this.setZona(this.nuevaZona);
             this.inicializo();
         }
+    };
+    ZonasComponent.prototype.editarZona = function (zona) {
+        this.CampoCiudad = zona.ciudad;
+        this.circle.setCenter(new google.maps.LatLng(zona.lat, zona.lon));
+        this.circle.setRadius(zona.radio);
+        this.nuevaZona.lat = zona.lat;
+        this.nuevaZona.lon = zona.lon;
+        this.nuevaZona.radio = zona.radio;
+        this.editar = true;
+    };
+    ZonasComponent.prototype.eliminarZona = function (zona) {
+        alert("eliminar");
     };
     //---> Funciones de servicios <---
     ZonasComponent.prototype.getCiudades = function () {
@@ -136,6 +153,9 @@ var ZonasComponent = (function () {
     };
     ZonasComponent.prototype.setZona = function (nueva) {
         this.zonasService.setZona(nueva);
+    };
+    ZonasComponent.prototype.updateZona = function (zona) {
+        this.zonasService.update(zona);
     };
     ZonasComponent = __decorate([
         core_1.Component({

@@ -41,6 +41,7 @@
                                     <th>Name</th>
                                     <th>latitud</th>
                                     <th>longitud</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,6 +49,7 @@
                                     <td>{{ciudad.nombre}}</td>
                                     <td>{{ciudad.lat}}</td>
                                     <td>{{ciudad.lon}}</td>
+                                    <td (click)="eliminarCiudad(ciudad)"><i class="material-icons link">delete</i></td>
                                 </tr>
                             </tbody>
                         </table>

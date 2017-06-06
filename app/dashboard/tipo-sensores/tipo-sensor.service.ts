@@ -29,8 +29,8 @@ export class TipoSensoresService {
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
-        const url = `${this.url}/${id}`;
+    delete(nombre: string): Promise<void> {
+        const url = `${this.url}/${nombre}`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(() => null)
@@ -45,14 +45,14 @@ export class TipoSensoresService {
             .catch(this.handleError);
     }
 
-    //update(hero: Ciudades): Promise<Ciudades> {
-    //    const url = `${this.heroesUrl}/${hero.id}`;
-    //    return this.http
-    //        .put(url, JSON.stringify(hero), { headers: this.headers })
-    //        .toPromise()
-    //        .then(() => hero)
-    //        .catch(this.handleError);
-    //}
+    updateTipoBaseSensor(tiposensor: TipoSensor): Promise<TipoSensor> {
+        const url = `${this.url}/${tiposensor.nombre}`;
+        return this.http
+            .put(url, JSON.stringify(tiposensor), { headers: this.headers })
+            .toPromise()
+            .then(() => tiposensor)
+            .catch(this.handleError);
+    }
 
 
     //---> Tipo base de sensores <---
