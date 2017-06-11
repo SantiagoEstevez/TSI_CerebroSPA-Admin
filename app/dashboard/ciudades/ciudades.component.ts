@@ -66,9 +66,9 @@ export class CiudadesComponent implements OnInit {
 
     //---> Funciones de uso interno <---
     inicializar() {
-        this.nuevaCiudad.lat = '';
-        this.nuevaCiudad.lon = '';
-        this.nuevaCiudad.nombre = '';
+        this.nuevaCiudad.Latitud = 0;
+        this.nuevaCiudad.Longitud = 0;
+        this.nuevaCiudad.Nombre = '';
 
         this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
@@ -84,10 +84,10 @@ export class CiudadesComponent implements OnInit {
             var lat = place.geometry.location.lat();
             var lon = place.geometry.location.lng();
 
-            if (!this.ciudades.find(item => item.lat == lat && item.lon == lon)) {
-                this.nuevaCiudad.nombre = place.name;
-                this.nuevaCiudad.lon = lon;
-                this.nuevaCiudad.lat = lat;
+            if (!this.ciudades.find(item => item.Latitud == lat && item.Longitud == lon)) {
+                this.nuevaCiudad.Nombre = place.name;
+                this.nuevaCiudad.Longitud = lon;
+                this.nuevaCiudad.Latitud = lat;
 
                 this.setCiudad(this.nuevaCiudad);
                 this.inicializar();
@@ -107,7 +107,7 @@ export class CiudadesComponent implements OnInit {
         if (cantSensores > 0 || cantZonas > 0) {
             alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
         } else {
-            this.ciudadesService.delete(ciudad.lat);
+            this.ciudadesService.delete(ciudad.Latitud);
             this.inicializar();
         }
     }

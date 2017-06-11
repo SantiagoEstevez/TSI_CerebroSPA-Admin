@@ -13,6 +13,7 @@ import { CiudadesService } from './ciudades/ciudades.service';
 import { TipoSensoresService } from './tipo-sensores/tipo-sensor.service';
 import { SensoresService } from './sensores/sensores.service';
 import { ZonasService } from './zonas/zonas.service';
+import { EventosService } from './eventos/eventos.service';
 
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { MemoriaService } from './ciudades/memoria.service';
@@ -25,7 +26,7 @@ import { MemoriaService } from './ciudades/memoria.service';
         InMemoryWebApiModule.forRoot(MemoriaService) //comentar esta linea para desactivar la parte de memoria.
     ],
     declarations: [MODULE_COMPONENTS],
-    providers: [CiudadesService, TipoSensoresService, SensoresService, ZonasService, Ciudad, TipoSensor, Sensor, Zona]
+    providers: [CiudadesService, TipoSensoresService, SensoresService, ZonasService, EventosService, Ciudad, TipoSensor, Sensor, Zona]
 })
 
 export class DashboardModule{}

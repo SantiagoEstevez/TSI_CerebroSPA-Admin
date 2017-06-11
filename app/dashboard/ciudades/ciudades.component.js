@@ -53,9 +53,9 @@ var CiudadesComponent = (function () {
     };
     //---> Funciones de uso interno <---
     CiudadesComponent.prototype.inicializar = function () {
-        this.nuevaCiudad.lat = '';
-        this.nuevaCiudad.lon = '';
-        this.nuevaCiudad.nombre = '';
+        this.nuevaCiudad.Latitud = 0;
+        this.nuevaCiudad.Longitud = 0;
+        this.nuevaCiudad.Nombre = '';
         this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
         this.getUsuarios();
@@ -66,10 +66,10 @@ var CiudadesComponent = (function () {
         if (place.name != '') {
             var lat = place.geometry.location.lat();
             var lon = place.geometry.location.lng();
-            if (!this.ciudades.find(function (item) { return item.lat == lat && item.lon == lon; })) {
-                this.nuevaCiudad.nombre = place.name;
-                this.nuevaCiudad.lon = lon;
-                this.nuevaCiudad.lat = lat;
+            if (!this.ciudades.find(function (item) { return item.Latitud == lat && item.Longitud == lon; })) {
+                this.nuevaCiudad.Nombre = place.name;
+                this.nuevaCiudad.Longitud = lon;
+                this.nuevaCiudad.Latitud = lat;
                 this.setCiudad(this.nuevaCiudad);
                 this.inicializar();
             }
@@ -87,7 +87,7 @@ var CiudadesComponent = (function () {
             alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
         }
         else {
-            this.ciudadesService.delete(ciudad.lat);
+            this.ciudadesService.delete(ciudad.Latitud);
             this.inicializar();
         }
     };

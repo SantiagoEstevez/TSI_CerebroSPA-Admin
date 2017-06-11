@@ -11,7 +11,8 @@ import { MemoriaService } from './memoria.service'
 export class CiudadesService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    private Url = 'api/ciudades';  // URL to web api
+    private Url = 'api/ciudad';  // URL to web api
+    //private Url = 'http://localhost:6346/api/ciudad/'
 
     constructor(private http: Http) { }
 
@@ -44,7 +45,7 @@ export class CiudadesService {
             .catch(this.handleError);
     }
 
-    delete(lat: string): Promise<void> {
+    delete(lat: number): Promise<void> {
         const url = `${this.Url}/"${lat}"`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()

@@ -21,6 +21,7 @@ var ciudades_service_1 = require('./ciudades/ciudades.service');
 var tipo_sensor_service_1 = require('./tipo-sensores/tipo-sensor.service');
 var sensores_service_1 = require('./sensores/sensores.service');
 var zonas_service_1 = require('./zonas/zonas.service');
+var eventos_service_1 = require('./eventos/eventos.service');
 var angular_in_memory_web_api_1 = require('angular-in-memory-web-api');
 var memoria_service_1 = require('./ciudades/memoria.service');
 var DashboardModule = (function () {
@@ -35,7 +36,7 @@ var DashboardModule = (function () {
                 angular_in_memory_web_api_1.InMemoryWebApiModule.forRoot(memoria_service_1.MemoriaService) //comentar esta linea para desactivar la parte de memoria.
             ],
             declarations: [dashboard_routes_1.MODULE_COMPONENTS],
-            providers: [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, sensores_service_1.SensoresService, zonas_service_1.ZonasService, ciudad_1.Ciudad, tipo_sensor_1.TipoSensor, sensor_1.Sensor, zona_1.Zona]
+            providers: [ciudades_service_1.CiudadesService, tipo_sensor_service_1.TipoSensoresService, sensores_service_1.SensoresService, zonas_service_1.ZonasService, eventos_service_1.EventosService, ciudad_1.Ciudad, tipo_sensor_1.TipoSensor, sensor_1.Sensor, zona_1.Zona]
         }), 
         __metadata('design:paramtypes', [])
     ], DashboardModule);
