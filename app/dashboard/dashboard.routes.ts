@@ -13,6 +13,8 @@ import { EventosComponent } from './eventos/eventos.component';
 import { TipoSensoresComponent } from './tipo-sensores/tipo-sensores.component';
 import { SensoresComponent } from './sensores/sensores.component';
 import { ZonasComponent } from './zonas/zonas.component';
+import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './auth.guard';
 
 export const MODULE_ROUTES: Route[] =[
     { path: 'dashboard', component: HomeComponent },
@@ -23,15 +25,18 @@ export const MODULE_ROUTES: Route[] =[
     { path: 'Zonas', component: ZonasComponent },
     { path: 'Eventos', component: EventosComponent },
     { path: 'notifications', component: NotificationsComponent },
+    { path: 'login', component: LoginComponent },
     //{ path: 'user', component: UserComponent },
     //{ path: 'table', component: TableComponent },
     //{ path: 'icons', component: IconsComponent },
     //{ path: 'typography', component: TypographyComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
-    { path: '', redirectTo: 'maps', pathMatch: 'full' }
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    //{ path: '', redirectTo: 'login', pathMatch: 'full' }
 ]
 
 export const MODULE_COMPONENTS = [
+    LoginComponent,
     HomeComponent,
     UserComponent,
     TableComponent,

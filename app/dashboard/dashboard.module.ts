@@ -18,15 +18,29 @@ import { EventosService } from './eventos/eventos.service';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { MemoriaService } from './ciudades/memoria.service';
 
+import { AuthGuard } from './auth.guard';
+import { AuthenticationService } from './authentication.service';
+
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         RouterModule.forChild(MODULE_ROUTES),
-        InMemoryWebApiModule.forRoot(MemoriaService) //comentar esta linea para desactivar la parte de memoria.
+        //InMemoryWebApiModule.forRoot(MemoriaService) //comentar esta linea para desactivar la parte de memoria.
     ],
     declarations: [MODULE_COMPONENTS],
-    providers: [CiudadesService, TipoSensoresService, SensoresService, ZonasService, EventosService, Ciudad, TipoSensor, Sensor, Zona]
+    providers: [CiudadesService,
+                TipoSensoresService,
+                SensoresService,
+                ZonasService,
+                EventosService,
+                Ciudad,
+                TipoSensor,
+                Sensor,
+                Zona,
+                AuthGuard, 
+                AuthenticationService
+    ]
 })
 
 export class DashboardModule{}

@@ -12,6 +12,7 @@ var eventos_component_1 = require('./eventos/eventos.component');
 var tipo_sensores_component_1 = require('./tipo-sensores/tipo-sensores.component');
 var sensores_component_1 = require('./sensores/sensores.component');
 var zonas_component_1 = require('./zonas/zonas.component');
+var login_component_1 = require('./login/login.component');
 exports.MODULE_ROUTES = [
     { path: 'dashboard', component: home_component_1.HomeComponent },
     { path: 'maps', component: maps_component_1.MapsComponent },
@@ -21,14 +22,16 @@ exports.MODULE_ROUTES = [
     { path: 'Zonas', component: zonas_component_1.ZonasComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
     { path: 'notifications', component: notifications_component_1.NotificationsComponent },
+    { path: 'login', component: login_component_1.LoginComponent },
     //{ path: 'user', component: UserComponent },
     //{ path: 'table', component: TableComponent },
     //{ path: 'icons', component: IconsComponent },
     //{ path: 'typography', component: TypographyComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
-    { path: '', redirectTo: 'maps', pathMatch: 'full' }
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 exports.MODULE_COMPONENTS = [
+    login_component_1.LoginComponent,
     home_component_1.HomeComponent,
     user_component_1.UserComponent,
     table_component_1.TableComponent,

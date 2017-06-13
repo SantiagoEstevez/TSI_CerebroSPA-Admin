@@ -9,22 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var DashboardComponent = (function () {
-    function DashboardComponent() {
-        this.access_token = localStorage.getItem('access_token');
-        this.expires_in = localStorage.getItem('expires_in');
-        this.token_type = localStorage.getItem('token_type');
-        this.userName = localStorage.getItem('userName');
+var router_1 = require('@angular/router');
+var AuthGuard = (function () {
+    function AuthGuard(router) {
+        this.router = router;
     }
-    DashboardComponent = __decorate([
-        core_1.Component({
-            selector: 'dashboard-cmp',
-            moduleId: module.id,
-            templateUrl: 'dashboard.component.html'
-        }), 
-        __metadata('design:paramtypes', [])
-    ], DashboardComponent);
-    return DashboardComponent;
+    AuthGuard.prototype.canActivate = function () {
+        if (localStorage.getItem('currentUser')) {
+            // logged in so return true
+            return true;
+        }
+        // not logged in so redirect to login page
+        this.router.navigate(['/login']);
+        return false;
+    };
+    AuthGuard = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [router_1.Router])
+    ], AuthGuard);
+    return AuthGuard;
 }());
-exports.DashboardComponent = DashboardComponent;
-//# sourceMappingURL=dashboard.component.js.map
+exports.AuthGuard = AuthGuard;
+//# sourceMappingURL=auth.guard.js.map

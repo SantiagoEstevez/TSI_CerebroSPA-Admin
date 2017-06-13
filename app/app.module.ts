@@ -1,7 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent }   from './app.component';
@@ -26,7 +26,9 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
         RouterModule.forRoot([])
     ],
     declarations: [ AppComponent, DashboardComponent ],
-    providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
+    providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }
+
+    ],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
