@@ -16,8 +16,7 @@ export class ZonasComponent implements OnInit {
 
     constructor(
         private ciudadesService: CiudadesService,
-        private zonasService: ZonasService,
-        private nuevaZona: Zona
+        private zonasService: ZonasService
     ) { };
 
     nombreCampoCiudad: string = 'Ciudad de la zona';
@@ -30,6 +29,7 @@ export class ZonasComponent implements OnInit {
 
     ciudades: Ciudad[];
     zonas: Zona[];
+    nuevaZona: Zona;
 
     ngOnInit() {
 
@@ -106,8 +106,8 @@ export class ZonasComponent implements OnInit {
         //Agregar evento click del mapa
         this.map.addListener('click', (e) => {
             this.circle.setCenter(e.latLng);
-            this.nuevaZona.lat = e.latLng.lat();
-            this.nuevaZona.lon = e.latLng.lng();
+            //this.nuevaZona.Latitude = e.latLng.lat();
+            //this.nuevaZona.Longitude = e.latLng.lng();
         });
 
         this.inicializo();
@@ -116,54 +116,52 @@ export class ZonasComponent implements OnInit {
 
     //---> Funciones internas <---
     inicializo() {
+        this.CampoCiudad = this.nombreCampoCiudad;
+        this.nuevaZona = new Zona();
+        this.zonas = [];
+
         this.circle.setCenter(null);
         this.circle.setRadius(1000);
-
-        this.CampoCiudad = this.nombreCampoCiudad;
         this.editar = false;
 
-        this.nuevaZona.lat = '';
-        this.nuevaZona.lon = '';
-        this.nuevaZona.radio = '';
-        this.nuevaZona.ciudad = '';
-
         this.getCiudades();
-        this.getZonas();
     }
 
 
     //---> Funciones de eventos <---
-    changeCiudad(value) {
-        this.CampoCiudad = value.nombre;
-        this.nuevaZona.ciudad = value.nombre;
-        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
+    changeCiudad(ciudad: Ciudad) {
+        this.CampoCiudad = ciudad.Nombre;
+        this.nuevaZona.ciudad = ciudad.Nombre;
+        this.nuevaZona.cLatitude = ciudad.Latitud;
+        this.nuevaZona.cLongitude = ciudad.Longitud;
+        this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
     }
 
     agregarZona() {
-        this.nuevaZona.lat = this.circle.getCenter().lat();
-        this.nuevaZona.lon = this.circle.getCenter().lng();
-        this.nuevaZona.radio = this.circle.getRadius();
+        this.nuevaZona.Latitude = this.circle.getCenter().lat();
+        this.nuevaZona.Longitude = this.circle.getCenter().lng();
+        this.nuevaZona.Radio = this.circle.getRadius();
 
-        if (this.nuevaZona.ciudad != '' && this.nuevaZona.lat != '' && this.nuevaZona.lon != '') {
+        if (this.nuevaZona.ciudad != '' && this.nuevaZona.Latitude != 0 && this.nuevaZona.Longitude != 0) {
             if (this.editar) {
                 this.updateZona(this.nuevaZona);
+            } else {
+                this.setZona(this.nuevaZona);
             }
-            this.setZona(this.nuevaZona);
-
-            this.inicializo();
         }
     }
 
     editarZona(zona: Zona) {
-        this.CampoCiudad = zona.ciudad;
-        this.circle.setCenter(new google.maps.LatLng(zona.lat, zona.lon));
-        this.circle.setRadius(zona.radio);
+        alert("editar");
+        //this.CampoCiudad = zona.ciudad;
+        //this.circle.setCenter(new google.maps.LatLng(zona.Latitude, zona.Longitude));
+        //this.circle.setRadius(zona.Radio);
 
-        this.nuevaZona.lat = zona.lat;
-        this.nuevaZona.lon = zona.lon;
-        this.nuevaZona.radio = zona.radio;
+        //this.nuevaZona.Latitude = zona.Latitude;
+        //this.nuevaZona.Longitude = zona.Longitude;
+        //this.nuevaZona.Radio = zona.Radio;
 
-        this.editar = true;
+        //this.editar = true;
     }
 
     eliminarZona(zona) {
@@ -173,22 +171,35 @@ export class ZonasComponent implements OnInit {
 
     //---> Funciones de servicios <---
     getCiudades(): void {
-        this.ciudadesService
-            .getCiudades()
-            .then(ciudades => this.ciudades = ciudades);
+        this.ciudadesService.getCiudades().then(ciudades => {
+            this.ciudades = ciudades;
+            this.getZonas();
+        });
     }
 
     getZonas(): void {
-        this.zonasService
-            .getZonas()
-            .then(zonas => this.zonas = zonas);
+        for (var i = 0; i < this.ciudades.length; i++) {
+            let nombre = this.ciudades[i].Nombre;
+
+            this.zonasService.getZonas(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(z => {
+                for (var s = 0; s < z.length; s++) {
+                    z[s].ciudad = nombre;
+                    this.zonas.push(z[s]);
+                }
+            });
+        }
     }
 
     setZona(nueva: Zona): void {
-        this.zonasService.setZona(nueva);
+        nueva.Nombre = "Zona";
+        this.zonasService.setZona(nueva).then(() => {
+            this.inicializo();
+        });
     }
 
     updateZona(zona: Zona): void {
-        this.zonasService.update(zona);
+        this.zonasService.update(zona).then(() => {
+            this.inicializo();
+        });
     }
 }

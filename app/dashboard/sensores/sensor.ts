@@ -1,6 +1,8 @@
 export class Sensor {
-    tipo: string;
-    lat: string;
-    lon: string;
+    Tipo: string;
+    Latitude: number;
+    Longitude: number;
     ciudad: string;
+    cLatitude: number;
+    cLongitude: number;
 }

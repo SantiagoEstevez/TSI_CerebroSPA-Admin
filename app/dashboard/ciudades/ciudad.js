@@ -5,4 +5,4 @@ var Ciudad = (function () {
     return Ciudad;
 }());
 exports.Ciudad = Ciudad;
-//# sourceMappingURL=Ciudad.js.map
+//# sourceMappingURL=ciudad.js.map

@@ -15,13 +15,15 @@ var ZonasService = (function () {
     function ZonasService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.url = 'api/zonas'; // URL to web api
+        //private url = 'api/zonas';  // URL to web api
+        this.url = 'http://localhost:6346/api/Evento/Zona/';
     }
     //--> Tipo de sensores <--
-    ZonasService.prototype.getZonas = function () {
-        return this.http.get(this.url)
+    ZonasService.prototype.getZonas = function (lat, lon) {
+        var url = this.url + "cityLat/" + lat + "/cityLon/" + lon + "/";
+        return this.http.get(url)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     ZonasService.prototype.getZona = function (lat, lon) {
@@ -46,7 +48,7 @@ var ZonasService = (function () {
             .catch(this.handleError);
     };
     ZonasService.prototype.update = function (zona) {
-        var url = this.url + "/" + zona.lat;
+        var url = this.url + "/" + zona.Latitude;
         return this.http
             .put(url, JSON.stringify(zona), { headers: this.headers })
             .toPromise()

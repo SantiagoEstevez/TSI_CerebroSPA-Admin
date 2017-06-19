@@ -1,4 +1,14 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+//Clases.
+import { Ciudad } from '../ciudades/ciudad';
+import { Sensor } from '../sensores/sensor';
+import { Zona } from '../zonas/zona';
+
+//Servicios.
+import { CiudadesService } from '../ciudades/ciudades.service';
+import { SensoresService } from '../sensores/sensores.service';
+import { ZonasService } from '../zonas/zonas.service';
 
 declare var google: any;
 
@@ -9,11 +19,27 @@ declare var google: any;
 })
 
 export class MapsComponent implements OnInit {
+    constructor(
+        private ciudadesService: CiudadesService,
+        private SensoresService: SensoresService,
+        private ZonasService: ZonasService
+    ) { };
+
     public lat: number = -34.9114282;
     public lon: number = -56.1725558;
     public map: any;
 
+    nombreCampoCiudad: string = 'Mis ciudades';
+
+    CampoCiudad: string = '';
+    ciudades: Ciudad[] = [];
+    sensores: Sensor[] = [];
+    zonas: Zona[] = [];
+    ciudadActual: Ciudad;
+
     ngOnInit() {
+        this.inicializo();
+
         var myLatlng = new google.maps.LatLng(this.lat, this.lon);
         var mapOptions = {
           zoom: 13,
@@ -65,13 +91,66 @@ export class MapsComponent implements OnInit {
           ]
         }
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    }
 
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            title:"Hello World!"
+    //---> Funciones internas <---
+    inicializo() {
+        this.CampoCiudad = this.nombreCampoCiudad;
+
+        this.getCiudades();
+    }
+
+    cargoCiudad(ciudad: Ciudad) {
+        this.getSensores(ciudad);
+        this.getZonas(ciudad);
+    }
+
+
+    //---> Funciones de eventos <---
+    changeCiudad(ciudad: Ciudad) {
+        this.CampoCiudad = ciudad.Nombre;
+        this.ciudadActual = ciudad;
+        this.cargoCiudad(ciudad);
+
+        this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
+    }
+
+
+    //---> Funciones de servicios <---
+    getCiudades(): void {
+        this.ciudadesService.getCiudades().then(ciudades => this.ciudades = ciudades);
+    }
+
+    getSensores(ciudad: Ciudad): void {
+        this.SensoresService.getSensores(ciudad.Latitud, ciudad.Longitud).subscribe(sensores => {
+            this.sensores = sensores
+
+            for (var i = 0; i < this.sensores.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(this.sensores[i].Latitude, this.sensores[i].Longitude),
+                    title: this.sensores[i].Tipo,
+                    map: this.map
+                });
+            }
         });
+    }
 
-        // To add the marker to the map, call setMap();
-        marker.setMap(this.map);
+    getZonas(ciudad: Ciudad): void {
+        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(zonas => {
+            for (var i = 0; i < zonas.length; i++) {
+                new google.maps.Circle({
+                    radius: this.zonas[i].Radio,
+                    center: new google.maps.LatLng(this.zonas[i].Latitude, this.zonas[i].Longitude),
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.35,
+                    map: this.map,
+                    clickable: true,
+                    editable: false,
+                });
+            }
+        });
     }
 }

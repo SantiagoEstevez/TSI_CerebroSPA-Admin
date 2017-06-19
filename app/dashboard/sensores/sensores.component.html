@@ -17,7 +17,7 @@
                                         </button>
                                         <ul class="dropdown-menu" style="z-index: 1;">
                                             <li *ngFor="let ciudad of ciudades">
-                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.nombre}}</a>
+                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.Nombre}}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -41,13 +41,13 @@
                             <div class="col-md-2">
                                 <div class="form-group form-black label-floating is-empty">
                                     <!--<label class="control-label">Latitud (disabled)</label>-->
-                                    <input [(ngModel)]="nuevoSensor.lat" type="text" class="form-control" disabled>
+                                    <input [(ngModel)]="nuevoSensor.Latitude" type="text" class="form-control" disabled>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group form-black label-floating is-empty">
                                     <!--<label class="control-label">Longitud (disabled)</label>-->
-                                    <input [(ngModel)]="nuevoSensor.lon" type="text" class="form-control" disabled>
+                                    <input [(ngModel)]="nuevoSensor.Longitude" type="text" class="form-control" disabled>
                                 </div>
                             </div>
                         </div>
@@ -85,9 +85,9 @@
                             <tbody>
                                 <tr *ngFor="let sensor of sensores">
                                     <td>{{sensor.ciudad}}</td>
-                                    <td>{{sensor.tipo}}</td>
-                                    <td>{{sensor.lat}}</td>
-                                    <td>{{sensor.lon}}</td>
+                                    <td>{{sensor.Tipo}}</td>
+                                    <td>{{sensor.Latitude}}</td>
+                                    <td>{{sensor.Longitude}}</td>
                                     <td (click)="editarSensor(sensor)"><i class="material-icons link">mode_edit</i></td>
                                     <td (click)="eliminarSensor(sensor)"><i class="material-icons link">delete</i></td>
                                 </tr>

@@ -17,7 +17,7 @@ exports.MODULE_ROUTES = [
     { path: 'dashboard', component: home_component_1.HomeComponent },
     { path: 'maps', component: maps_component_1.MapsComponent },
     { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent },
-    { path: 'TipoSensores', component: tipo_sensores_component_1.TipoSensoresComponent },
+    //{ path: 'TipoSensores', component: TipoSensoresComponent },
     { path: 'Sensores', component: sensores_component_1.SensoresComponent },
     { path: 'Zonas', component: zonas_component_1.ZonasComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
@@ -28,7 +28,7 @@ exports.MODULE_ROUTES = [
     //{ path: 'icons', component: IconsComponent },
     //{ path: 'typography', component: TypographyComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: 'maps', pathMatch: 'full' }
 ];
 exports.MODULE_COMPONENTS = [
     login_component_1.LoginComponent,

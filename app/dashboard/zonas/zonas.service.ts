@@ -8,15 +8,17 @@ import { Zona } from './zona';
 export class ZonasService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    private url = 'api/zonas';  // URL to web api
+    //private url = 'api/zonas';  // URL to web api
+    private url = 'http://localhost:6346/api/Evento/Zona/'
 
     constructor(private http: Http) { }
 
     //--> Tipo de sensores <--
-    getZonas(): Promise<Zona[]> {
-        return this.http.get(this.url)
+    getZonas(lat: number, lon: number): Promise<Zona[]> {
+        const url = `${this.url}cityLat/${lat}/cityLon/${lon}/`;
+        return this.http.get(url)
             .toPromise()
-            .then(response => response.json().data as Zona[])
+            .then(response => response.json() as Zona[])
             .catch(this.handleError);
     }
 
@@ -45,7 +47,7 @@ export class ZonasService {
     }
 
     update(zona: Zona): Promise<Zona> {
-        const url = `${this.url}/${zona.lat}`;
+        const url = `${this.url}/${zona.Latitude}`;
         return this.http
             .put(url, JSON.stringify(zona), { headers: this.headers })
             .toPromise()

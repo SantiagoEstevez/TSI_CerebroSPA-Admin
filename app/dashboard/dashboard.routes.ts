@@ -20,7 +20,7 @@ export const MODULE_ROUTES: Route[] =[
     { path: 'dashboard', component: HomeComponent },
     { path: 'maps', component: MapsComponent },
     { path: 'Ciudades', component: CiudadesComponent },
-    { path: 'TipoSensores', component: TipoSensoresComponent },
+    //{ path: 'TipoSensores', component: TipoSensoresComponent },
     { path: 'Sensores', component: SensoresComponent },
     { path: 'Zonas', component: ZonasComponent },
     { path: 'Eventos', component: EventosComponent },
@@ -31,7 +31,7 @@ export const MODULE_ROUTES: Route[] =[
     //{ path: 'icons', component: IconsComponent },
     //{ path: 'typography', component: TypographyComponent },
     //{ path: 'upgrade', component: UpgradeComponent },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: 'maps', pathMatch: 'full' }
     //{ path: '', redirectTo: 'login', pathMatch: 'full' }
 ]
 

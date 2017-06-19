@@ -82,15 +82,15 @@ export class TipoSensoresComponent implements OnInit {
         var sensores: Sensor[];
         var existen: boolean = false;
 
-        this.sensoresService.getSensores().then(s => {
-            sensores = s;
+        //this.sensoresService.getSensores().then(s => {
+        //    sensores = s;
 
-            if (!sensores.find(r => r.tipo == tiposensor.nombre)) {
-                this.tipoSensoresService.delete(tiposensor.nombre);
-            } else {
-                alert("No se puede eliminar este tipo de sensor ya que tiene sensores asociados a el.");
-            }
-        });
+        //    if (!sensores.find(r => r.Tipo == tiposensor.nombre)) {
+        //        this.tipoSensoresService.delete(tiposensor.nombre);
+        //    } else {
+        //        alert("No se puede eliminar este tipo de sensor ya que tiene sensores asociados a el.");
+        //    }
+        //});
         
     }
 

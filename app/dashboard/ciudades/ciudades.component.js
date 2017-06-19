@@ -18,6 +18,7 @@ var CiudadesComponent = (function () {
         this.ciudadesService = ciudadesService;
         this.sensoresService = sensoresService;
         this.zonasService = zonasService;
+        this.ciudades = [];
         this.nuevaCiudad = new Ciudad_1.Ciudad();
     }
     ;
@@ -81,8 +82,8 @@ var CiudadesComponent = (function () {
     CiudadesComponent.prototype.eliminarCiudad = function (ciudad) {
         var cantSensores = 0;
         var cantZonas = 0;
-        this.sensoresService.getSensores().then(function (s) { return cantSensores = s.length; });
-        this.zonasService.getZonas().then(function (z) { return cantZonas = z.length; });
+        this.sensoresService.getSensores(ciudad.Latitud, ciudad.Longitud).subscribe(function (s) { return cantSensores = s.length; });
+        this.zonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(function (z) { return cantZonas = z.length; });
         if (cantSensores > 0 || cantZonas > 0) {
             alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
         }
@@ -94,9 +95,11 @@ var CiudadesComponent = (function () {
     //---> Funciones de servicios <---
     CiudadesComponent.prototype.getCiudades = function () {
         var _this = this;
-        this.ciudadesService
-            .getCiudades()
-            .then(function (ciudades) { return _this.ciudades = ciudades; });
+        this.ciudadesService.getCiudades().then(function (ciudades) {
+            if (ciudades) {
+                _this.ciudades = ciudades;
+            }
+        });
     };
     CiudadesComponent.prototype.getUsuarios = function () {
         //this.ciudadesService

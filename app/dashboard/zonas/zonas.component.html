@@ -17,7 +17,7 @@
                                         </button>
                                         <ul class="dropdown-menu" style="z-index: 1;">
                                             <li *ngFor="let ciudad of ciudades">
-                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.nombre}}</a>
+                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.Nombre}}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -58,9 +58,9 @@
                             <tbody>
                                 <tr *ngFor="let zona of zonas">
                                     <td>{{zona.ciudad}}</td>
-                                    <td>{{zona.radio}}</td>
-                                    <td>{{zona.lat}}</td>
-                                    <td>{{zona.lon}}</td>
+                                    <td>{{zona.Radio}}</td>
+                                    <td>{{zona.Latitude}}</td>
+                                    <td>{{zona.Longitude}}</td>
                                     <td (click)="editarZona(zona)"><i class="material-icons link">mode_edit</i></td>
                                     <td (click)="eliminarZona(zona)"><i class="material-icons link">delete</i></td>
                                 </tr>

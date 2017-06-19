@@ -1,6 +1,9 @@
-export class Zona {
-    lat: string;
-    lon: string;
-    radio: string;
+export class Zona {    
+    Nombre: string;
+    Latitude: number;
+    Longitude: number;
+    Radio: number;
     ciudad: string;
+    cLatitude: number;
+    cLongitude: number;
 }

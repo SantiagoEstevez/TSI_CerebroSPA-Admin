@@ -13,10 +13,9 @@ var ciudades_service_1 = require('../ciudades/ciudades.service');
 var zona_1 = require('./zona');
 var zonas_service_1 = require('./zonas.service');
 var ZonasComponent = (function () {
-    function ZonasComponent(ciudadesService, zonasService, nuevaZona) {
+    function ZonasComponent(ciudadesService, zonasService) {
         this.ciudadesService = ciudadesService;
         this.zonasService = zonasService;
-        this.nuevaZona = nuevaZona;
         this.nombreCampoCiudad = 'Ciudad de la zona';
         this.CampoCiudad = '';
         this.editar = false;
@@ -90,50 +89,51 @@ var ZonasComponent = (function () {
         //Agregar evento click del mapa
         this.map.addListener('click', function (e) {
             _this.circle.setCenter(e.latLng);
-            _this.nuevaZona.lat = e.latLng.lat();
-            _this.nuevaZona.lon = e.latLng.lng();
+            //this.nuevaZona.Latitude = e.latLng.lat();
+            //this.nuevaZona.Longitude = e.latLng.lng();
         });
         this.inicializo();
     };
     //---> Funciones internas <---
     ZonasComponent.prototype.inicializo = function () {
+        this.CampoCiudad = this.nombreCampoCiudad;
+        this.nuevaZona = new zona_1.Zona();
+        this.zonas = [];
         this.circle.setCenter(null);
         this.circle.setRadius(1000);
-        this.CampoCiudad = this.nombreCampoCiudad;
         this.editar = false;
-        this.nuevaZona.lat = '';
-        this.nuevaZona.lon = '';
-        this.nuevaZona.radio = '';
-        this.nuevaZona.ciudad = '';
         this.getCiudades();
-        this.getZonas();
     };
     //---> Funciones de eventos <---
-    ZonasComponent.prototype.changeCiudad = function (value) {
-        this.CampoCiudad = value.nombre;
-        this.nuevaZona.ciudad = value.nombre;
-        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
+    ZonasComponent.prototype.changeCiudad = function (ciudad) {
+        this.CampoCiudad = ciudad.Nombre;
+        this.nuevaZona.ciudad = ciudad.Nombre;
+        this.nuevaZona.cLatitude = ciudad.Latitud;
+        this.nuevaZona.cLongitude = ciudad.Longitud;
+        this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
     };
     ZonasComponent.prototype.agregarZona = function () {
-        this.nuevaZona.lat = this.circle.getCenter().lat();
-        this.nuevaZona.lon = this.circle.getCenter().lng();
-        this.nuevaZona.radio = this.circle.getRadius();
-        if (this.nuevaZona.ciudad != '' && this.nuevaZona.lat != '' && this.nuevaZona.lon != '') {
+        this.nuevaZona.Latitude = this.circle.getCenter().lat();
+        this.nuevaZona.Longitude = this.circle.getCenter().lng();
+        this.nuevaZona.Radio = this.circle.getRadius();
+        if (this.nuevaZona.ciudad != '' && this.nuevaZona.Latitude != 0 && this.nuevaZona.Longitude != 0) {
             if (this.editar) {
                 this.updateZona(this.nuevaZona);
             }
-            this.setZona(this.nuevaZona);
-            this.inicializo();
+            else {
+                this.setZona(this.nuevaZona);
+            }
         }
     };
     ZonasComponent.prototype.editarZona = function (zona) {
-        this.CampoCiudad = zona.ciudad;
-        this.circle.setCenter(new google.maps.LatLng(zona.lat, zona.lon));
-        this.circle.setRadius(zona.radio);
-        this.nuevaZona.lat = zona.lat;
-        this.nuevaZona.lon = zona.lon;
-        this.nuevaZona.radio = zona.radio;
-        this.editar = true;
+        alert("editar");
+        //this.CampoCiudad = zona.ciudad;
+        //this.circle.setCenter(new google.maps.LatLng(zona.Latitude, zona.Longitude));
+        //this.circle.setRadius(zona.Radio);
+        //this.nuevaZona.Latitude = zona.Latitude;
+        //this.nuevaZona.Longitude = zona.Longitude;
+        //this.nuevaZona.Radio = zona.Radio;
+        //this.editar = true;
     };
     ZonasComponent.prototype.eliminarZona = function (zona) {
         alert("eliminar");
@@ -141,21 +141,39 @@ var ZonasComponent = (function () {
     //---> Funciones de servicios <---
     ZonasComponent.prototype.getCiudades = function () {
         var _this = this;
-        this.ciudadesService
-            .getCiudades()
-            .then(function (ciudades) { return _this.ciudades = ciudades; });
+        this.ciudadesService.getCiudades().then(function (ciudades) {
+            _this.ciudades = ciudades;
+            _this.getZonas();
+        });
     };
     ZonasComponent.prototype.getZonas = function () {
         var _this = this;
-        this.zonasService
-            .getZonas()
-            .then(function (zonas) { return _this.zonas = zonas; });
+        var _loop_1 = function() {
+            var nombre = this_1.ciudades[i].Nombre;
+            this_1.zonasService.getZonas(this_1.ciudades[i].Latitud, this_1.ciudades[i].Longitud).then(function (z) {
+                for (var s = 0; s < z.length; s++) {
+                    z[s].ciudad = nombre;
+                    _this.zonas.push(z[s]);
+                }
+            });
+        };
+        var this_1 = this;
+        for (var i = 0; i < this.ciudades.length; i++) {
+            _loop_1();
+        }
     };
     ZonasComponent.prototype.setZona = function (nueva) {
-        this.zonasService.setZona(nueva);
+        var _this = this;
+        nueva.Nombre = "Zona";
+        this.zonasService.setZona(nueva).then(function () {
+            _this.inicializo();
+        });
     };
     ZonasComponent.prototype.updateZona = function (zona) {
-        this.zonasService.update(zona);
+        var _this = this;
+        this.zonasService.update(zona).then(function () {
+            _this.inicializo();
+        });
     };
     ZonasComponent = __decorate([
         core_1.Component({
@@ -163,7 +181,7 @@ var ZonasComponent = (function () {
             moduleId: module.id,
             templateUrl: 'zonas.component.html'
         }), 
-        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, zonas_service_1.ZonasService, zona_1.Zona])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, zonas_service_1.ZonasService])
     ], ZonasComponent);
     return ZonasComponent;
 }());

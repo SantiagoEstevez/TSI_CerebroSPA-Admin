@@ -60,18 +60,16 @@ var TipoSensoresComponent = (function () {
         this.Editado = true;
     };
     TipoSensoresComponent.prototype.eliminarTipoSensor = function (tiposensor) {
-        var _this = this;
         var sensores;
         var existen = false;
-        this.sensoresService.getSensores().then(function (s) {
-            sensores = s;
-            if (!sensores.find(function (r) { return r.tipo == tiposensor.nombre; })) {
-                _this.tipoSensoresService.delete(tiposensor.nombre);
-            }
-            else {
-                alert("No se puede eliminar este tipo de sensor ya que tiene sensores asociados a el.");
-            }
-        });
+        //this.sensoresService.getSensores().then(s => {
+        //    sensores = s;
+        //    if (!sensores.find(r => r.Tipo == tiposensor.nombre)) {
+        //        this.tipoSensoresService.delete(tiposensor.nombre);
+        //    } else {
+        //        alert("No se puede eliminar este tipo de sensor ya que tiene sensores asociados a el.");
+        //    }
+        //});
     };
     TipoSensoresComponent.prototype.agregarTipoSensor = function () {
         var ciudad = this.nuevoTipoSensor.ciudad;

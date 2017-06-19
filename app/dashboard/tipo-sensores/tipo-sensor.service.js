@@ -15,6 +15,7 @@ var TipoSensoresService = (function () {
     function TipoSensoresService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        this.UrlSB = 'http://localhost:6346/api/Sensor/Tipos';
         this.url = 'api/tiposensores'; // URL to web api
     }
     //--> Tipo de sensores <--
@@ -55,9 +56,9 @@ var TipoSensoresService = (function () {
     };
     //---> Tipo base de sensores <---
     TipoSensoresService.prototype.getTipoBaseSensor = function () {
-        return this.http.get('api/tiposbaseensores')
+        return this.http.get(this.UrlSB)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     TipoSensoresService.prototype.handleError = function (error) {

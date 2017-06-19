@@ -23,7 +23,7 @@ export class CiudadesComponent implements OnInit {
 
     autocomplete: any;
     map: any;
-    ciudades: Ciudad[];
+    ciudades: Ciudad[] = [];
     usuarios: any[];
     nuevaCiudad = new Ciudad();
 
@@ -101,8 +101,8 @@ export class CiudadesComponent implements OnInit {
         var cantSensores: number = 0;
         var cantZonas: number = 0;
 
-        this.sensoresService.getSensores().then(s => cantSensores = s.length);
-        this.zonasService.getZonas().then(z => cantZonas = z.length);
+        this.sensoresService.getSensores(ciudad.Latitud, ciudad.Longitud).subscribe(s => cantSensores = s.length);
+        this.zonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(z => cantZonas = z.length);
 
         if (cantSensores > 0 || cantZonas > 0) {
             alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
@@ -115,9 +115,11 @@ export class CiudadesComponent implements OnInit {
 
     //---> Funciones de servicios <---
     getCiudades(): void {
-        this.ciudadesService
-            .getCiudades()
-            .then(ciudades => this.ciudades = ciudades);
+        this.ciudadesService.getCiudades().then(ciudades => {
+            if (ciudades) {
+                this.ciudades = ciudades
+            }
+        });
     }
 
     getUsuarios(): void {

@@ -14,14 +14,14 @@ require('rxjs/add/operator/toPromise');
 require('rxjs/add/operator/catch');
 require('rxjs/add/operator/map');
 var CiudadesService = (function () {
-    //private Url = 'http://localhost:6346/api/ciudad/'
     function CiudadesService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.Url = 'api/ciudad'; // URL to web api
+        //private Url = 'api/ciudad';  // URL to web api
+        this.Url = 'http://localhost:6346/api/ciudad/';
     }
     CiudadesService.prototype.getUsuarios = function () {
-        return this.http.get('http://localhost:6346/api/usuario/')
+        return this.http.get(this.Url)
             .toPromise()
             .then(function (response) { return response.json(); })
             .catch(this.handleError);
@@ -36,7 +36,7 @@ var CiudadesService = (function () {
     CiudadesService.prototype.getCiudades = function () {
         return this.http.get(this.Url)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     CiudadesService.prototype.getCiudad = function (lat) {

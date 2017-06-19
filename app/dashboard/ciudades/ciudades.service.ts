@@ -11,13 +11,13 @@ import { MemoriaService } from './memoria.service'
 export class CiudadesService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    private Url = 'api/ciudad';  // URL to web api
-    //private Url = 'http://localhost:6346/api/ciudad/'
+    //private Url = 'api/ciudad';  // URL to web api
+    private Url = 'http://localhost:6346/api/ciudad/'
 
     constructor(private http: Http) { }
 
     getUsuarios(): Promise<Ciudad[]> {
-        return this.http.get('http://localhost:6346/api/usuario/')
+        return this.http.get(this.Url)
             .toPromise()
             .then(response => response.json() as Ciudad[])
             .catch(this.handleError);
@@ -33,7 +33,7 @@ export class CiudadesService {
     getCiudades(): Promise<Ciudad[]> {
         return this.http.get(this.Url)
             .toPromise()
-            .then(response => response.json().data as Ciudad[])
+            .then(response => response.json() as Ciudad[])
             .catch(this.handleError);
     }
 

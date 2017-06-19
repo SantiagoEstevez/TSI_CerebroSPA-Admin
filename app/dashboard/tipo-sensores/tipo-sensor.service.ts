@@ -9,6 +9,7 @@ import { TipoBaseSensor } from './tipo-base-sensor';
 export class TipoSensoresService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
+    private UrlSB = 'http://localhost:6346/api/Sensor/Tipos';
     private url = 'api/tiposensores';  // URL to web api
 
     constructor(private http: Http) { }
@@ -57,9 +58,9 @@ export class TipoSensoresService {
 
     //---> Tipo base de sensores <---
     getTipoBaseSensor(): Promise<TipoBaseSensor[]> {
-        return this.http.get('api/tiposbaseensores')
+        return this.http.get(this.UrlSB)
             .toPromise()
-            .then(response => response.json().data as TipoBaseSensor[])
+            .then(response => response.json() as TipoBaseSensor[] )
             .catch(this.handleError);
     }
 

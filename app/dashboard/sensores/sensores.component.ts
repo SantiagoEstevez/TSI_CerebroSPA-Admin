@@ -4,6 +4,7 @@ import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
 import { TipoSensor } from '../tipo-sensores/tipo-sensor';
 import { Ciudad } from '../ciudades/ciudad';
 import { Sensor } from './sensor';
+import { TipoBaseSensor } from '../tipo-sensores/tipo-base-sensor';
 import { SensoresService } from './sensores.service';
 
 declare var google: any;
@@ -19,8 +20,7 @@ export class SensoresComponent implements OnInit {
     constructor(
         private ciudadesService: CiudadesService,
         private tipoSensoresService: TipoSensoresService,
-        private SensoresService: SensoresService,
-        private nuevoSensor: Sensor
+        private SensoresService: SensoresService
     ) { };
 
     nombreCampoTS: string = 'Tipo sensor';
@@ -30,12 +30,15 @@ export class SensoresComponent implements OnInit {
     CampoCiudad: string = '';
     map: any;
     marker: any;
+    nuevoSensor: Sensor;
 
     ciudades: Ciudad[];
-    tipoSensores: TipoSensor[];
+    //tipoSensores: TipoSensor[];
+    tipoSensores: TipoBaseSensor[];
     sensores: Sensor[];
 
     ngOnInit() {
+        this.inicializo();
 
         //Cargo mapa
         var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
@@ -52,14 +55,12 @@ export class SensoresComponent implements OnInit {
             map: this.map
         });
 
-        //Agregar evento
+        //Agregar evento al mapa
         this.map.addListener('click', (e) => {
-            this.nuevoSensor.lat = e.latLng.lat();
-            this.nuevoSensor.lon = e.latLng.lng();
+            this.nuevoSensor.Latitude = e.latLng.lat();
+            this.nuevoSensor.Longitude = e.latLng.lng();
             this.marker.setPosition(e.latLng);
         });
-
-        this.inicializo();
     }
 
 
@@ -67,72 +68,78 @@ export class SensoresComponent implements OnInit {
     inicializo() {
         this.CampoTS = this.nombreCampoTS;
         this.CampoCiudad = this.nombreCampoCiudad;
-
-        this.nuevoSensor.lat = '';
-        this.nuevoSensor.lon = '';
-        this.nuevoSensor.tipo = '';
-        this.nuevoSensor.ciudad = '';
+        this.nuevoSensor = new Sensor();
+        this.sensores = [];
 
         this.getCiudades();
         this.getTipoSensores();
-        this.getSensores();
     }
 
 
     //---> Funciones de eventos <---
-    changeTipoSensor(value) {
-        this.CampoTS = value.nombre;
-        this.nuevoSensor.tipo = value.nombre;
+    changeTipoSensor(tipoSensor: TipoBaseSensor) {
+        this.CampoTS = tipoSensor.nombre;
+        this.nuevoSensor.Tipo = tipoSensor.nombre;
     }
 
-    changeCiudad(value) {
-        this.CampoCiudad = value.nombre;
-        this.nuevoSensor.ciudad = value.nombre;
-        this.map.setCenter(new google.maps.LatLng(value.lat, value.lon));
+    changeCiudad(ciudad: Ciudad) {
+        this.CampoCiudad = ciudad.Nombre;
+        this.nuevoSensor.ciudad = ciudad.Nombre;
+        this.nuevoSensor.cLatitude = ciudad.Latitud;
+        this.nuevoSensor.cLongitude = ciudad.Longitud;
+
+        this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
     }
 
-    editarSensor(sensor) {
+    editarSensor(sensor: Sensor) {
         alert("editando");
     }
 
-    eliminarSensor(sensor) {
+    eliminarSensor(sensor: Sensor) {
         alert("eliminando");
     }
 
     agregarSensor() {
         var ciudad = this.nuevoSensor.ciudad;
-        var tipo = this.nuevoSensor.tipo;
-        var lat = this.nuevoSensor.lat;
-        var lon = this.nuevoSensor.lon;
+        var tipo = this.nuevoSensor.Tipo;
+        var lat = this.nuevoSensor.Latitude;
+        var lon = this.nuevoSensor.Longitude;
 
-        if (ciudad != '' && tipo != '' && lat != '' && lon != '') {
+        if (ciudad != '' && tipo != '' && lat != 0 && lon != 0) {
             this.setSensor(this.nuevoSensor);
-
-            this.inicializo();
         }
     }
 
 
     //---> Funciones de servicios <---
     getCiudades(): void {
-        this.ciudadesService
-            .getCiudades()
-            .then(ciudades => this.ciudades = ciudades);
+        this.ciudadesService.getCiudades().then(ciudades => {
+            this.ciudades = ciudades;
+            this.getSensores();
+        });
     }
 
     getTipoSensores(): void {
-        this.tipoSensoresService
-            .getTipoSensores()
-            .then(tipoSensores => this.tipoSensores = tipoSensores);
+        //this.tipoSensoresService.getTipoSensores().then(tipoSensores => this.tipoSensores = tipoSensores);
+        this.tipoSensoresService.getTipoBaseSensor().then(tipoSensores => this.tipoSensores = tipoSensores);
     }
 
     getSensores(): void {
-        this.SensoresService
-            .getSensores()
-            .then(sensores => this.sensores = sensores);
+        for (var i = 0; i < this.ciudades.length; i++) {
+            let nombre = this.ciudades[i].Nombre;
+
+            this.SensoresService.getSensores(this.ciudades[i].Latitud, this.ciudades[i].Longitud).subscribe(sensores => {
+                for (var s = 0; s < sensores.length; s++) {
+                    sensores[s].ciudad = nombre;
+                    this.sensores.push(sensores[s]);
+                }
+            });            
+        }
     }
 
     setSensor(nuevo: Sensor): void {
-        this.SensoresService.setSensor(nuevo);
+        this.SensoresService.setSensor(nuevo).then(() => {
+            this.inicializo();
+        });
     }
 }
