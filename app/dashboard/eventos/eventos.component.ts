@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
-import { TipoSensor } from '../tipo-sensores/tipo-sensor';
+
+//Clases
 import { Evento } from './evento';
 import { Dispositivo } from './dispositivo';
+import { TipoBaseSensor } from '../tipo-sensores/tipo-base-sensor';
+import { Ciudad } from '../ciudades/ciudad'
+
+//Servicios.
 import { EventosService } from './eventos.service';
+import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
+import { CiudadesService } from '../ciudades/ciudades.service'
 
 @Component({
     selector: 'eventos-cmp',
@@ -15,19 +21,23 @@ export class EventosComponent implements OnInit {
 
     constructor(
         private eventosService: EventosService,
-        private tipoSensoresService: TipoSensoresService
+        private tipoSensoresService: TipoSensoresService,
+        private CiudadesService: CiudadesService
     ) { };
 
     //Nombres
+    nombreCampoCiudad: string = 'Ciudad del sensor';
     nombreCampoTS: string = 'Tipo sensor';
+    CampoCiudad: string = this.nombreCampoCiudad;
     CampoTS: string = '';
-
+    
     //Objetos
     oEvento: Evento;
     oDispositivo: Dispositivo;
 
     //Listas de objetos
-    tipoSensores: TipoSensor[];
+    ciudades: Ciudad[];
+    tipoSensores: TipoBaseSensor[];
     eventos: Evento[];
     dispositivos: Dispositivo[];
 
@@ -38,12 +48,14 @@ export class EventosComponent implements OnInit {
 
     //---> Funciones internas <---
     inicializo() {
+        this.CampoCiudad = this.nombreCampoCiudad;
+
         this.oEvento = new Evento();
         this.dispositivos = [];
-        
         this.inicializoDispositivo();
+
+        this.getCiudades();
         this.getTipoSensores();   
-        this.getEventos();
     }
 
     inicializoDispositivo() {
@@ -55,8 +67,8 @@ export class EventosComponent implements OnInit {
     //---> Funciones de eventos <---
     agregarEvento() {
         if (this.dispositivos.length > 0) {
-            if (this.oEvento.nombre != "") {
-                this.oEvento.dispositivos = this.dispositivos;
+            if (this.oEvento.Name != "") {
+                this.oEvento.DataSources = this.dispositivos;
                 this.setEvento(this.oEvento);
                 this.inicializo();
             } else {
@@ -67,24 +79,6 @@ export class EventosComponent implements OnInit {
         }
     }
 
-    agregarDispositivo() {
-        if (this.oDispositivo.regla != "" && this.oDispositivo.tipo != "") {
-            this.dispositivos.push(this.oDispositivo);
-            this.inicializoDispositivo();
-        } else {
-            alert("Debe seleccionar el tipo y la regla.");
-        }
-    }
-
-    eliminarDispositivo() {
-        alert("eliminando de la lista >D");
-    }
-
-    changeTipoSensor(tipoSensor: TipoSensor) {
-        this.CampoTS = tipoSensor.nombre;
-        this.oDispositivo.tipo = tipoSensor.nombre;
-    }
-
     editarEvento() {
         alert("editando evento");
     }
@@ -93,17 +87,55 @@ export class EventosComponent implements OnInit {
         alert("eliminando evento");
     }
 
+    agregarDispositivo() {
+        if (this.oDispositivo.Umbral != "" && this.oDispositivo.Tipo != "") {
+            this.dispositivos.push(this.oDispositivo);
+            this.inicializoDispositivo();
+        } else {
+            alert("Debe seleccionar el tipo y el humbral.");
+        }
+    }
+
+    eliminarDispositivo() {
+        alert("eliminando de la lista >D");
+    }
+
+    changeCiudad(ciudad: Ciudad) {
+        this.CampoCiudad = ciudad.Nombre;
+        //this.nuevoSensor.ciudad = ciudad.Nombre;
+        //this.nuevoSensor.cLatitude = ciudad.Latitud;
+        //this.nuevoSensor.cLongitude = ciudad.Longitud;
+    }
+
+    changeTipoSensor(tipoSensor: TipoBaseSensor) {
+        this.CampoTS = tipoSensor.nombre;
+        this.oDispositivo.Tipo = tipoSensor.nombre;
+    }
+
+
     //---> Funciones de servicios <---
-    getTipoSensores(): void {
-        this.tipoSensoresService
-            .getTipoSensores()
-            .then(tipoSensores => this.tipoSensores = tipoSensores);
+    getCiudades() {
+        this.CiudadesService.getCiudades().then(ciudades => {
+            this.ciudades = ciudades;
+            //this.getEventos();
+        });
     }
 
     getEventos(): void {
-        this.eventosService
-            .getEventos()
-            .then(eventos => this.eventos = eventos);
+        for (var i = 0; i < this.ciudades.length; i++) {
+            let nombre = this.ciudades[i].Nombre;
+
+            this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+                for (var e = 0; e < eventos.length; e++) {
+                    this.eventos.push(eventos[e]);
+                }
+                this.eventos = eventos
+            });
+        }
+    }
+    
+    getTipoSensores(): void {
+        this.tipoSensoresService.getTipoBaseSensor().then(tipoSensores => this.tipoSensores = tipoSensores);
     }
 
     setEvento(nuevo: Evento): void {

@@ -10,11 +10,24 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group form-black label-floating is-empty">
-                                    <label class="control-label">Nombre</label>
-                                    <input [(ngModel)]="oEvento.nombre" type="text" class="form-control">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle dropdown-Width" type="button" data-toggle="dropdown">
+                                            <span>{{CampoCiudad}}</span>
+                                            <span class="caret">  </span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="z-index: 1;">
+                                            <li *ngFor="let ciudad of ciudades">
+                                                <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.Nombre}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="form-group form-black label-floating is-empty">
+                                    <label class="control-label">Nombre</label>
+                                    <input [(ngModel)]="oEvento.nombre" type="text" class="form-control">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -62,8 +75,8 @@
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let dispositivo of dispositivos">
-                                                    <td>{{dispositivo.tipo}}</td>
-                                                    <td>{{dispositivo.regla}}</td>
+                                                    <td>{{dispositivo.Tipo}}</td>
+                                                    <td>{{dispositivo.Umbral}}</td>
                                                     <td (click)="eliminarDispositivo(dispositivo)"><i class="material-icons link">delete</i></td>
                                                 </tr>
                                             </tbody>
@@ -95,7 +108,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let evento of eventos">
-                                    <td>{{evento.nombre}}</td>
+                                    <td>{{evento.Name}}</td>
                                     <td>{{evento.dispositivos.length}}</td>
                                     <td (click)="editarEvento(evento)"><i class="material-icons link">mode_edit</i></td>
                                     <td (click)="eliminarEvento(evento)"><i class="material-icons link">delete</i></td>

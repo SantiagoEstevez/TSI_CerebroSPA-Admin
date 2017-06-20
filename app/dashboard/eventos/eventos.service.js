@@ -15,13 +15,15 @@ var EventosService = (function () {
     function EventosService(http) {
         this.http = http;
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        this.url = 'api/evento'; // URL to web api
+        //private url = 'api/evento';  // URL to web api
+        this.url = 'http://localhost:6346/api/Evento/Global/';
     }
     //--> Tipo de sensores <--
-    EventosService.prototype.getEventos = function () {
-        return this.http.get(this.url)
+    EventosService.prototype.getEventos = function (lat, lon) {
+        var url = this.url + "cityLat/" + lat + "/cityLon/" + lon + "/";
+        return this.http.get(url)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
     EventosService.prototype.getEvento = function (id) {
@@ -46,7 +48,7 @@ var EventosService = (function () {
             .catch(this.handleError);
     };
     EventosService.prototype.update = function (evento) {
-        var url = this.url + "/" + evento.nombre;
+        var url = this.url + "/" + evento.Name;
         return this.http
             .put(url, JSON.stringify(evento), { headers: this.headers })
             .toPromise()

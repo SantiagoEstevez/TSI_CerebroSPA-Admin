@@ -8,15 +8,17 @@ import { Evento } from './evento';
 export class EventosService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
-    private url = 'api/evento';  // URL to web api
+    //private url = 'api/evento';  // URL to web api
+    private url = 'http://localhost:6346/api/Evento/Global/'
 
     constructor(private http: Http) { }
 
     //--> Tipo de sensores <--
-    getEventos(): Promise<Evento[]> {
-        return this.http.get(this.url)
+    getEventos(lat: number, lon: number): Promise<Evento[]> {
+        const url = `${this.url}cityLat/${lat}/cityLon/${lon}/`;
+        return this.http.get(url)
             .toPromise()
-            .then(response => response.json().data as Evento[])
+            .then(response => response.json() as Evento[])
             .catch(this.handleError);
     }
 
@@ -45,7 +47,7 @@ export class EventosService {
     }
 
     update(evento: Evento): Promise<Evento> {
-        const url = `${this.url}/${evento.nombre}`;
+        const url = `${this.url}/${evento.Name}`;
         return this.http
             .put(url, JSON.stringify(evento), { headers: this.headers })
             .toPromise()

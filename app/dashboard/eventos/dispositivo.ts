@@ -1,4 +1,6 @@
 export class Dispositivo {
-    tipo: string;
-    regla: string;
+    Tipo: string;
+    Latitude: number;
+    Longitude: number;
+    Umbral: string;
 }
