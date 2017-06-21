@@ -18,7 +18,6 @@ var EventosService = (function () {
         //private url = 'api/evento';  // URL to web api
         this.url = 'http://localhost:6346/api/Evento/Global/';
     }
-    //--> Tipo de sensores <--
     EventosService.prototype.getEventos = function (lat, lon) {
         var url = this.url + "cityLat/" + lat + "/cityLon/" + lon + "/";
         return this.http.get(url)
@@ -26,35 +25,36 @@ var EventosService = (function () {
             .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
-    EventosService.prototype.getEvento = function (id) {
-        var url = this.url + "/" + id;
-        return this.http.get(url)
-            .toPromise()
-            .then(function (response) { return response.json().data; })
-            .catch(this.handleError);
-    };
-    EventosService.prototype.delete = function (id) {
-        var url = this.url + "/" + id;
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(function () { return null; })
-            .catch(this.handleError);
-    };
+    //getEvento(id: number): Promise<Evento> {
+    //    const url = `${this.url}/${id}`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json().data as Evento)
+    //        .catch(this.handleError);
+    //}
+    //delete(id: number): Promise<void> {
+    //    const url = `${this.url}/${id}`;
+    //    return this.http.delete(url, { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => null)
+    //        .catch(this.handleError);
+    //}
     EventosService.prototype.setEvento = function (nurevoEvento) {
+        console.log(nurevoEvento);
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
-            .then(function (res) { return res.json().data; })
+            .then(function (res) { return res.json(); })
             .catch(this.handleError);
     };
-    EventosService.prototype.update = function (evento) {
-        var url = this.url + "/" + evento.Name;
-        return this.http
-            .put(url, JSON.stringify(evento), { headers: this.headers })
-            .toPromise()
-            .then(function () { return evento; })
-            .catch(this.handleError);
-    };
+    //update(evento: Evento): Promise<Evento> {
+    //    const url = `${this.url}/${evento.Name}`;
+    //    return this.http
+    //        .put(url, JSON.stringify(evento), { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => evento)
+    //        .catch(this.handleError);
+    //}
     EventosService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);

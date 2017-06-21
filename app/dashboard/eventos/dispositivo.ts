@@ -3,4 +3,6 @@ export class Dispositivo {
     Latitude: number;
     Longitude: number;
     Umbral: string;
+    Regla: string;
+    Medida: number;
 }

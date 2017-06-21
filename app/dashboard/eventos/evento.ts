@@ -1,9 +1,14 @@
 import { Dispositivo } from './dispositivo';
 
 export class Evento {
-    Name: string;
+    Nombre: string;
     Latitude: number;
     Longitude: number;
-    DataSources: Dispositivo[];
+    SendoresAsociados: Dispositivo[];
     Actions: any[];
+
+    //Para la ciudad
+    ciudad: string;
+    cLatitude: number;
+    cLongitude: number;
 }

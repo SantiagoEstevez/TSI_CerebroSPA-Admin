@@ -13,7 +13,6 @@ export class EventosService {
 
     constructor(private http: Http) { }
 
-    //--> Tipo de sensores <--
     getEventos(lat: number, lon: number): Promise<Evento[]> {
         const url = `${this.url}cityLat/${lat}/cityLon/${lon}/`;
         return this.http.get(url)
@@ -22,38 +21,39 @@ export class EventosService {
             .catch(this.handleError);
     }
 
-    getEvento(id: number): Promise<Evento> {
-        const url = `${this.url}/${id}`;
-        return this.http.get(url)
-            .toPromise()
-            .then(response => response.json().data as Evento)
-            .catch(this.handleError);
-    }
+    //getEvento(id: number): Promise<Evento> {
+    //    const url = `${this.url}/${id}`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json().data as Evento)
+    //        .catch(this.handleError);
+    //}
 
-    delete(id: number): Promise<void> {
-        const url = `${this.url}/${id}`;
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(() => null)
-            .catch(this.handleError);
-    }
+    //delete(id: number): Promise<void> {
+    //    const url = `${this.url}/${id}`;
+    //    return this.http.delete(url, { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => null)
+    //        .catch(this.handleError);
+    //}
 
     setEvento(nurevoEvento: Evento): Promise<Evento> {
+        console.log(nurevoEvento);
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
-            .then(res => res.json().data as Evento)
+            .then(res => res.json() as Evento)
             .catch(this.handleError);
     }
 
-    update(evento: Evento): Promise<Evento> {
-        const url = `${this.url}/${evento.Name}`;
-        return this.http
-            .put(url, JSON.stringify(evento), { headers: this.headers })
-            .toPromise()
-            .then(() => evento)
-            .catch(this.handleError);
-    }
+    //update(evento: Evento): Promise<Evento> {
+    //    const url = `${this.url}/${evento.Name}`;
+    //    return this.http
+    //        .put(url, JSON.stringify(evento), { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => evento)
+    //        .catch(this.handleError);
+    //}
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only

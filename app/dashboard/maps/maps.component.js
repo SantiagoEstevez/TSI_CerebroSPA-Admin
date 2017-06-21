@@ -75,19 +75,22 @@ var MapsComponent = (function () {
     MapsComponent.prototype.getZonas = function (ciudad) {
         var _this = this;
         this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(function (zonas) {
-            for (var i = 0; i < zonas.length; i++) {
-                new google.maps.Circle({
-                    radius: _this.zonas[i].Radio,
-                    center: new google.maps.LatLng(_this.zonas[i].Latitude, _this.zonas[i].Longitude),
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: '#FF0000',
-                    fillOpacity: 0.35,
-                    map: _this.map,
-                    clickable: true,
-                    editable: false,
-                });
+            if (zonas) {
+                _this.zonas = zonas;
+                for (var z = 0; z < zonas.length; z++) {
+                    new google.maps.Circle({
+                        radius: zonas[z].Radio,
+                        center: new google.maps.LatLng(zonas[z].Latitude, zonas[z].Longitude),
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.35,
+                        map: _this.map,
+                        clickable: true,
+                        editable: false,
+                    });
+                }
             }
         });
     };

@@ -35,6 +35,7 @@ var EventosComponent = (function () {
     EventosComponent.prototype.inicializo = function () {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.oEvento = new evento_1.Evento();
+        this.eventos = [];
         this.dispositivos = [];
         this.inicializoDispositivo();
         this.getCiudades();
@@ -47,10 +48,9 @@ var EventosComponent = (function () {
     //---> Funciones de eventos <---
     EventosComponent.prototype.agregarEvento = function () {
         if (this.dispositivos.length > 0) {
-            if (this.oEvento.Name != "") {
-                this.oEvento.DataSources = this.dispositivos;
+            if (this.oEvento.Nombre != "") {
+                this.oEvento.SendoresAsociados = this.dispositivos;
                 this.setEvento(this.oEvento);
-                this.inicializo();
             }
             else {
                 alert("Debe asignarle un nombre al evento.");
@@ -67,22 +67,26 @@ var EventosComponent = (function () {
         alert("eliminando evento");
     };
     EventosComponent.prototype.agregarDispositivo = function () {
-        if (this.oDispositivo.Umbral != "" && this.oDispositivo.Tipo != "") {
+        if (this.oDispositivo.Regla != "" && this.oDispositivo.Tipo != "" && this.oDispositivo.Tipo != this.nombreCampoTS && this.oDispositivo.Medida != 0) {
+            this.oDispositivo.Umbral = this.oDispositivo.Regla + " " + this.oDispositivo.Medida;
             this.dispositivos.push(this.oDispositivo);
             this.inicializoDispositivo();
         }
         else {
-            alert("Debe seleccionar el tipo y el humbral.");
+            alert("Debe seleccionar tipo, regla y valor");
         }
     };
-    EventosComponent.prototype.eliminarDispositivo = function () {
-        alert("eliminando de la lista >D");
+    EventosComponent.prototype.eliminarDispositivo = function (dispositivo) {
+        var index = this.dispositivos.indexOf(dispositivo);
+        if (index !== -1) {
+            this.dispositivos.splice(index, 1);
+        }
     };
     EventosComponent.prototype.changeCiudad = function (ciudad) {
         this.CampoCiudad = ciudad.Nombre;
-        //this.nuevoSensor.ciudad = ciudad.Nombre;
-        //this.nuevoSensor.cLatitude = ciudad.Latitud;
-        //this.nuevoSensor.cLongitude = ciudad.Longitud;
+        this.oEvento.ciudad = ciudad.Nombre;
+        this.oEvento.cLatitude = ciudad.Latitud;
+        this.oEvento.cLongitude = ciudad.Longitud;
     };
     EventosComponent.prototype.changeTipoSensor = function (tipoSensor) {
         this.CampoTS = tipoSensor.nombre;
@@ -93,7 +97,7 @@ var EventosComponent = (function () {
         var _this = this;
         this.CiudadesService.getCiudades().then(function (ciudades) {
             _this.ciudades = ciudades;
-            //this.getEventos();
+            _this.getEventos();
         });
     };
     EventosComponent.prototype.getEventos = function () {
@@ -101,10 +105,14 @@ var EventosComponent = (function () {
         for (var i = 0; i < this.ciudades.length; i++) {
             var nombre = this.ciudades[i].Nombre;
             this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(function (eventos) {
-                for (var e = 0; e < eventos.length; e++) {
-                    _this.eventos.push(eventos[e]);
+                if (eventos) {
+                    for (var e = 0; e < eventos.length; e++) {
+                        if (!eventos[e].SendoresAsociados) {
+                            eventos[e].SendoresAsociados = [];
+                        }
+                        _this.eventos.push(eventos[e]);
+                    }
                 }
-                _this.eventos = eventos;
             });
         }
     };
@@ -113,8 +121,13 @@ var EventosComponent = (function () {
         this.tipoSensoresService.getTipoBaseSensor().then(function (tipoSensores) { return _this.tipoSensores = tipoSensores; });
     };
     EventosComponent.prototype.setEvento = function (nuevo) {
-        this.eventosService
-            .setEvento(nuevo);
+        var _this = this;
+        var latitudgenerada = Math.floor((Math.random() * 10) + 1);
+        nuevo.Longitude = latitudgenerada;
+        console.log(latitudgenerada);
+        this.eventosService.setEvento(nuevo).then(function () {
+            _this.inicializo();
+        });
     };
     EventosComponent = __decorate([
         core_1.Component({

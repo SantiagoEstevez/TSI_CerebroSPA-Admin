@@ -51,6 +51,7 @@ export class EventosComponent implements OnInit {
         this.CampoCiudad = this.nombreCampoCiudad;
 
         this.oEvento = new Evento();
+        this.eventos = [];
         this.dispositivos = [];
         this.inicializoDispositivo();
 
@@ -67,10 +68,10 @@ export class EventosComponent implements OnInit {
     //---> Funciones de eventos <---
     agregarEvento() {
         if (this.dispositivos.length > 0) {
-            if (this.oEvento.Name != "") {
-                this.oEvento.DataSources = this.dispositivos;
+            if (this.oEvento.Nombre != "") {
+                this.oEvento.SendoresAsociados = this.dispositivos;
                 this.setEvento(this.oEvento);
-                this.inicializo();
+                
             } else {
                 alert("Debe asignarle un nombre al evento.");
             }
@@ -88,23 +89,28 @@ export class EventosComponent implements OnInit {
     }
 
     agregarDispositivo() {
-        if (this.oDispositivo.Umbral != "" && this.oDispositivo.Tipo != "") {
+        if (this.oDispositivo.Regla != "" && this.oDispositivo.Tipo != "" && this.oDispositivo.Tipo != this.nombreCampoTS && this.oDispositivo.Medida != 0) {
+            this.oDispositivo.Umbral = this.oDispositivo.Regla + " " + this.oDispositivo.Medida;
             this.dispositivos.push(this.oDispositivo);
             this.inicializoDispositivo();
         } else {
-            alert("Debe seleccionar el tipo y el humbral.");
+            alert("Debe seleccionar tipo, regla y valor");
         }
     }
 
-    eliminarDispositivo() {
-        alert("eliminando de la lista >D");
+    eliminarDispositivo(dispositivo: Dispositivo) {
+        let index: number = this.dispositivos.indexOf(dispositivo);
+        if (index !== -1) {
+            this.dispositivos.splice(index, 1);
+        }  
     }
 
     changeCiudad(ciudad: Ciudad) {
         this.CampoCiudad = ciudad.Nombre;
-        //this.nuevoSensor.ciudad = ciudad.Nombre;
-        //this.nuevoSensor.cLatitude = ciudad.Latitud;
-        //this.nuevoSensor.cLongitude = ciudad.Longitud;
+
+        this.oEvento.ciudad = ciudad.Nombre;
+        this.oEvento.cLatitude = ciudad.Latitud;
+        this.oEvento.cLongitude = ciudad.Longitud;
     }
 
     changeTipoSensor(tipoSensor: TipoBaseSensor) {
@@ -117,7 +123,7 @@ export class EventosComponent implements OnInit {
     getCiudades() {
         this.CiudadesService.getCiudades().then(ciudades => {
             this.ciudades = ciudades;
-            //this.getEventos();
+            this.getEventos();
         });
     }
 
@@ -126,10 +132,14 @@ export class EventosComponent implements OnInit {
             let nombre = this.ciudades[i].Nombre;
 
             this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
-                for (var e = 0; e < eventos.length; e++) {
-                    this.eventos.push(eventos[e]);
+                if (eventos) {
+                    for (var e = 0; e < eventos.length; e++) {
+                        if (!eventos[e].SendoresAsociados) {
+                            eventos[e].SendoresAsociados = [];
+                        }
+                        this.eventos.push(eventos[e]);
+                    }
                 }
-                this.eventos = eventos
             });
         }
     }
@@ -139,7 +149,11 @@ export class EventosComponent implements OnInit {
     }
 
     setEvento(nuevo: Evento): void {
-        this.eventosService
-            .setEvento(nuevo);
+        let latitudgenerada = Math.floor((Math.random() * 10) + 1);
+        nuevo.Longitude = latitudgenerada;
+        console.log(latitudgenerada)
+        this.eventosService.setEvento(nuevo).then(() => {
+            this.inicializo();
+        });
     }
 }
