@@ -10,6 +10,7 @@ import { MapsComponent } from './maps/maps.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
 import { CiudadesComponent } from './ciudades/ciudades.component';
 import { EventosComponent } from './eventos/eventos.component';
+import { EventosZonasComponent } from './eventos/eventosZonas.component';
 import { TipoSensoresComponent } from './tipo-sensores/tipo-sensores.component';
 import { SensoresComponent } from './sensores/sensores.component';
 import { ZonasComponent } from './zonas/zonas.component';
@@ -24,6 +25,7 @@ export const MODULE_ROUTES: Route[] =[
     { path: 'Sensores', component: SensoresComponent },
     { path: 'Zonas', component: ZonasComponent },
     { path: 'Eventos', component: EventosComponent },
+    { path: 'EventosZonas', component: EventosZonasComponent },
     { path: 'notifications', component: NotificationsComponent },
     { path: 'login', component: LoginComponent },
     //{ path: 'user', component: UserComponent },
@@ -47,6 +49,7 @@ export const MODULE_COMPONENTS = [
     UpgradeComponent,
     CiudadesComponent,
     EventosComponent,
+    EventosZonasComponent,
     TipoSensoresComponent,
     SensoresComponent,
     ZonasComponent

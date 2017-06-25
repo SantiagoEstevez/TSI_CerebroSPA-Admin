@@ -26,6 +26,9 @@ var LoginComponent = (function () {
     };
     LoginComponent.prototype.login = function () {
         var usuario = new usuario_1.Usuario();
+        usuario.CI = "477";
+        usuario.Name = "santiago";
+        usuario.Lastname = "estevez";
         usuario.Username = this.model.username;
         usuario.Password = this.model.password;
         this.loading = true;
@@ -41,11 +44,9 @@ var LoginComponent = (function () {
         //            this.loading = false;
         //        }
         //    });
-        console.log("segunda");
-        //this.authenticationService.login2(usuario);
-        this.authenticationService.login3(usuario).subscribe(function (result) {
+        this.authenticationService.login(usuario).subscribe(function (result) {
             console.log(result);
-            console.log(localStorage.getItem('currentUser'));
+            console.log(localStorage.getItem('token'));
         });
     };
     LoginComponent = __decorate([

@@ -24,6 +24,9 @@ export class LoginComponent implements OnInit {
 
     login() {
         var usuario = new Usuario();
+        usuario.CI = "477";
+        usuario.Name = "santiago";
+        usuario.Lastname = "estevez";
         usuario.Username = this.model.username;
         usuario.Password = this.model.password;
 
@@ -41,14 +44,9 @@ export class LoginComponent implements OnInit {
         //        }
         //    });
 
-        console.log("segunda");
-        //this.authenticationService.login2(usuario);
-        this.authenticationService.login3(usuario).subscribe(result => {
+        this.authenticationService.login(usuario).subscribe(result => {
             console.log(result);
-            console.log(localStorage.getItem('currentUser'));
+            console.log(localStorage.getItem('token'));
         });
-        
-        
-            
     }
 }

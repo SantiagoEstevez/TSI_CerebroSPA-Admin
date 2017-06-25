@@ -1,6 +1,7 @@
 "use strict";
 var Evento = (function () {
     function Evento() {
+        this.SendoresAsociados = [];
     }
     return Evento;
 }());

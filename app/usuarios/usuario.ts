@@ -1,4 +1,7 @@
 export class Usuario {
-  Username: string;
-  Password: string;
+    CI: string;
+    Name: string;
+    Lastname: string;
+    Username: string;
+    Password: string;
 }

@@ -9,12 +9,21 @@ export class EventosService {
 
     private headers = new Headers({ 'Content-Type': 'application/json' });
     //private url = 'api/evento';  // URL to web api
-    private url = 'http://localhost:6346/api/Evento/Global/'
+    private url = 'http://localhost:6346/api/Evento/Global/';
+    private urlZona = 'http://localhost:6346/api/Evento/Zone/';
 
     constructor(private http: Http) { }
 
     getEventos(lat: number, lon: number): Promise<Evento[]> {
         const url = `${this.url}cityLat/${lat}/cityLon/${lon}/`;
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json() as Evento[])
+            .catch(this.handleError);
+    }
+
+    getEventosZona(lat: number, lon: number): Promise<Evento[]> {
+        const url = `${this.urlZona}cityLat/${lat}/cityLon/${lon}/`;
         return this.http.get(url)
             .toPromise()
             .then(response => response.json() as Evento[])
@@ -38,9 +47,17 @@ export class EventosService {
     //}
 
     setEvento(nurevoEvento: Evento): Promise<Evento> {
-        console.log(nurevoEvento);
+        console.log(JSON.stringify(nurevoEvento));
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
+            .toPromise()
+            .then(res => res.json() as Evento)
+            .catch(this.handleError);
+    }
+
+    setEventoZona(nurevoEvento: Evento): Promise<Evento> {
+        return this.http
+            .post(this.urlZona, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
             .then(res => res.json() as Evento)
             .catch(this.handleError);

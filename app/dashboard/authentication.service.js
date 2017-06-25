@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
-var usuario_1 = require('../usuarios/usuario');
 var AuthenticationService = (function () {
     function AuthenticationService(http) {
         this.http = http;
@@ -21,49 +20,47 @@ var AuthenticationService = (function () {
         //var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         //this.token = currentUser && currentUser.token;
     }
+    //login(usuario: Usuario): Observable<boolean> {
+    //    return this.http.post(this.url, JSON.stringify(usuario))
+    //        .map((response: Response) => {
+    //            // login successful if there's a jwt token in the response
+    //            console.log("antes de tocar");
+    //            let token = response.json() && response.json().token;
+    //            if (token) {
+    //                // set token property
+    //                this.token = token;
+    //                // store username and jwt token in local storage to keep user logged in between page refreshes
+    //                localStorage.setItem('currentUser', JSON.stringify(usuario));
+    //                // return true to indicate successful login
+    //                return true;
+    //            } else {
+    //                // return false to indicate failed login
+    //                return false;
+    //            }
+    //        });
+    //}
+    //login2(usuario: Usuario): Observable<string> {
+    //    console.log("entre");
+    //    return this.http
+    //        .post(this.url, JSON.stringify(Usuario), { headers: this.headers })
+    //        .map(res => {
+    //            console.log("emm se supone que me deberia estar llegando.");
+    //            console.log(res.json());
+    //        })
+    //        .catch(this.handleError);
+    //}
     AuthenticationService.prototype.login = function (usuario) {
-        var _this = this;
-        return this.http.post(this.url, JSON.stringify(usuario))
-            .map(function (response) {
-            // login successful if there's a jwt token in the response
-            console.log("antes de tocar");
-            var token = response.json() && response.json().token;
-            if (token) {
-                // set token property
-                _this.token = token;
-                // store username and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('currentUser', JSON.stringify(usuario));
-                // return true to indicate successful login
-                return true;
-            }
-            else {
-                // return false to indicate failed login
-                return false;
-            }
-        });
-    };
-    AuthenticationService.prototype.login2 = function (usuario) {
-        console.log("entre");
         return this.http
-            .post(this.url, JSON.stringify(usuario_1.Usuario), { headers: this.headers })
-            .map(function (res) {
-            console.log("emm se supone que me deberia estar llegando.");
-            console.log(res.json());
-        })
-            .catch(this.handleError);
-    };
-    AuthenticationService.prototype.login3 = function (usuario) {
-        return this.http
-            .post(this.url, JSON.stringify(usuario_1.Usuario), { headers: this.headers })
+            .post(this.url, JSON.stringify(usuario), { headers: this.headers })
             .map(function (response) {
-            localStorage.setItem('currentUser', response.json());
+            localStorage.setItem('token', response.json());
             return true;
         });
     };
     AuthenticationService.prototype.logout = function () {
         // clear token remove user from local storage to log user out
         this.token = null;
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
     };
     AuthenticationService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only

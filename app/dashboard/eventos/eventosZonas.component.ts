@@ -5,24 +5,29 @@ import { Evento } from './evento';
 import { Dispositivo } from './dispositivo';
 import { TipoBaseSensor } from '../tipo-sensores/tipo-base-sensor';
 import { Ciudad } from '../ciudades/ciudad'
+import { Zona } from '../zonas/zona'
 
 //Servicios.
 import { EventosService } from './eventos.service';
 import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
 import { CiudadesService } from '../ciudades/ciudades.service'
+import { ZonasService } from '../zonas/zonas.service'
+
+declare var google: any;
 
 @Component({
-    selector: 'eventos-cmp',
+    selector: 'eventosZonas-cmp',
     moduleId: module.id,
-    templateUrl: 'eventos.component.html'
+    templateUrl: 'eventosZonas.component.html'
 })
 
-export class EventosComponent implements OnInit {
+export class EventosZonasComponent implements OnInit {
 
     constructor(
         private eventosService: EventosService,
         private tipoSensoresService: TipoSensoresService,
-        private CiudadesService: CiudadesService
+        private CiudadesService: CiudadesService,
+        private ZonasService: ZonasService
     ) { };
 
     //Nombres
@@ -36,16 +41,29 @@ export class EventosComponent implements OnInit {
     //Objetos
     oEvento: Evento;
     oDispositivo: Dispositivo;
+    map: any;
 
     //Listas de objetos
     ciudades: Ciudad[];
     tipoSensores: TipoBaseSensor[];
     eventos: Evento[];
     dispositivos: Dispositivo[];
+    zonas: Zona[];
+    zonasMapa: any[];
     reglas: string[] = [">=", "<="];
 
 
     ngOnInit() {
+        //Cargo mapa
+        var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
+        var mapOptions = {
+            zoom: 13,
+            center: myLatlng,
+            scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
+            styles: []
+        }
+        this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
         this.inicializo();
     }
 
@@ -56,6 +74,8 @@ export class EventosComponent implements OnInit {
         this.oEvento = new Evento();
         this.eventos = [];
         this.dispositivos = [];
+        this.zonas = [];
+        this.zonasMapa = [];
         this.inicializoDispositivo();
 
         this.getCiudades();
@@ -68,24 +88,30 @@ export class EventosComponent implements OnInit {
         this.oDispositivo = new Dispositivo();
     }
 
+    borrarZonasMapa() {
+        for (let i = 0; i < this.zonasMapa.length; i++) {
+            this.zonasMapa[i].setMap(null);
+        }
+        this.zonasMapa = [];
+    }
+
 
     //---> Funciones de eventos <---
     agregarEvento() {
-        if (this.oEvento.ciudad != undefined) {
-            if (this.dispositivos.length > 0) {
-                if (this.oEvento.Nombre != "") {
+        if (this.dispositivos.length > 0) {
+            if (this.oEvento.Nombre != "") {
+                if (!isNaN(this.oEvento.Latitude) && !isNaN(this.oEvento.Longitude)) {
                     //this.oEvento.SendoresAsociados = this.dispositivos;
                     this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
                     this.setEvento(this.oEvento);
-
                 } else {
-                    alert("Debe asignarle un nombre al evento.");
+                    alert("Debe seleccionar una zona.");
                 }
             } else {
-                alert("El evento debe tener por lo menos un tipo de sensor asociado.");
+                alert("Debe asignarle un nombre al evento.");
             }
         } else {
-            alert("Debe seleccionar la ciudad del evento.");
+            alert("El evento debe tener alguna regla asociada.");
         }
     }
 
@@ -128,6 +154,9 @@ export class EventosComponent implements OnInit {
         this.oEvento.ciudad = ciudad.Nombre;
         this.oEvento.cLatitude = ciudad.Latitud;
         this.oEvento.cLongitude = ciudad.Longitud;
+
+        this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
+        this.getZonas(ciudad);
     }
 
     changeTipoSensor(tipoSensor: TipoBaseSensor) {
@@ -150,10 +179,10 @@ export class EventosComponent implements OnInit {
     }
 
     getEventos(): void {
-        for (var i = 0; i < this.ciudades.length; i++) {
+        for (let i = 0; i < this.ciudades.length; i++) {
             let nombre = this.ciudades[i].Nombre;
 
-            this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            this.eventosService.getEventosZona(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
                 if (eventos) {
                     for (var e = 0; e < eventos.length; e++) {
                         if (!eventos[e].SendoresAsociados) {
@@ -171,11 +200,45 @@ export class EventosComponent implements OnInit {
     }
 
     setEvento(nuevo: Evento): void {
-        let latitudgenerada = Math.floor((Math.random() * 10) + 1);
-        nuevo.Longitude = latitudgenerada;
-        console.log(latitudgenerada)
-        this.eventosService.setEvento(nuevo).then(() => {
+        this.eventosService.setEventoZona(nuevo).then(() => {
             this.inicializo();
+        });
+    }
+
+    getZonas(ciudad: Ciudad): void {
+        this.borrarZonasMapa();
+
+        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(zonas => {
+            if (zonas) {
+                this.zonas = zonas;
+
+                for (let z = 0; z < zonas.length; z++) {
+                    let zona = new google.maps.Circle({
+                        radius: zonas[z].Radio,
+                        center: new google.maps.LatLng(zonas[z].Latitude, zonas[z].Longitude),
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.35,
+                        clickable: true,
+                        editable: false,
+                        map: this.map
+                    });
+
+                    //Eventos seleccion de la zona mapa.
+                    zona.addListener('click', (e) => {
+                        for (let c = 0; c < this.zonasMapa.length; c++) {
+                            this.zonasMapa[c].setOptions({ fillColor: '#FF0000', strokeColor: '#FF0000' });
+                        }
+                        this.oEvento.Latitude = e.latLng.lat();
+                        this.oEvento.Longitude = e.latLng.lng();
+                        zona.setOptions({ fillColor: '#013ADF', strokeColor: '#08088A' });
+                    });
+
+                    this.zonasMapa.push(zona);
+                }
+            }
         });
     }
 }

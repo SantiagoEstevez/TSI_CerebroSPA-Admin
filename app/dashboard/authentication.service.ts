@@ -16,44 +16,44 @@ export class AuthenticationService {
         //this.token = currentUser && currentUser.token;
     }
 
+    //login(usuario: Usuario): Observable<boolean> {
+    //    return this.http.post(this.url, JSON.stringify(usuario))
+    //        .map((response: Response) => {
+    //            // login successful if there's a jwt token in the response
+    //            console.log("antes de tocar");
+    //            let token = response.json() && response.json().token;
+    //            if (token) {
+    //                // set token property
+    //                this.token = token;
+
+    //                // store username and jwt token in local storage to keep user logged in between page refreshes
+    //                localStorage.setItem('currentUser', JSON.stringify(usuario));
+
+    //                // return true to indicate successful login
+    //                return true;
+    //            } else {
+    //                // return false to indicate failed login
+    //                return false;
+    //            }
+    //        });
+    //}
+
+    //login2(usuario: Usuario): Observable<string> {
+    //    console.log("entre");
+    //    return this.http
+    //        .post(this.url, JSON.stringify(Usuario), { headers: this.headers })
+    //        .map(res => {
+    //            console.log("emm se supone que me deberia estar llegando.");
+    //            console.log(res.json());
+    //        })
+    //        .catch(this.handleError);
+    //}
+
     login(usuario: Usuario): Observable<boolean> {
-        return this.http.post(this.url, JSON.stringify(usuario))
-            .map((response: Response) => {
-                // login successful if there's a jwt token in the response
-                console.log("antes de tocar");
-                let token = response.json() && response.json().token;
-                if (token) {
-                    // set token property
-                    this.token = token;
-
-                    // store username and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(usuario));
-
-                    // return true to indicate successful login
-                    return true;
-                } else {
-                    // return false to indicate failed login
-                    return false;
-                }
-            });
-    }
-
-    login2(usuario: Usuario): Observable<string> {
-        console.log("entre");
         return this.http
-            .post(this.url, JSON.stringify(Usuario), { headers: this.headers })
-            .map(res => {
-                console.log("emm se supone que me deberia estar llegando.");
-                console.log(res.json());
-            })
-            .catch(this.handleError);
-    }
-
-    login3(usuario: Usuario): Observable<boolean> {
-        return this.http
-            .post(this.url, JSON.stringify(Usuario), { headers: this.headers })
+            .post(this.url, JSON.stringify(usuario), { headers: this.headers })
             .map(response => {
-                localStorage.setItem('currentUser', response.json() as string);
+                localStorage.setItem('token', response.json() as string);
                 return true;
             });
     }
@@ -61,7 +61,7 @@ export class AuthenticationService {
     logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
     }
 
     private handleError(error: any): Promise<any> {

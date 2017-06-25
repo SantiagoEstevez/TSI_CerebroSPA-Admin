@@ -17,9 +17,17 @@ var EventosService = (function () {
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         //private url = 'api/evento';  // URL to web api
         this.url = 'http://localhost:6346/api/Evento/Global/';
+        this.urlZona = 'http://localhost:6346/api/Evento/Zone/';
     }
     EventosService.prototype.getEventos = function (lat, lon) {
         var url = this.url + "cityLat/" + lat + "/cityLon/" + lon + "/";
+        return this.http.get(url)
+            .toPromise()
+            .then(function (response) { return response.json(); })
+            .catch(this.handleError);
+    };
+    EventosService.prototype.getEventosZona = function (lat, lon) {
+        var url = this.urlZona + "cityLat/" + lat + "/cityLon/" + lon + "/";
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json(); })
@@ -40,9 +48,16 @@ var EventosService = (function () {
     //        .catch(this.handleError);
     //}
     EventosService.prototype.setEvento = function (nurevoEvento) {
-        console.log(nurevoEvento);
+        console.log(JSON.stringify(nurevoEvento));
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
+    EventosService.prototype.setEventoZona = function (nurevoEvento) {
+        return this.http
+            .post(this.urlZona, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
             .catch(this.handleError);

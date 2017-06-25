@@ -9,6 +9,7 @@ var maps_component_1 = require('./maps/maps.component');
 var upgrade_component_1 = require('./upgrade/upgrade.component');
 var ciudades_component_1 = require('./ciudades/ciudades.component');
 var eventos_component_1 = require('./eventos/eventos.component');
+var eventosZonas_component_1 = require('./eventos/eventosZonas.component');
 var tipo_sensores_component_1 = require('./tipo-sensores/tipo-sensores.component');
 var sensores_component_1 = require('./sensores/sensores.component');
 var zonas_component_1 = require('./zonas/zonas.component');
@@ -21,6 +22,7 @@ exports.MODULE_ROUTES = [
     { path: 'Sensores', component: sensores_component_1.SensoresComponent },
     { path: 'Zonas', component: zonas_component_1.ZonasComponent },
     { path: 'Eventos', component: eventos_component_1.EventosComponent },
+    { path: 'EventosZonas', component: eventosZonas_component_1.EventosZonasComponent },
     { path: 'notifications', component: notifications_component_1.NotificationsComponent },
     { path: 'login', component: login_component_1.LoginComponent },
     //{ path: 'user', component: UserComponent },
@@ -42,6 +44,7 @@ exports.MODULE_COMPONENTS = [
     upgrade_component_1.UpgradeComponent,
     ciudades_component_1.CiudadesComponent,
     eventos_component_1.EventosComponent,
+    eventosZonas_component_1.EventosZonasComponent,
     tipo_sensores_component_1.TipoSensoresComponent,
     sensores_component_1.SensoresComponent,
     zonas_component_1.ZonasComponent

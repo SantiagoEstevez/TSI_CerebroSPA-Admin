@@ -21,16 +21,26 @@
         </div>
         <div *ngIf="error" class="alert alert-danger">{{error}}</div>
     </form>
-    <button class="btn btn-primary btn-margin"
+    <!--<button class="btn btn-primary btn-margin"
             *ngIf="!auth.isAuthenticated()"
             (click)="auth.login()">
         Log In
-    </button>
+    </button>-->
+    <!--<button class="btn btn-primary btn-margin"
+            
+            (click)="auth.login()">
+        Log In
+    </button>-->
 
-    <button class="btn btn-primary btn-margin"
+    <!--<button class="btn btn-primary btn-margin"
             *ngIf="auth.isAuthenticated()"
             (click)="auth.logout()">
         Log Out
-    </button>
+    </button>-->
+    <!--<button class="btn btn-primary btn-margin"
+            
+            (click)="auth.logout()">
+        Log Out
+    </button>-->
 
 </div>

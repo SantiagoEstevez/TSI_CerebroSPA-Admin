@@ -16,11 +16,13 @@ var dispositivo_1 = require('./dispositivo');
 var eventos_service_1 = require('./eventos.service');
 var tipo_sensor_service_1 = require('../tipo-sensores/tipo-sensor.service');
 var ciudades_service_1 = require('../ciudades/ciudades.service');
-var EventosComponent = (function () {
-    function EventosComponent(eventosService, tipoSensoresService, CiudadesService) {
+var zonas_service_1 = require('../zonas/zonas.service');
+var EventosZonasComponent = (function () {
+    function EventosZonasComponent(eventosService, tipoSensoresService, CiudadesService, ZonasService) {
         this.eventosService = eventosService;
         this.tipoSensoresService = tipoSensoresService;
         this.CiudadesService = CiudadesService;
+        this.ZonasService = ZonasService;
         //Nombres
         this.nombreCampoCiudad = 'Ciudad del evento';
         this.nombreCampoTS = 'Tipo sensor';
@@ -31,52 +33,69 @@ var EventosComponent = (function () {
         this.reglas = [">=", "<="];
     }
     ;
-    EventosComponent.prototype.ngOnInit = function () {
+    EventosZonasComponent.prototype.ngOnInit = function () {
+        //Cargo mapa
+        var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
+        var mapOptions = {
+            zoom: 13,
+            center: myLatlng,
+            scrollwheel: false,
+            styles: []
+        };
+        this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
         this.inicializo();
     };
     //---> Funciones internas <---
-    EventosComponent.prototype.inicializo = function () {
+    EventosZonasComponent.prototype.inicializo = function () {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.oEvento = new evento_1.Evento();
         this.eventos = [];
         this.dispositivos = [];
+        this.zonas = [];
+        this.zonasMapa = [];
         this.inicializoDispositivo();
         this.getCiudades();
         this.getTipoSensores();
     };
-    EventosComponent.prototype.inicializoDispositivo = function () {
+    EventosZonasComponent.prototype.inicializoDispositivo = function () {
         this.CampoTS = this.nombreCampoTS;
         this.CampoRegla = this.nombreCampoRegla;
         this.oDispositivo = new dispositivo_1.Dispositivo();
     };
+    EventosZonasComponent.prototype.borrarZonasMapa = function () {
+        for (var i = 0; i < this.zonasMapa.length; i++) {
+            this.zonasMapa[i].setMap(null);
+        }
+        this.zonasMapa = [];
+    };
     //---> Funciones de eventos <---
-    EventosComponent.prototype.agregarEvento = function () {
-        if (this.oEvento.ciudad != undefined) {
-            if (this.dispositivos.length > 0) {
-                if (this.oEvento.Nombre != "") {
+    EventosZonasComponent.prototype.agregarEvento = function () {
+        if (this.dispositivos.length > 0) {
+            if (this.oEvento.Nombre != "") {
+                if (!isNaN(this.oEvento.Latitude) && !isNaN(this.oEvento.Longitude)) {
                     //this.oEvento.SendoresAsociados = this.dispositivos;
                     this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
                     this.setEvento(this.oEvento);
                 }
                 else {
-                    alert("Debe asignarle un nombre al evento.");
+                    alert("Debe seleccionar una zona.");
                 }
             }
             else {
-                alert("El evento debe tener por lo menos un tipo de sensor asociado.");
+                alert("Debe asignarle un nombre al evento.");
             }
         }
         else {
-            alert("Debe seleccionar la ciudad del evento.");
+            alert("El evento debe tener alguna regla asociada.");
         }
     };
-    EventosComponent.prototype.editarEvento = function () {
+    EventosZonasComponent.prototype.editarEvento = function () {
         alert("editando evento");
     };
-    EventosComponent.prototype.eliminarEvento = function () {
+    EventosZonasComponent.prototype.eliminarEvento = function () {
         alert("eliminando evento");
     };
-    EventosComponent.prototype.agregarDispositivo = function () {
+    EventosZonasComponent.prototype.agregarDispositivo = function () {
         if (this.oDispositivo.Regla == ">=" || this.oDispositivo.Regla == "<=") {
             if (!isNaN(this.oDispositivo.Medida)) {
                 if (this.oDispositivo.Tipo != undefined && this.oDispositivo.Tipo != this.nombreCampoTS) {
@@ -96,39 +115,41 @@ var EventosComponent = (function () {
             alert("La regla debe ser >= o <=");
         }
     };
-    EventosComponent.prototype.eliminarDispositivo = function (dispositivo) {
+    EventosZonasComponent.prototype.eliminarDispositivo = function (dispositivo) {
         var index = this.dispositivos.indexOf(dispositivo);
         if (index !== -1) {
             this.dispositivos.splice(index, 1);
         }
     };
-    EventosComponent.prototype.changeCiudad = function (ciudad) {
+    EventosZonasComponent.prototype.changeCiudad = function (ciudad) {
         this.CampoCiudad = ciudad.Nombre;
         this.oEvento.ciudad = ciudad.Nombre;
         this.oEvento.cLatitude = ciudad.Latitud;
         this.oEvento.cLongitude = ciudad.Longitud;
+        this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
+        this.getZonas(ciudad);
     };
-    EventosComponent.prototype.changeTipoSensor = function (tipoSensor) {
+    EventosZonasComponent.prototype.changeTipoSensor = function (tipoSensor) {
         this.CampoTS = tipoSensor.nombre;
         this.oDispositivo.Tipo = tipoSensor.nombre;
     };
-    EventosComponent.prototype.changeRegla = function (regla) {
+    EventosZonasComponent.prototype.changeRegla = function (regla) {
         this.CampoRegla = regla;
         this.oDispositivo.Regla = regla;
     };
     //---> Funciones de servicios <---
-    EventosComponent.prototype.getCiudades = function () {
+    EventosZonasComponent.prototype.getCiudades = function () {
         var _this = this;
         this.CiudadesService.getCiudades().then(function (ciudades) {
             _this.ciudades = ciudades;
             _this.getEventos();
         });
     };
-    EventosComponent.prototype.getEventos = function () {
+    EventosZonasComponent.prototype.getEventos = function () {
         var _this = this;
         for (var i = 0; i < this.ciudades.length; i++) {
             var nombre = this.ciudades[i].Nombre;
-            this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(function (eventos) {
+            this.eventosService.getEventosZona(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(function (eventos) {
                 if (eventos) {
                     for (var e = 0; e < eventos.length; e++) {
                         if (!eventos[e].SendoresAsociados) {
@@ -140,28 +161,61 @@ var EventosComponent = (function () {
             });
         }
     };
-    EventosComponent.prototype.getTipoSensores = function () {
+    EventosZonasComponent.prototype.getTipoSensores = function () {
         var _this = this;
         this.tipoSensoresService.getTipoBaseSensor().then(function (tipoSensores) { return _this.tipoSensores = tipoSensores; });
     };
-    EventosComponent.prototype.setEvento = function (nuevo) {
+    EventosZonasComponent.prototype.setEvento = function (nuevo) {
         var _this = this;
-        var latitudgenerada = Math.floor((Math.random() * 10) + 1);
-        nuevo.Longitude = latitudgenerada;
-        console.log(latitudgenerada);
-        this.eventosService.setEvento(nuevo).then(function () {
+        this.eventosService.setEventoZona(nuevo).then(function () {
             _this.inicializo();
         });
     };
-    EventosComponent = __decorate([
+    EventosZonasComponent.prototype.getZonas = function (ciudad) {
+        var _this = this;
+        this.borrarZonasMapa();
+        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(function (zonas) {
+            if (zonas) {
+                _this.zonas = zonas;
+                var _loop_1 = function(z) {
+                    var zona = new google.maps.Circle({
+                        radius: zonas[z].Radio,
+                        center: new google.maps.LatLng(zonas[z].Latitude, zonas[z].Longitude),
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.35,
+                        clickable: true,
+                        editable: false,
+                        map: _this.map
+                    });
+                    //Eventos seleccion de la zona mapa.
+                    zona.addListener('click', function (e) {
+                        for (var c = 0; c < _this.zonasMapa.length; c++) {
+                            _this.zonasMapa[c].setOptions({ fillColor: '#FF0000', strokeColor: '#FF0000' });
+                        }
+                        _this.oEvento.Latitude = e.latLng.lat();
+                        _this.oEvento.Longitude = e.latLng.lng();
+                        zona.setOptions({ fillColor: '#013ADF', strokeColor: '#08088A' });
+                    });
+                    _this.zonasMapa.push(zona);
+                };
+                for (var z = 0; z < zonas.length; z++) {
+                    _loop_1(z);
+                }
+            }
+        });
+    };
+    EventosZonasComponent = __decorate([
         core_1.Component({
-            selector: 'eventos-cmp',
+            selector: 'eventosZonas-cmp',
             moduleId: module.id,
-            templateUrl: 'eventos.component.html'
+            templateUrl: 'eventosZonas.component.html'
         }), 
-        __metadata('design:paramtypes', [eventos_service_1.EventosService, tipo_sensor_service_1.TipoSensoresService, ciudades_service_1.CiudadesService])
-    ], EventosComponent);
-    return EventosComponent;
+        __metadata('design:paramtypes', [eventos_service_1.EventosService, tipo_sensor_service_1.TipoSensoresService, ciudades_service_1.CiudadesService, zonas_service_1.ZonasService])
+    ], EventosZonasComponent);
+    return EventosZonasComponent;
 }());
-exports.EventosComponent = EventosComponent;
-//# sourceMappingURL=eventos.component.js.map
+exports.EventosZonasComponent = EventosZonasComponent;
+//# sourceMappingURL=eventosZonas.component.js.map
