@@ -36,6 +36,7 @@ export class EventosComponent implements OnInit {
     //Objetos
     oEvento: Evento;
     oDispositivo: Dispositivo;
+    idEvento: number;
 
     //Listas de objetos
     ciudades: Ciudad[];
@@ -102,6 +103,8 @@ export class EventosComponent implements OnInit {
             if (!isNaN(this.oDispositivo.Medida)) {
                 if (this.oDispositivo.Tipo != undefined && this.oDispositivo.Tipo != this.nombreCampoTS) {
                     this.oDispositivo.Umbral = this.oDispositivo.Regla + " " + this.oDispositivo.Medida;
+                    this.oDispositivo.cLatitude = this.oEvento.cLatitude;
+                    this.oDispositivo.cLongitude = this.oEvento.cLongitude;
                     this.dispositivos.push(this.oDispositivo);
                     this.inicializoDispositivo();
                 } else {
@@ -171,10 +174,13 @@ export class EventosComponent implements OnInit {
     }
 
     setEvento(nuevo: Evento): void {
-        let latitudgenerada = Math.floor((Math.random() * 10) + 1);
-        nuevo.Longitude = latitudgenerada;
-        console.log(latitudgenerada)
-        this.eventosService.setEvento(nuevo).then(() => {
+        this.eventosService.setEvento(nuevo).then(res => {
+            let idEvento: number = Number(res.split(":")[1]);
+            for (let v = 0; v < this.dispositivos.length; v++) {
+                this.dispositivos[v].idEvent = idEvento;
+                console.log("insertando dispo");
+                //this.eventosService.setDispositivoEvento(this.dispositivos[v]);
+            }
             this.inicializo();
         });
     }

@@ -14,16 +14,17 @@ var tipo_sensores_component_1 = require('./tipo-sensores/tipo-sensores.component
 var sensores_component_1 = require('./sensores/sensores.component');
 var zonas_component_1 = require('./zonas/zonas.component');
 var login_component_1 = require('./login/login.component');
+var auth_guard_1 = require('./auth.guard');
 exports.MODULE_ROUTES = [
-    { path: 'dashboard', component: home_component_1.HomeComponent },
-    { path: 'maps', component: maps_component_1.MapsComponent },
-    { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent },
+    //{ path: 'dashboard', component: HomeComponent },
+    { path: 'maps', component: maps_component_1.MapsComponent, canActivate: [auth_guard_1.AuthGuard] },
+    { path: 'Ciudades', component: ciudades_component_1.CiudadesComponent, canActivate: [auth_guard_1.AuthGuard] },
     //{ path: 'TipoSensores', component: TipoSensoresComponent },
-    { path: 'Sensores', component: sensores_component_1.SensoresComponent },
-    { path: 'Zonas', component: zonas_component_1.ZonasComponent },
-    { path: 'Eventos', component: eventos_component_1.EventosComponent },
-    { path: 'EventosZonas', component: eventosZonas_component_1.EventosZonasComponent },
-    { path: 'notifications', component: notifications_component_1.NotificationsComponent },
+    { path: 'Sensores', component: sensores_component_1.SensoresComponent, canActivate: [auth_guard_1.AuthGuard] },
+    { path: 'Zonas', component: zonas_component_1.ZonasComponent, canActivate: [auth_guard_1.AuthGuard] },
+    { path: 'Eventos', component: eventos_component_1.EventosComponent, canActivate: [auth_guard_1.AuthGuard] },
+    { path: 'EventosZonas', component: eventosZonas_component_1.EventosZonasComponent, canActivate: [auth_guard_1.AuthGuard] },
+    { path: 'notifications', component: notifications_component_1.NotificationsComponent, canActivate: [auth_guard_1.AuthGuard] },
     { path: 'login', component: login_component_1.LoginComponent },
     //{ path: 'user', component: UserComponent },
     //{ path: 'table', component: TableComponent },

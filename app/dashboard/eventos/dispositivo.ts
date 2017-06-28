@@ -1,7 +1,8 @@
 export class Dispositivo {
+    idEvent: number;
     Tipo: string;
-    Latitude: number;
-    Longitude: number;
+    cLatitude: number;
+    cLongitude: number;
     Umbral: string;
     Regla: string;
     Medida: number;

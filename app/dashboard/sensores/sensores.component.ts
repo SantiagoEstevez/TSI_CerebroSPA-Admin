@@ -38,7 +38,6 @@ export class SensoresComponent implements OnInit {
     sensores: Sensor[];
 
     ngOnInit() {
-        this.inicializo();
 
         //Cargo mapa
         var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
@@ -52,15 +51,18 @@ export class SensoresComponent implements OnInit {
 
         //Cargo unico marcador
         this.marker = new google.maps.Marker({
-            map: this.map
+            map: null
         });
 
         //Agregar evento al mapa
         this.map.addListener('click', (e) => {
             this.nuevoSensor.Latitude = e.latLng.lat();
             this.nuevoSensor.Longitude = e.latLng.lng();
+            this.marker.setMap(this.map);
             this.marker.setPosition(e.latLng);
         });
+
+        this.inicializo();
     }
 
 
@@ -70,6 +72,8 @@ export class SensoresComponent implements OnInit {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.nuevoSensor = new Sensor();
         this.sensores = [];
+
+        this.marker.setMap(null);
 
         this.getCiudades();
         this.getTipoSensores();

@@ -81,6 +81,8 @@ var EventosComponent = (function () {
             if (!isNaN(this.oDispositivo.Medida)) {
                 if (this.oDispositivo.Tipo != undefined && this.oDispositivo.Tipo != this.nombreCampoTS) {
                     this.oDispositivo.Umbral = this.oDispositivo.Regla + " " + this.oDispositivo.Medida;
+                    this.oDispositivo.cLatitude = this.oEvento.cLatitude;
+                    this.oDispositivo.cLongitude = this.oEvento.cLongitude;
                     this.dispositivos.push(this.oDispositivo);
                     this.inicializoDispositivo();
                 }
@@ -146,10 +148,12 @@ var EventosComponent = (function () {
     };
     EventosComponent.prototype.setEvento = function (nuevo) {
         var _this = this;
-        var latitudgenerada = Math.floor((Math.random() * 10) + 1);
-        nuevo.Longitude = latitudgenerada;
-        console.log(latitudgenerada);
-        this.eventosService.setEvento(nuevo).then(function () {
+        this.eventosService.setEvento(nuevo).then(function (res) {
+            var idEvento = Number(res.split(":")[1]);
+            for (var v = 0; v < _this.dispositivos.length; v++) {
+                _this.dispositivos[v].idEvent = idEvento;
+                console.log("insertando dispo");
+            }
             _this.inicializo();
         });
     };

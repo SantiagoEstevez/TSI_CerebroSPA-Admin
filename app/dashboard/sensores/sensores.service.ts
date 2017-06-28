@@ -22,21 +22,21 @@ export class SensoresService {
             .map(response => response.json() as Sensor[]);
     }
 
-    getTipoSensor(id: number): Promise<Sensor> {
-        const url = `${this.Url}/${id}`;
-        return this.http.get(url)
-            .toPromise()
-            .then(response => response.json().data as Sensor)
-            .catch(this.handleError);
-    }
+    //getTipoSensor(id: number): Promise<Sensor> {
+    //    const url = `${this.Url}/${id}`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json().data as Sensor)
+    //        .catch(this.handleError);
+    //}
 
-    delete(id: number): Promise<void> {
-        const url = `${this.Url}/${id}`;
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(() => null)
-            .catch(this.handleError);
-    }
+    //delete(id: number): Promise<void> {
+    //    const url = `${this.Url}/${id}`;
+    //    return this.http.delete(url, { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => null)
+    //        .catch(this.handleError);
+    //}
 
     setSensor(nuevoSensor: Sensor): Promise<Sensor> {
         return this.http

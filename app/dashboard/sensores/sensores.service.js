@@ -25,20 +25,20 @@ var SensoresService = (function () {
         return this.http.get(Url)
             .map(function (response) { return response.json(); });
     };
-    SensoresService.prototype.getTipoSensor = function (id) {
-        var url = this.Url + "/" + id;
-        return this.http.get(url)
-            .toPromise()
-            .then(function (response) { return response.json().data; })
-            .catch(this.handleError);
-    };
-    SensoresService.prototype.delete = function (id) {
-        var url = this.Url + "/" + id;
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(function () { return null; })
-            .catch(this.handleError);
-    };
+    //getTipoSensor(id: number): Promise<Sensor> {
+    //    const url = `${this.Url}/${id}`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json().data as Sensor)
+    //        .catch(this.handleError);
+    //}
+    //delete(id: number): Promise<void> {
+    //    const url = `${this.Url}/${id}`;
+    //    return this.http.delete(url, { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => null)
+    //        .catch(this.handleError);
+    //}
     SensoresService.prototype.setSensor = function (nuevoSensor) {
         return this.http
             .post(this.Url, JSON.stringify(nuevoSensor), { headers: this.headers })

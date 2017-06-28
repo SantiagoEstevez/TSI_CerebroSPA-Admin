@@ -18,15 +18,15 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
 
 export const MODULE_ROUTES: Route[] =[
-    { path: 'dashboard', component: HomeComponent },
-    { path: 'maps', component: MapsComponent },
-    { path: 'Ciudades', component: CiudadesComponent },
+    //{ path: 'dashboard', component: HomeComponent },
+    { path: 'maps', component: MapsComponent, canActivate: [AuthGuard]},
+    { path: 'Ciudades', component: CiudadesComponent, canActivate: [AuthGuard] },
     //{ path: 'TipoSensores', component: TipoSensoresComponent },
-    { path: 'Sensores', component: SensoresComponent },
-    { path: 'Zonas', component: ZonasComponent },
-    { path: 'Eventos', component: EventosComponent },
-    { path: 'EventosZonas', component: EventosZonasComponent },
-    { path: 'notifications', component: NotificationsComponent },
+    { path: 'Sensores', component: SensoresComponent, canActivate: [AuthGuard] },
+    { path: 'Zonas', component: ZonasComponent, canActivate: [AuthGuard] },
+    { path: 'Eventos', component: EventosComponent, canActivate: [AuthGuard] },
+    { path: 'EventosZonas', component: EventosZonasComponent, canActivate: [AuthGuard] },
+    { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     //{ path: 'user', component: UserComponent },
     //{ path: 'table', component: TableComponent },

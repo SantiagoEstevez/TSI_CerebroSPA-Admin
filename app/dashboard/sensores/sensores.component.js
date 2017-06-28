@@ -26,7 +26,6 @@ var SensoresComponent = (function () {
     ;
     SensoresComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.inicializo();
         //Cargo mapa
         var myLatlng = new google.maps.LatLng(-34.9114282, -56.1725558);
         var mapOptions = {
@@ -38,14 +37,16 @@ var SensoresComponent = (function () {
         this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
         //Cargo unico marcador
         this.marker = new google.maps.Marker({
-            map: this.map
+            map: null
         });
         //Agregar evento al mapa
         this.map.addListener('click', function (e) {
             _this.nuevoSensor.Latitude = e.latLng.lat();
             _this.nuevoSensor.Longitude = e.latLng.lng();
+            _this.marker.setMap(_this.map);
             _this.marker.setPosition(e.latLng);
         });
+        this.inicializo();
     };
     //---> Funciones internas <---
     SensoresComponent.prototype.inicializo = function () {
@@ -53,6 +54,7 @@ var SensoresComponent = (function () {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.nuevoSensor = new sensor_1.Sensor();
         this.sensores = [];
+        this.marker.setMap(null);
         this.getCiudades();
         this.getTipoSensores();
     };

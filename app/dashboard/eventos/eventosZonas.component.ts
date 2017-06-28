@@ -128,6 +128,8 @@ export class EventosZonasComponent implements OnInit {
             if (!isNaN(this.oDispositivo.Medida)) {
                 if (this.oDispositivo.Tipo != undefined && this.oDispositivo.Tipo != this.nombreCampoTS) {
                     this.oDispositivo.Umbral = this.oDispositivo.Regla + " " + this.oDispositivo.Medida;
+                    this.oDispositivo.cLatitude = this.oEvento.cLatitude;
+                    this.oDispositivo.cLongitude = this.oEvento.cLongitude;
                     this.dispositivos.push(this.oDispositivo);
                     this.inicializoDispositivo();
                 } else {
@@ -200,7 +202,13 @@ export class EventosZonasComponent implements OnInit {
     }
 
     setEvento(nuevo: Evento): void {
-        this.eventosService.setEventoZona(nuevo).then(() => {
+        this.eventosService.setEventoZona(nuevo).then(res => {
+            let idEvento: number = Number(res.split(":")[1]);
+            for (let v = 0; v < this.dispositivos.length; v++) {
+                this.dispositivos[v].idEvent = idEvento;
+                console.log("insertando dispo");
+                //this.eventosService.setDispositivoEvento(this.dispositivos[v]);
+            }
             this.inicializo();
         });
     }
@@ -231,8 +239,8 @@ export class EventosZonasComponent implements OnInit {
                         for (let c = 0; c < this.zonasMapa.length; c++) {
                             this.zonasMapa[c].setOptions({ fillColor: '#FF0000', strokeColor: '#FF0000' });
                         }
-                        this.oEvento.Latitude = e.latLng.lat();
-                        this.oEvento.Longitude = e.latLng.lng();
+                        this.oEvento.Latitude = zona.getCenter().lat();
+                        this.oEvento.Longitude = zona.getCenter().lng();
                         zona.setOptions({ fillColor: '#013ADF', strokeColor: '#08088A' });
                     });
 

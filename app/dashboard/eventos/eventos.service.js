@@ -48,9 +48,15 @@ var EventosService = (function () {
     //        .catch(this.handleError);
     //}
     EventosService.prototype.setEvento = function (nurevoEvento) {
-        console.log(JSON.stringify(nurevoEvento));
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
+    EventosService.prototype.setDispositivoEvento = function (dispositivo) {
+        return this.http
+            .post(this.url, JSON.stringify(dispositivo), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
             .catch(this.handleError);

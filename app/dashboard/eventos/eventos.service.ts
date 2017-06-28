@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import { Evento } from './evento';
+import { Dispositivo } from './dispositivo';
 
 @Injectable()
 export class EventosService {
@@ -46,20 +47,27 @@ export class EventosService {
     //        .catch(this.handleError);
     //}
 
-    setEvento(nurevoEvento: Evento): Promise<Evento> {
-        console.log(JSON.stringify(nurevoEvento));
+    setEvento(nurevoEvento: Evento): Promise<string> {
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
-            .then(res => res.json() as Evento)
+            .then(res => res.json())
             .catch(this.handleError);
     }
 
-    setEventoZona(nurevoEvento: Evento): Promise<Evento> {
+    setDispositivoEvento(dispositivo: Dispositivo): Promise<Dispositivo> {
+        return this.http
+            .post(this.url, JSON.stringify(dispositivo), { headers: this.headers })
+            .toPromise()
+            .then(res => res.json() as Dispositivo)
+            .catch(this.handleError);
+    }
+
+    setEventoZona(nurevoEvento: Evento): Promise<string> {
         return this.http
             .post(this.urlZona, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
-            .then(res => res.json() as Evento)
+            .then(res => res.json())
             .catch(this.handleError);
     }
 

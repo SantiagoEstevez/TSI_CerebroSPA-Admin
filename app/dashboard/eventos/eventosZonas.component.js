@@ -100,6 +100,8 @@ var EventosZonasComponent = (function () {
             if (!isNaN(this.oDispositivo.Medida)) {
                 if (this.oDispositivo.Tipo != undefined && this.oDispositivo.Tipo != this.nombreCampoTS) {
                     this.oDispositivo.Umbral = this.oDispositivo.Regla + " " + this.oDispositivo.Medida;
+                    this.oDispositivo.cLatitude = this.oEvento.cLatitude;
+                    this.oDispositivo.cLongitude = this.oEvento.cLongitude;
                     this.dispositivos.push(this.oDispositivo);
                     this.inicializoDispositivo();
                 }
@@ -167,7 +169,12 @@ var EventosZonasComponent = (function () {
     };
     EventosZonasComponent.prototype.setEvento = function (nuevo) {
         var _this = this;
-        this.eventosService.setEventoZona(nuevo).then(function () {
+        this.eventosService.setEventoZona(nuevo).then(function (res) {
+            var idEvento = Number(res.split(":")[1]);
+            for (var v = 0; v < _this.dispositivos.length; v++) {
+                _this.dispositivos[v].idEvent = idEvento;
+                console.log("insertando dispo");
+            }
             _this.inicializo();
         });
     };
@@ -195,8 +202,8 @@ var EventosZonasComponent = (function () {
                         for (var c = 0; c < _this.zonasMapa.length; c++) {
                             _this.zonasMapa[c].setOptions({ fillColor: '#FF0000', strokeColor: '#FF0000' });
                         }
-                        _this.oEvento.Latitude = e.latLng.lat();
-                        _this.oEvento.Longitude = e.latLng.lng();
+                        _this.oEvento.Latitude = zona.getCenter().lat();
+                        _this.oEvento.Longitude = zona.getCenter().lng();
                         zona.setOptions({ fillColor: '#013ADF', strokeColor: '#08088A' });
                     });
                     _this.zonasMapa.push(zona);

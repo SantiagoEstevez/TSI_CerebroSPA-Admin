@@ -72,7 +72,6 @@ export class CiudadesComponent implements OnInit {
 
         this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
-        this.getUsuarios();
     }
 
 
@@ -107,7 +106,7 @@ export class CiudadesComponent implements OnInit {
         if (cantSensores > 0 || cantZonas > 0) {
             alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
         } else {
-            this.ciudadesService.delete(ciudad.Latitud);
+            //this.ciudadesService.delete(ciudad.Latitud);
             this.inicializar();
         }
     }
@@ -122,17 +121,9 @@ export class CiudadesComponent implements OnInit {
         });
     }
 
-    getUsuarios(): void {
-        //this.ciudadesService
-        //    .getAll()
-        //    .then(ciudades => this.ciudades = ciudades);
-        //this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
-    }
-
     setCiudad(nueva: Ciudad): void {
-        this.ciudadesService.setCiudad(nueva)
-            .then(ciudad => {
-                //this.ciudades.push(ciudad);
-            });
+        this.ciudadesService.setCiudad(nueva).then(ciudad => {
+            this.inicializar();
+        });
     }
 }

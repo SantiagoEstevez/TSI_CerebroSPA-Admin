@@ -16,37 +16,31 @@ var LoginComponent = (function () {
     function LoginComponent(router, authenticationService) {
         this.router = router;
         this.authenticationService = authenticationService;
-        this.model = {};
         this.loading = false;
         this.error = '';
     }
     LoginComponent.prototype.ngOnInit = function () {
-        // reset login status
         this.authenticationService.logout();
     };
     LoginComponent.prototype.login = function () {
+        var _this = this;
         var usuario = new usuario_1.Usuario();
         usuario.CI = "477";
         usuario.Name = "santiago";
         usuario.Lastname = "estevez";
-        usuario.Username = this.model.username;
-        usuario.Password = this.model.password;
+        usuario.Username = this.user;
+        usuario.Password = this.password;
         this.loading = true;
-        //this.authenticationService.login(usuario)
-        //    .subscribe(result => {
-        //        console.log("despues");
-        //        if (result == true) {
-        //            // login successful
-        //            this.router.navigate(['/']);
-        //        } else {
-        //            // login failed
-        //            this.error = 'Username or password is incorrect';
-        //            this.loading = false;
-        //        }
-        //    });
         this.authenticationService.login(usuario).subscribe(function (result) {
-            console.log(result);
-            console.log(localStorage.getItem('token'));
+            if (result == true) {
+                // login successful
+                _this.router.navigate(['/']);
+            }
+            else {
+                // login failed
+                _this.error = 'Username or password is incorrect';
+                _this.loading = false;
+            }
         });
     };
     LoginComponent = __decorate([

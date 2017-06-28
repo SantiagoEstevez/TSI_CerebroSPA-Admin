@@ -9,16 +9,17 @@ import { Usuario } from '../../usuarios/usuario';
 })
 
 export class LoginComponent implements OnInit {
-    model: any = {};
+
     loading = false;
     error = '';
+    user: string;
+    password: string;
 
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService) { }
 
     ngOnInit() {
-        // reset login status
         this.authenticationService.logout();
     }
 
@@ -27,26 +28,19 @@ export class LoginComponent implements OnInit {
         usuario.CI = "477";
         usuario.Name = "santiago";
         usuario.Lastname = "estevez";
-        usuario.Username = this.model.username;
-        usuario.Password = this.model.password;
+        usuario.Username = this.user;
+        usuario.Password = this.password;
 
         this.loading = true;
-        //this.authenticationService.login(usuario)
-        //    .subscribe(result => {
-        //        console.log("despues");
-        //        if (result == true) {
-        //            // login successful
-        //            this.router.navigate(['/']);
-        //        } else {
-        //            // login failed
-        //            this.error = 'Username or password is incorrect';
-        //            this.loading = false;
-        //        }
-        //    });
-
         this.authenticationService.login(usuario).subscribe(result => {
-            console.log(result);
-            console.log(localStorage.getItem('token'));
+            if (result == true) {
+                // login successful
+                this.router.navigate(['/']);
+            } else {
+                // login failed
+                this.error = 'Username or password is incorrect';
+                this.loading = false;
+            }
         });
     }
 }

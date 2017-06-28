@@ -59,7 +59,6 @@ var CiudadesComponent = (function () {
         this.nuevaCiudad.Nombre = '';
         this.map.setCenter(new google.maps.LatLng(-34.9114282, -56.1725558));
         this.getCiudades();
-        this.getUsuarios();
     };
     //---> Funciones de eventos <---
     CiudadesComponent.prototype.agregarCiudad = function () {
@@ -88,7 +87,7 @@ var CiudadesComponent = (function () {
             alert("No se puede borrar la ciudad ya que hay zonas y/o sensores asociada a ella");
         }
         else {
-            this.ciudadesService.delete(ciudad.Latitud);
+            //this.ciudadesService.delete(ciudad.Latitud);
             this.inicializar();
         }
     };
@@ -101,16 +100,10 @@ var CiudadesComponent = (function () {
             }
         });
     };
-    CiudadesComponent.prototype.getUsuarios = function () {
-        //this.ciudadesService
-        //    .getAll()
-        //    .then(ciudades => this.ciudades = ciudades);
-        //this.ciudadesService.getUsuarios().then(ciudades => this.ciudades = ciudades);
-    };
     CiudadesComponent.prototype.setCiudad = function (nueva) {
-        this.ciudadesService.setCiudad(nueva)
-            .then(function (ciudad) {
-            //this.ciudades.push(ciudad);
+        var _this = this;
+        this.ciudadesService.setCiudad(nueva).then(function (ciudad) {
+            _this.inicializar();
         });
     };
     CiudadesComponent = __decorate([
