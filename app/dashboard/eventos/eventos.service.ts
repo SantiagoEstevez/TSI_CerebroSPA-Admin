@@ -23,8 +23,24 @@ export class EventosService {
             .catch(this.handleError);
     }
 
+    getEventosByCityName(nombreCiudad: string): Promise<Evento[]> {
+        const url = `${this.url}${nombreCiudad}/`;
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json() as Evento[])
+            .catch(this.handleError);
+    }
+
     getEventosZona(lat: number, lon: number): Promise<Evento[]> {
         const url = `${this.urlZona}cityLat/${lat}/cityLon/${lon}/`;
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json() as Evento[])
+            .catch(this.handleError);
+    }
+
+    getEventosZonaByCityName(nombreCiudad: string): Promise<Evento[]> {
+        const url = `${this.urlZona}${nombreCiudad}/`;
         return this.http.get(url)
             .toPromise()
             .then(response => response.json() as Evento[])
@@ -48,6 +64,7 @@ export class EventosService {
     //}
 
     setEvento(nurevoEvento: Evento): Promise<string> {
+        console.log("seteando evento");
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
@@ -56,8 +73,9 @@ export class EventosService {
     }
 
     setDispositivoEvento(dispositivo: Dispositivo): Promise<Dispositivo> {
+        console.log("seteando dispo en evento");
         return this.http
-            .post(this.url, JSON.stringify(dispositivo), { headers: this.headers })
+            .post('http://localhost:6346/api/Sensor/ToEvent/', JSON.stringify(dispositivo), { headers: this.headers })
             .toPromise()
             .then(res => res.json() as Dispositivo)
             .catch(this.handleError);

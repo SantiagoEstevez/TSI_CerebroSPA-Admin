@@ -15,7 +15,7 @@
                                             <span>{{CampoCiudad}}</span>
                                             <span class="caret">  </span>
                                         </button>
-                                        <ul class="dropdown-menu" style="z-index: 1;">
+                                        <ul class="dropdown-menu" style="z-index: 2;">
                                             <li *ngFor="let ciudad of ciudades">
                                                 <a (click)="changeCiudad(ciudad)" style="cursor: pointer;">{{ciudad.Nombre}}</a>
                                             </li>
@@ -125,16 +125,18 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Ciudad</th>
                                     <th>Nombre</th>
-                                    <th>Cantidad sensores asociados.</th>
+                                    <!--<th>Cantidad sensores asociados.</th>-->
                                     <th>Editar</th>
                                     <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let evento of eventos">
+                                    <td>{{evento.ciudad}}</td>
                                     <td>{{evento.Name}}</td>
-                                    <td>{{evento.SendoresAsociados.length}}</td>
+                                    <!--<td>{{evento.SendoresAsociados.length}}</td>-->
                                     <td (click)="editarEvento(evento)"><i class="material-icons link">mode_edit</i></td>
                                     <td (click)="eliminarEvento(evento)"><i class="material-icons link">delete</i></td>
                                 </tr>

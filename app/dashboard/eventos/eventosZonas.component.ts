@@ -101,8 +101,8 @@ export class EventosZonasComponent implements OnInit {
         if (this.dispositivos.length > 0) {
             if (this.oEvento.Nombre != "") {
                 if (!isNaN(this.oEvento.Latitude) && !isNaN(this.oEvento.Longitude)) {
-                    //this.oEvento.SendoresAsociados = this.dispositivos;
-                    this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
+                    this.oEvento.SendoresAsociados = this.dispositivos;
+                    //this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
                     this.setEvento(this.oEvento);
                 } else {
                     alert("Debe seleccionar una zona.");
@@ -184,10 +184,24 @@ export class EventosZonasComponent implements OnInit {
         for (let i = 0; i < this.ciudades.length; i++) {
             let nombre = this.ciudades[i].Nombre;
 
-            this.eventosService.getEventosZona(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            //Por nombre ciudad
+            //this.eventosService.getEventosZona(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            //    if (eventos) {
+            //        for (var e = 0; e < eventos.length; e++) {
+            //            if (!eventos[e].SendoresAsociados) {
+            //                eventos[e].SendoresAsociados = [];
+            //            }
+            //            this.eventos.push(eventos[e]);
+            //        }
+            //    }
+            //});
+
+            //Por nombre ciudad
+            this.eventosService.getEventosZonaByCityName(nombre).then(eventos => {
                 if (eventos) {
                     for (var e = 0; e < eventos.length; e++) {
                         if (!eventos[e].SendoresAsociados) {
+                            eventos[e].ciudad = nombre;
                             eventos[e].SendoresAsociados = [];
                         }
                         this.eventos.push(eventos[e]);
@@ -203,11 +217,10 @@ export class EventosZonasComponent implements OnInit {
 
     setEvento(nuevo: Evento): void {
         this.eventosService.setEventoZona(nuevo).then(res => {
-            let idEvento: number = Number(res.split(":")[1]);
+            let idEvento: number = Number(res);
             for (let v = 0; v < this.dispositivos.length; v++) {
                 this.dispositivos[v].idEvent = idEvento;
-                console.log("insertando dispo");
-                //this.eventosService.setDispositivoEvento(this.dispositivos[v]);
+                this.eventosService.setDispositivoEvento(this.dispositivos[v]);
             }
             this.inicializo();
         });
@@ -216,7 +229,7 @@ export class EventosZonasComponent implements OnInit {
     getZonas(ciudad: Ciudad): void {
         this.borrarZonasMapa();
 
-        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(zonas => {
+        this.ZonasService.getZonasByCityName(ciudad.Nombre).then(zonas => {
             if (zonas) {
                 this.zonas = zonas;
 

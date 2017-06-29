@@ -62,6 +62,10 @@ my-app .main-panel .main-content .card{
     }
 }
 
+.sidebar .nav > li.none {
+    display: none;
+}
+
 .tim-row{
     margin-bottom: 20px;
 }

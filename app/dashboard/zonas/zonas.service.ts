@@ -22,21 +22,29 @@ export class ZonasService {
             .catch(this.handleError);
     }
 
-    getZona(lat: string, lon: string): Promise<Zona> {
-        const url = `${this.url}/${lat}`;
+    getZonasByCityName(nombreCiudad: string): Promise<Zona[]> {
+        const url = `${this.url}${nombreCiudad}/`;
         return this.http.get(url)
             .toPromise()
-            .then(response => response.json().data as Zona)
+            .then(response => response.json() as Zona[])
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
-        const url = `${this.url}/${id}`;
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(() => null)
-            .catch(this.handleError);
-    }
+    //getZona(lat: string, lon: string): Promise<Zona> {
+    //    const url = `${this.url}/${lat}`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json().data as Zona)
+    //        .catch(this.handleError);
+    //}
+
+    //delete(id: number): Promise<void> {
+    //    const url = `${this.url}/${id}`;
+    //    return this.http.delete(url, { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => null)
+    //        .catch(this.handleError);
+    //}
 
     setZona(nurevaZona: Zona): Promise<Zona> {
         return this.http
@@ -46,14 +54,14 @@ export class ZonasService {
             .catch(this.handleError);
     }
 
-    update(zona: Zona): Promise<Zona> {
-        const url = `${this.url}/${zona.Latitude}`;
-        return this.http
-            .put(url, JSON.stringify(zona), { headers: this.headers })
-            .toPromise()
-            .then(() => zona)
-            .catch(this.handleError);
-    }
+    //update(zona: Zona): Promise<Zona> {
+    //    const url = `${this.url}/${zona.Latitude}`;
+    //    return this.http
+    //        .put(url, JSON.stringify(zona), { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => zona)
+    //        .catch(this.handleError);
+    //}
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only

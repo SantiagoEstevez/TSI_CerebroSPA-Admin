@@ -95,14 +95,21 @@ var SensoresComponent = (function () {
     };
     SensoresComponent.prototype.getTipoSensores = function () {
         var _this = this;
-        //this.tipoSensoresService.getTipoSensores().then(tipoSensores => this.tipoSensores = tipoSensores);
         this.tipoSensoresService.getTipoBaseSensor().then(function (tipoSensores) { return _this.tipoSensores = tipoSensores; });
     };
     SensoresComponent.prototype.getSensores = function () {
         var _this = this;
         var _loop_1 = function() {
             var nombre = this_1.ciudades[i].Nombre;
-            this_1.SensoresService.getSensores(this_1.ciudades[i].Latitud, this_1.ciudades[i].Longitud).subscribe(function (sensores) {
+            //Por LAT Y LOT ciudad
+            //this.SensoresService.getSensores(this.ciudades[i].Latitud, this.ciudades[i].Longitud).subscribe(sensores => {
+            //    for (var s = 0; s < sensores.length; s++) {
+            //        sensores[s].ciudad = nombre;
+            //        this.sensores.push(sensores[s]);
+            //    }
+            //});  
+            //Por nombre ciudad
+            this_1.SensoresService.getSensoresByCityName(nombre).subscribe(function (sensores) {
                 for (var s = 0; s < sensores.length; s++) {
                     sensores[s].ciudad = nombre;
                     _this.sensores.push(sensores[s]);

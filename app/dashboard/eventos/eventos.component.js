@@ -54,8 +54,8 @@ var EventosComponent = (function () {
         if (this.oEvento.ciudad != undefined) {
             if (this.dispositivos.length > 0) {
                 if (this.oEvento.Nombre != "") {
-                    //this.oEvento.SendoresAsociados = this.dispositivos;
-                    this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
+                    this.oEvento.SendoresAsociados = this.dispositivos;
+                    //this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
                     this.setEvento(this.oEvento);
                 }
                 else {
@@ -128,11 +128,24 @@ var EventosComponent = (function () {
     };
     EventosComponent.prototype.getEventos = function () {
         var _this = this;
-        for (var i = 0; i < this.ciudades.length; i++) {
-            var nombre = this.ciudades[i].Nombre;
-            this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(function (eventos) {
+        var _loop_1 = function() {
+            var nombre = this_1.ciudades[i].Nombre;
+            //Por lat y long de ciudad
+            //this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            //    if (eventos) {
+            //        for (var e = 0; e < eventos.length; e++) {
+            //            if (!eventos[e].SendoresAsociados) {
+            //                eventos[e].SendoresAsociados = [];
+            //            }
+            //            this.eventos.push(eventos[e]);
+            //        }
+            //    }
+            //});
+            //Por nombre de ciudad
+            this_1.eventosService.getEventosByCityName(nombre).then(function (eventos) {
                 if (eventos) {
                     for (var e = 0; e < eventos.length; e++) {
+                        eventos[e].ciudad = nombre;
                         if (!eventos[e].SendoresAsociados) {
                             eventos[e].SendoresAsociados = [];
                         }
@@ -140,6 +153,10 @@ var EventosComponent = (function () {
                     }
                 }
             });
+        };
+        var this_1 = this;
+        for (var i = 0; i < this.ciudades.length; i++) {
+            _loop_1();
         }
     };
     EventosComponent.prototype.getTipoSensores = function () {
@@ -149,10 +166,10 @@ var EventosComponent = (function () {
     EventosComponent.prototype.setEvento = function (nuevo) {
         var _this = this;
         this.eventosService.setEvento(nuevo).then(function (res) {
-            var idEvento = Number(res.split(":")[1]);
+            var idEvento = Number(res);
             for (var v = 0; v < _this.dispositivos.length; v++) {
                 _this.dispositivos[v].idEvent = idEvento;
-                console.log("insertando dispo");
+                _this.eventosService.setDispositivoEvento(_this.dispositivos[v]);
             }
             _this.inicializo();
         });

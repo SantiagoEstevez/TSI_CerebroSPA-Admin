@@ -33,7 +33,7 @@ var CiudadesService = (function () {
     //    });
     //}    
     CiudadesService.prototype.getCiudades = function () {
-        var url = this.Url + "ciudades/";
+        var url = this.Url + "Ciudad/All/";
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json(); })

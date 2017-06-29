@@ -31,7 +31,7 @@ export class CiudadesService {
     //}    
 
     getCiudades(): Promise<Ciudad[]> {
-        const url = `${this.Url}ciudades/`;
+        const url = `${this.Url}Ciudad/All/`;
         return this.http.get(url)
             .toPromise()
             .then(response => response.json() as Ciudad[])

@@ -75,8 +75,8 @@ export class EventosComponent implements OnInit {
         if (this.oEvento.ciudad != undefined) {
             if (this.dispositivos.length > 0) {
                 if (this.oEvento.Nombre != "") {
-                    //this.oEvento.SendoresAsociados = this.dispositivos;
-                    this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
+                    this.oEvento.SendoresAsociados = this.dispositivos;
+                    //this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
                     this.setEvento(this.oEvento);
 
                 } else {
@@ -156,9 +156,23 @@ export class EventosComponent implements OnInit {
         for (var i = 0; i < this.ciudades.length; i++) {
             let nombre = this.ciudades[i].Nombre;
 
-            this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            //Por lat y long de ciudad
+            //this.eventosService.getEventos(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            //    if (eventos) {
+            //        for (var e = 0; e < eventos.length; e++) {
+            //            if (!eventos[e].SendoresAsociados) {
+            //                eventos[e].SendoresAsociados = [];
+            //            }
+            //            this.eventos.push(eventos[e]);
+            //        }
+            //    }
+            //});
+
+            //Por nombre de ciudad
+            this.eventosService.getEventosByCityName(nombre).then(eventos => {
                 if (eventos) {
                     for (var e = 0; e < eventos.length; e++) {
+                        eventos[e].ciudad = nombre;
                         if (!eventos[e].SendoresAsociados) {
                             eventos[e].SendoresAsociados = [];
                         }
@@ -175,11 +189,10 @@ export class EventosComponent implements OnInit {
 
     setEvento(nuevo: Evento): void {
         this.eventosService.setEvento(nuevo).then(res => {
-            let idEvento: number = Number(res.split(":")[1]);
+            let idEvento: number = Number(res);
             for (let v = 0; v < this.dispositivos.length; v++) {
                 this.dispositivos[v].idEvent = idEvento;
-                console.log("insertando dispo");
-                //this.eventosService.setDispositivoEvento(this.dispositivos[v]);
+                this.eventosService.setDispositivoEvento(this.dispositivos[v]);
             }
             this.inicializo();
         });

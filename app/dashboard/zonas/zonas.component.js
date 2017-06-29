@@ -116,13 +116,21 @@ var ZonasComponent = (function () {
         this.nuevaZona.Latitude = this.circle.getCenter().lat();
         this.nuevaZona.Longitude = this.circle.getCenter().lng();
         this.nuevaZona.Radio = this.circle.getRadius();
-        if (this.nuevaZona.ciudad != '' && this.nuevaZona.Latitude != 0 && this.nuevaZona.Longitude != 0) {
-            if (this.editar) {
-                this.updateZona(this.nuevaZona);
+        if (this.nuevaZona.ciudad != this.nombreCampoCiudad && this.nuevaZona.ciudad != undefined) {
+            if (!isNaN(this.nuevaZona.Latitude) && !isNaN(this.nuevaZona.Longitude)) {
+                if (this.editar) {
+                    this.updateZona(this.nuevaZona);
+                }
+                else {
+                    this.setZona(this.nuevaZona);
+                }
             }
             else {
-                this.setZona(this.nuevaZona);
+                alert("Debe ubicar la zona.");
             }
+        }
+        else {
+            alert("Debe seleccionar la ciudad de la zona.");
         }
     };
     ZonasComponent.prototype.editarZona = function (zona) {
@@ -150,7 +158,15 @@ var ZonasComponent = (function () {
         var _this = this;
         var _loop_1 = function() {
             var nombre = this_1.ciudades[i].Nombre;
-            this_1.zonasService.getZonas(this_1.ciudades[i].Latitud, this_1.ciudades[i].Longitud).then(function (z) {
+            //Por lat y long de ciudad
+            //this.zonasService.getZonas(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(z => {
+            //    for (var s = 0; s < z.length; s++) {
+            //        z[s].ciudad = nombre;
+            //        this.zonas.push(z[s]);
+            //    }
+            //});
+            //Por nombre de ciudad
+            this_1.zonasService.getZonasByCityName(nombre).then(function (z) {
                 for (var s = 0; s < z.length; s++) {
                     z[s].ciudad = nombre;
                     _this.zonas.push(z[s]);
@@ -170,10 +186,9 @@ var ZonasComponent = (function () {
         });
     };
     ZonasComponent.prototype.updateZona = function (zona) {
-        var _this = this;
-        this.zonasService.update(zona).then(function () {
-            _this.inicializo();
-        });
+        //this.zonasService.update(zona).then(() => {
+        //    this.inicializo();
+        //});
     };
     ZonasComponent = __decorate([
         core_1.Component({

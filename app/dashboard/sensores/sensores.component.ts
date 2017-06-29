@@ -124,7 +124,6 @@ export class SensoresComponent implements OnInit {
     }
 
     getTipoSensores(): void {
-        //this.tipoSensoresService.getTipoSensores().then(tipoSensores => this.tipoSensores = tipoSensores);
         this.tipoSensoresService.getTipoBaseSensor().then(tipoSensores => this.tipoSensores = tipoSensores);
     }
 
@@ -132,12 +131,21 @@ export class SensoresComponent implements OnInit {
         for (var i = 0; i < this.ciudades.length; i++) {
             let nombre = this.ciudades[i].Nombre;
 
-            this.SensoresService.getSensores(this.ciudades[i].Latitud, this.ciudades[i].Longitud).subscribe(sensores => {
+            //Por LAT Y LOT ciudad
+            //this.SensoresService.getSensores(this.ciudades[i].Latitud, this.ciudades[i].Longitud).subscribe(sensores => {
+            //    for (var s = 0; s < sensores.length; s++) {
+            //        sensores[s].ciudad = nombre;
+            //        this.sensores.push(sensores[s]);
+            //    }
+            //});  
+
+            //Por nombre ciudad
+            this.SensoresService.getSensoresByCityName(nombre).subscribe(sensores => {
                 for (var s = 0; s < sensores.length; s++) {
                     sensores[s].ciudad = nombre;
                     this.sensores.push(sensores[s]);
                 }
-            });            
+            }); 
         }
     }
 

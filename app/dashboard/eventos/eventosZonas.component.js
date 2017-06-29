@@ -73,8 +73,8 @@ var EventosZonasComponent = (function () {
         if (this.dispositivos.length > 0) {
             if (this.oEvento.Nombre != "") {
                 if (!isNaN(this.oEvento.Latitude) && !isNaN(this.oEvento.Longitude)) {
-                    //this.oEvento.SendoresAsociados = this.dispositivos;
-                    this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
+                    this.oEvento.SendoresAsociados = this.dispositivos;
+                    //this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
                     this.setEvento(this.oEvento);
                 }
                 else {
@@ -149,18 +149,35 @@ var EventosZonasComponent = (function () {
     };
     EventosZonasComponent.prototype.getEventos = function () {
         var _this = this;
-        for (var i = 0; i < this.ciudades.length; i++) {
-            var nombre = this.ciudades[i].Nombre;
-            this.eventosService.getEventosZona(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(function (eventos) {
+        var _loop_1 = function(i) {
+            var nombre = this_1.ciudades[i].Nombre;
+            //Por nombre ciudad
+            //this.eventosService.getEventosZona(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(eventos => {
+            //    if (eventos) {
+            //        for (var e = 0; e < eventos.length; e++) {
+            //            if (!eventos[e].SendoresAsociados) {
+            //                eventos[e].SendoresAsociados = [];
+            //            }
+            //            this.eventos.push(eventos[e]);
+            //        }
+            //    }
+            //});
+            //Por nombre ciudad
+            this_1.eventosService.getEventosZonaByCityName(nombre).then(function (eventos) {
                 if (eventos) {
                     for (var e = 0; e < eventos.length; e++) {
                         if (!eventos[e].SendoresAsociados) {
+                            eventos[e].ciudad = nombre;
                             eventos[e].SendoresAsociados = [];
                         }
                         _this.eventos.push(eventos[e]);
                     }
                 }
             });
+        };
+        var this_1 = this;
+        for (var i = 0; i < this.ciudades.length; i++) {
+            _loop_1(i);
         }
     };
     EventosZonasComponent.prototype.getTipoSensores = function () {
@@ -170,10 +187,10 @@ var EventosZonasComponent = (function () {
     EventosZonasComponent.prototype.setEvento = function (nuevo) {
         var _this = this;
         this.eventosService.setEventoZona(nuevo).then(function (res) {
-            var idEvento = Number(res.split(":")[1]);
+            var idEvento = Number(res);
             for (var v = 0; v < _this.dispositivos.length; v++) {
                 _this.dispositivos[v].idEvent = idEvento;
-                console.log("insertando dispo");
+                _this.eventosService.setDispositivoEvento(_this.dispositivos[v]);
             }
             _this.inicializo();
         });
@@ -181,10 +198,10 @@ var EventosZonasComponent = (function () {
     EventosZonasComponent.prototype.getZonas = function (ciudad) {
         var _this = this;
         this.borrarZonasMapa();
-        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(function (zonas) {
+        this.ZonasService.getZonasByCityName(ciudad.Nombre).then(function (zonas) {
             if (zonas) {
                 _this.zonas = zonas;
-                var _loop_1 = function(z) {
+                var _loop_2 = function(z) {
                     var zona = new google.maps.Circle({
                         radius: zonas[z].Radio,
                         center: new google.maps.LatLng(zonas[z].Latitude, zonas[z].Longitude),
@@ -209,7 +226,7 @@ var EventosZonasComponent = (function () {
                     _this.zonasMapa.push(zona);
                 };
                 for (var z = 0; z < zonas.length; z++) {
-                    _loop_1(z);
+                    _loop_2(z);
                 }
             }
         });

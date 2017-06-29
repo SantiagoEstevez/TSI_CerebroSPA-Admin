@@ -26,8 +26,22 @@ var EventosService = (function () {
             .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
+    EventosService.prototype.getEventosByCityName = function (nombreCiudad) {
+        var url = "" + this.url + nombreCiudad + "/";
+        return this.http.get(url)
+            .toPromise()
+            .then(function (response) { return response.json(); })
+            .catch(this.handleError);
+    };
     EventosService.prototype.getEventosZona = function (lat, lon) {
         var url = this.urlZona + "cityLat/" + lat + "/cityLon/" + lon + "/";
+        return this.http.get(url)
+            .toPromise()
+            .then(function (response) { return response.json(); })
+            .catch(this.handleError);
+    };
+    EventosService.prototype.getEventosZonaByCityName = function (nombreCiudad) {
+        var url = "" + this.urlZona + nombreCiudad + "/";
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json(); })
@@ -48,6 +62,7 @@ var EventosService = (function () {
     //        .catch(this.handleError);
     //}
     EventosService.prototype.setEvento = function (nurevoEvento) {
+        console.log("seteando evento");
         return this.http
             .post(this.url, JSON.stringify(nurevoEvento), { headers: this.headers })
             .toPromise()
@@ -55,8 +70,9 @@ var EventosService = (function () {
             .catch(this.handleError);
     };
     EventosService.prototype.setDispositivoEvento = function (dispositivo) {
+        console.log("seteando dispo en evento");
         return this.http
-            .post(this.url, JSON.stringify(dispositivo), { headers: this.headers })
+            .post('http://localhost:6346/api/Sensor/ToEvent/', JSON.stringify(dispositivo), { headers: this.headers })
             .toPromise()
             .then(function (res) { return res.json(); })
             .catch(this.handleError);

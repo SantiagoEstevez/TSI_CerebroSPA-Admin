@@ -5,8 +5,7 @@ export class Evento {
     Nombre: string;
     Latitude: number;
     Longitude: number;
-    SendoresAsociados1: Dispositivo[];
-    SendoresAsociados: DataSource[] = [];
+    SendoresAsociados: Dispositivo[] = [];
     Actions: any[];
 
     //Para la ciudad

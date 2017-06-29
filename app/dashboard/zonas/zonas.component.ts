@@ -142,12 +142,18 @@ export class ZonasComponent implements OnInit {
         this.nuevaZona.Longitude = this.circle.getCenter().lng();
         this.nuevaZona.Radio = this.circle.getRadius();
 
-        if (this.nuevaZona.ciudad != '' && this.nuevaZona.Latitude != 0 && this.nuevaZona.Longitude != 0) {
-            if (this.editar) {
-                this.updateZona(this.nuevaZona);
+        if (this.nuevaZona.ciudad != this.nombreCampoCiudad && this.nuevaZona.ciudad != undefined) {
+            if (!isNaN(this.nuevaZona.Latitude) && !isNaN(this.nuevaZona.Longitude)) {
+                if (this.editar) {
+                    this.updateZona(this.nuevaZona);
+                } else {
+                    this.setZona(this.nuevaZona);
+                }
             } else {
-                this.setZona(this.nuevaZona);
+                alert("Debe ubicar la zona.");
             }
+        } else {
+            alert("Debe seleccionar la ciudad de la zona.");
         }
     }
 
@@ -181,7 +187,16 @@ export class ZonasComponent implements OnInit {
         for (var i = 0; i < this.ciudades.length; i++) {
             let nombre = this.ciudades[i].Nombre;
 
-            this.zonasService.getZonas(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(z => {
+            //Por lat y long de ciudad
+            //this.zonasService.getZonas(this.ciudades[i].Latitud, this.ciudades[i].Longitud).then(z => {
+            //    for (var s = 0; s < z.length; s++) {
+            //        z[s].ciudad = nombre;
+            //        this.zonas.push(z[s]);
+            //    }
+            //});
+
+            //Por nombre de ciudad
+            this.zonasService.getZonasByCityName(nombre).then(z => {
                 for (var s = 0; s < z.length; s++) {
                     z[s].ciudad = nombre;
                     this.zonas.push(z[s]);
@@ -198,8 +213,8 @@ export class ZonasComponent implements OnInit {
     }
 
     updateZona(zona: Zona): void {
-        this.zonasService.update(zona).then(() => {
-            this.inicializo();
-        });
+        //this.zonasService.update(zona).then(() => {
+        //    this.inicializo();
+        //});
     }
 }

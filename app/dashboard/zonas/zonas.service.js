@@ -26,20 +26,27 @@ var ZonasService = (function () {
             .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
-    ZonasService.prototype.getZona = function (lat, lon) {
-        var url = this.url + "/" + lat;
+    ZonasService.prototype.getZonasByCityName = function (nombreCiudad) {
+        var url = "" + this.url + nombreCiudad + "/";
         return this.http.get(url)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) { return response.json(); })
             .catch(this.handleError);
     };
-    ZonasService.prototype.delete = function (id) {
-        var url = this.url + "/" + id;
-        return this.http.delete(url, { headers: this.headers })
-            .toPromise()
-            .then(function () { return null; })
-            .catch(this.handleError);
-    };
+    //getZona(lat: string, lon: string): Promise<Zona> {
+    //    const url = `${this.url}/${lat}`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json().data as Zona)
+    //        .catch(this.handleError);
+    //}
+    //delete(id: number): Promise<void> {
+    //    const url = `${this.url}/${id}`;
+    //    return this.http.delete(url, { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => null)
+    //        .catch(this.handleError);
+    //}
     ZonasService.prototype.setZona = function (nurevaZona) {
         return this.http
             .post(this.url, JSON.stringify(nurevaZona), { headers: this.headers })
@@ -47,14 +54,14 @@ var ZonasService = (function () {
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
-    ZonasService.prototype.update = function (zona) {
-        var url = this.url + "/" + zona.Latitude;
-        return this.http
-            .put(url, JSON.stringify(zona), { headers: this.headers })
-            .toPromise()
-            .then(function () { return zona; })
-            .catch(this.handleError);
-    };
+    //update(zona: Zona): Promise<Zona> {
+    //    const url = `${this.url}/${zona.Latitude}`;
+    //    return this.http
+    //        .put(url, JSON.stringify(zona), { headers: this.headers })
+    //        .toPromise()
+    //        .then(() => zona)
+    //        .catch(this.handleError);
+    //}
     ZonasService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
