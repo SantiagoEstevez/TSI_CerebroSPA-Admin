@@ -191,6 +191,11 @@ var EventosZonasComponent = (function () {
             var idEvento = Number(res);
             for (var v = 0; v < _this.dispositivos.length; v++) {
                 _this.dispositivos[v].idEvent = idEvento;
+                _this.dispositivos[v].cLatitude = nuevo.cLatitude;
+                _this.dispositivos[v].cLongitude = nuevo.cLongitude;
+                _this.dispositivos[v].zLatitude = nuevo.Latitude;
+                _this.dispositivos[v].zLongitude = nuevo.Longitude;
+                console.log(_this.dispositivos[v]);
                 _this.eventosService.setDispositivoEvento(_this.dispositivos[v]);
             }
             _this.inicializo();

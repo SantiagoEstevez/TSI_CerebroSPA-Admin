@@ -221,6 +221,12 @@ export class EventosZonasComponent implements OnInit {
             let idEvento: number = Number(res);
             for (let v = 0; v < this.dispositivos.length; v++) {
                 this.dispositivos[v].idEvent = idEvento;
+                this.dispositivos[v].cLatitude = nuevo.cLatitude;
+                this.dispositivos[v].cLongitude = nuevo.cLongitude;
+                this.dispositivos[v].zLatitude = nuevo.Latitude;
+                this.dispositivos[v].zLongitude = nuevo.Longitude;
+                console.log(this.dispositivos[v]);
+
                 this.eventosService.setDispositivoEvento(this.dispositivos[v]);
             }
             this.inicializo();

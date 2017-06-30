@@ -7,7 +7,7 @@ import { Usuario } from '../usuarios/usuario'
 @Injectable()
 export class AuthenticationService {
     public token: string;
-    private url = 'http://localhost:6346/api/usuario/login';
+    private url = 'http://localhost:6346/api/Usuario/Login/';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
     constructor(private http: Http) {

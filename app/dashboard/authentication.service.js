@@ -14,7 +14,7 @@ require('rxjs/add/operator/map');
 var AuthenticationService = (function () {
     function AuthenticationService(http) {
         this.http = http;
-        this.url = 'http://localhost:6346/api/usuario/login';
+        this.url = 'http://localhost:6346/api/Usuario/Login/';
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         // set token if saved in local storage
         //var currentUser = JSON.parse(localStorage.getItem('currentUser'));

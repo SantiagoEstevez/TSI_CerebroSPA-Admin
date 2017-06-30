@@ -7,6 +7,7 @@ export class Evento {
     Longitude: number;
     SendoresAsociados: Dispositivo[] = [];
     Actions: any[];
+    idZona: number;
 
     //Para la ciudad
     ciudad: string;
