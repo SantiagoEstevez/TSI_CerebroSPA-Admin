@@ -54,6 +54,7 @@ var EventosZonasComponent = (function () {
         this.zonas = [];
         this.zonasMapa = [];
         this.inicializoDispositivo();
+        this.borrarZonasMapa();
         this.getCiudades();
         this.getTipoSensores();
     };

@@ -61,7 +61,7 @@ var MapsComponent = (function () {
     };
     MapsComponent.prototype.getSensores = function (ciudad) {
         var _this = this;
-        this.SensoresService.getSensores(ciudad.Latitud, ciudad.Longitud).subscribe(function (sensores) {
+        this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(function (sensores) {
             _this.sensores = sensores;
             for (var i = 0; i < _this.sensores.length; i++) {
                 var marker = new google.maps.Marker({
@@ -74,7 +74,7 @@ var MapsComponent = (function () {
     };
     MapsComponent.prototype.getZonas = function (ciudad) {
         var _this = this;
-        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(function (zonas) {
+        this.ZonasService.getZonasByCityName(ciudad.Nombre).then(function (zonas) {
             if (zonas) {
                 _this.zonas = zonas;
                 for (var z = 0; z < zonas.length; z++) {

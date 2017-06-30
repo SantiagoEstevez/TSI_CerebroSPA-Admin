@@ -78,6 +78,7 @@ export class EventosZonasComponent implements OnInit {
         this.zonasMapa = [];
         this.inicializoDispositivo();
 
+        this.borrarZonasMapa();
         this.getCiudades();
         this.getTipoSensores();   
     }

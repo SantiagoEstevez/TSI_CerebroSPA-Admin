@@ -122,7 +122,7 @@ export class MapsComponent implements OnInit {
     }
 
     getSensores(ciudad: Ciudad): void {
-        this.SensoresService.getSensores(ciudad.Latitud, ciudad.Longitud).subscribe(sensores => {
+        this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(sensores => {
             this.sensores = sensores
 
             for (var i = 0; i < this.sensores.length; i++) {
@@ -136,7 +136,7 @@ export class MapsComponent implements OnInit {
     }
 
     getZonas(ciudad: Ciudad): void {
-        this.ZonasService.getZonas(ciudad.Latitud, ciudad.Longitud).then(zonas => {
+        this.ZonasService.getZonasByCityName(ciudad.Nombre).then(zonas => {
             if (zonas) {
                 this.zonas = zonas;
 
