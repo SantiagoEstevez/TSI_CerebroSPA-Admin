@@ -87,6 +87,7 @@ export class CiudadesComponent implements OnInit {
                 this.nuevaCiudad.Nombre = place.name;
                 this.nuevaCiudad.Longitud = lon;
                 this.nuevaCiudad.Latitud = lat;
+                this.nuevaCiudad.NameAdmin = localStorage.getItem('username');
 
                 this.setCiudad(this.nuevaCiudad);
                 this.inicializar();

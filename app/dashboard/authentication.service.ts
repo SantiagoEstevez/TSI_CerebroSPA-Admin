@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/map'
 import { Usuario } from '../usuarios/usuario'
 
@@ -10,7 +11,10 @@ export class AuthenticationService {
     private url = 'http://localhost:6346/api/Usuario/LoginAdmin/';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
-    constructor(private http: Http) {
+    constructor(
+        private http: Http,
+        private router: Router
+    ) {
         // set token if saved in local storage
         //var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         //this.token = currentUser && currentUser.token;
@@ -64,6 +68,7 @@ export class AuthenticationService {
         this.token = null;
         localStorage.removeItem('token');
         localStorage.removeItem('username');
+        this.router.navigate(['login']);
     }
 
     getLoginStatus(): boolean {

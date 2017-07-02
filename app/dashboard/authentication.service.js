@@ -10,10 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
+var router_1 = require('@angular/router');
 require('rxjs/add/operator/map');
 var AuthenticationService = (function () {
-    function AuthenticationService(http) {
+    function AuthenticationService(http, router) {
         this.http = http;
+        this.router = router;
         this.url = 'http://localhost:6346/api/Usuario/LoginAdmin/';
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         // set token if saved in local storage
@@ -63,6 +65,7 @@ var AuthenticationService = (function () {
         this.token = null;
         localStorage.removeItem('token');
         localStorage.removeItem('username');
+        this.router.navigate(['login']);
     };
     AuthenticationService.prototype.getLoginStatus = function () {
         if (localStorage.getItem('token')) {
@@ -78,7 +81,7 @@ var AuthenticationService = (function () {
     };
     AuthenticationService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router])
     ], AuthenticationService);
     return AuthenticationService;
 }());
