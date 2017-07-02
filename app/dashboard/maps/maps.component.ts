@@ -34,7 +34,9 @@ export class MapsComponent implements OnInit {
     CampoCiudad: string = '';
     ciudades: Ciudad[] = [];
     sensores: Sensor[] = [];
+    sensoresMapa: any[] = [];
     zonas: Zona[] = [];
+    zonasMapa: any[] = [];
     ciudadActual: Ciudad;
 
     ngOnInit() {
@@ -97,12 +99,28 @@ export class MapsComponent implements OnInit {
     inicializo() {
         this.CampoCiudad = this.nombreCampoCiudad;
 
+        this.borrarSensoresMapa();
+        this.borrarZonasMapa();
         this.getCiudades();
     }
 
     cargoCiudad(ciudad: Ciudad) {
         this.getSensores(ciudad);
         this.getZonas(ciudad);
+    }
+
+    borrarZonasMapa() {
+        for (let i = 0; i < this.zonasMapa.length; i++) {
+            this.zonasMapa[i].setMap(null);
+        }
+        this.zonasMapa = [];
+    }
+
+    borrarSensoresMapa() {
+        for (let i = 0; i < this.sensoresMapa.length; i++) {
+            this.sensoresMapa[i].setMap(null);
+        }
+        this.sensoresMapa = [];
     }
 
 
@@ -126,11 +144,13 @@ export class MapsComponent implements OnInit {
             this.sensores = sensores
 
             for (var i = 0; i < this.sensores.length; i++) {
-                var marker = new google.maps.Marker({
+                let marker = new google.maps.Marker({
                     position: new google.maps.LatLng(this.sensores[i].Latitude, this.sensores[i].Longitude),
                     title: this.sensores[i].Tipo,
                     map: this.map
                 });
+
+                this.sensoresMapa.push(marker);
             }
         });
     }
@@ -141,7 +161,7 @@ export class MapsComponent implements OnInit {
                 this.zonas = zonas;
 
                 for (var z = 0; z < zonas.length; z++) {
-                    new google.maps.Circle({
+                    let zona = new google.maps.Circle({
                         radius: zonas[z].Radio,
                         center: new google.maps.LatLng(zonas[z].Latitude, zonas[z].Longitude),
                         strokeColor: '#FF0000',
@@ -153,6 +173,8 @@ export class MapsComponent implements OnInit {
                         clickable: true,
                         editable: false,
                     });
+
+                    this.zonasMapa.push(zona);
                 }
             }
         });

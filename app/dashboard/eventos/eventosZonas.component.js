@@ -17,12 +17,14 @@ var eventos_service_1 = require('./eventos.service');
 var tipo_sensor_service_1 = require('../tipo-sensores/tipo-sensor.service');
 var ciudades_service_1 = require('../ciudades/ciudades.service');
 var zonas_service_1 = require('../zonas/zonas.service');
+var sensores_service_1 = require('../sensores/sensores.service');
 var EventosZonasComponent = (function () {
-    function EventosZonasComponent(eventosService, tipoSensoresService, CiudadesService, ZonasService) {
+    function EventosZonasComponent(eventosService, tipoSensoresService, CiudadesService, ZonasService, SensoresService) {
         this.eventosService = eventosService;
         this.tipoSensoresService = tipoSensoresService;
         this.CiudadesService = CiudadesService;
         this.ZonasService = ZonasService;
+        this.SensoresService = SensoresService;
         //Nombres
         this.nombreCampoCiudad = 'Ciudad del evento';
         this.nombreCampoTS = 'Tipo sensor';
@@ -51,9 +53,12 @@ var EventosZonasComponent = (function () {
         this.oEvento = new evento_1.Evento();
         this.eventos = [];
         this.dispositivos = [];
+        this.sensores = [];
+        this.sensoresMapa = [];
         this.zonas = [];
         this.zonasMapa = [];
         this.inicializoDispositivo();
+        this.borrarSensoresMapa();
         this.borrarZonasMapa();
         this.getCiudades();
         this.getTipoSensores();
@@ -68,6 +73,12 @@ var EventosZonasComponent = (function () {
             this.zonasMapa[i].setMap(null);
         }
         this.zonasMapa = [];
+    };
+    EventosZonasComponent.prototype.borrarSensoresMapa = function () {
+        for (var i = 0; i < this.sensoresMapa.length; i++) {
+            this.sensoresMapa[i].setMap(null);
+        }
+        this.sensoresMapa = [];
     };
     //---> Funciones de eventos <---
     EventosZonasComponent.prototype.agregarEvento = function () {
@@ -131,6 +142,7 @@ var EventosZonasComponent = (function () {
         this.oEvento.cLongitude = ciudad.Longitud;
         this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
         this.getZonas(ciudad);
+        this.getSensores(ciudad);
     };
     EventosZonasComponent.prototype.changeTipoSensor = function (tipoSensor) {
         this.CampoTS = tipoSensor.nombre;
@@ -184,6 +196,20 @@ var EventosZonasComponent = (function () {
     EventosZonasComponent.prototype.getTipoSensores = function () {
         var _this = this;
         this.tipoSensoresService.getTipoBaseSensor().then(function (tipoSensores) { return _this.tipoSensores = tipoSensores; });
+    };
+    EventosZonasComponent.prototype.getSensores = function (ciudad) {
+        var _this = this;
+        this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(function (sensores) {
+            _this.sensores = sensores;
+            for (var i = 0; i < _this.sensores.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(_this.sensores[i].Latitude, _this.sensores[i].Longitude),
+                    title: _this.sensores[i].Tipo,
+                    map: _this.map
+                });
+                _this.sensoresMapa.push(marker);
+            }
+        });
     };
     EventosZonasComponent.prototype.setEvento = function (nuevo) {
         var _this = this;
@@ -243,7 +269,7 @@ var EventosZonasComponent = (function () {
             moduleId: module.id,
             templateUrl: 'eventosZonas.component.html'
         }), 
-        __metadata('design:paramtypes', [eventos_service_1.EventosService, tipo_sensor_service_1.TipoSensoresService, ciudades_service_1.CiudadesService, zonas_service_1.ZonasService])
+        __metadata('design:paramtypes', [eventos_service_1.EventosService, tipo_sensor_service_1.TipoSensoresService, ciudades_service_1.CiudadesService, zonas_service_1.ZonasService, sensores_service_1.SensoresService])
     ], EventosZonasComponent);
     return EventosZonasComponent;
 }());

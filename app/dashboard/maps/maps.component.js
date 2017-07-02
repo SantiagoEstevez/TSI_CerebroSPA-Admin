@@ -24,7 +24,9 @@ var MapsComponent = (function () {
         this.CampoCiudad = '';
         this.ciudades = [];
         this.sensores = [];
+        this.sensoresMapa = [];
         this.zonas = [];
+        this.zonasMapa = [];
     }
     ;
     MapsComponent.prototype.ngOnInit = function () {
@@ -41,11 +43,25 @@ var MapsComponent = (function () {
     //---> Funciones internas <---
     MapsComponent.prototype.inicializo = function () {
         this.CampoCiudad = this.nombreCampoCiudad;
+        this.borrarSensoresMapa();
+        this.borrarZonasMapa();
         this.getCiudades();
     };
     MapsComponent.prototype.cargoCiudad = function (ciudad) {
         this.getSensores(ciudad);
         this.getZonas(ciudad);
+    };
+    MapsComponent.prototype.borrarZonasMapa = function () {
+        for (var i = 0; i < this.zonasMapa.length; i++) {
+            this.zonasMapa[i].setMap(null);
+        }
+        this.zonasMapa = [];
+    };
+    MapsComponent.prototype.borrarSensoresMapa = function () {
+        for (var i = 0; i < this.sensoresMapa.length; i++) {
+            this.sensoresMapa[i].setMap(null);
+        }
+        this.sensoresMapa = [];
     };
     //---> Funciones de eventos <---
     MapsComponent.prototype.changeCiudad = function (ciudad) {
@@ -69,6 +85,7 @@ var MapsComponent = (function () {
                     title: _this.sensores[i].Tipo,
                     map: _this.map
                 });
+                _this.sensoresMapa.push(marker);
             }
         });
     };
@@ -78,7 +95,7 @@ var MapsComponent = (function () {
             if (zonas) {
                 _this.zonas = zonas;
                 for (var z = 0; z < zonas.length; z++) {
-                    new google.maps.Circle({
+                    var zona = new google.maps.Circle({
                         radius: zonas[z].Radio,
                         center: new google.maps.LatLng(zonas[z].Latitude, zonas[z].Longitude),
                         strokeColor: '#FF0000',
@@ -90,6 +107,7 @@ var MapsComponent = (function () {
                         clickable: true,
                         editable: false,
                     });
+                    _this.zonasMapa.push(zona);
                 }
             }
         });

@@ -6,12 +6,14 @@ import { Dispositivo } from './dispositivo';
 import { TipoBaseSensor } from '../tipo-sensores/tipo-base-sensor';
 import { Ciudad } from '../ciudades/ciudad'
 import { Zona } from '../zonas/zona'
+import { Sensor } from '../sensores/sensor'
 
 //Servicios.
 import { EventosService } from './eventos.service';
 import { TipoSensoresService } from '../tipo-sensores/tipo-sensor.service';
 import { CiudadesService } from '../ciudades/ciudades.service'
 import { ZonasService } from '../zonas/zonas.service'
+import { SensoresService } from '../sensores/sensores.service'
 
 declare var google: any;
 
@@ -27,7 +29,8 @@ export class EventosZonasComponent implements OnInit {
         private eventosService: EventosService,
         private tipoSensoresService: TipoSensoresService,
         private CiudadesService: CiudadesService,
-        private ZonasService: ZonasService
+        private ZonasService: ZonasService,
+        private SensoresService: SensoresService
     ) { };
 
     //Nombres
@@ -48,6 +51,8 @@ export class EventosZonasComponent implements OnInit {
     tipoSensores: TipoBaseSensor[];
     eventos: Evento[];
     dispositivos: Dispositivo[];
+    sensores: Sensor[];
+    sensoresMapa: any[];
     zonas: Zona[];
     zonasMapa: any[];
     reglas: string[] = [">=", "<="];
@@ -74,10 +79,13 @@ export class EventosZonasComponent implements OnInit {
         this.oEvento = new Evento();
         this.eventos = [];
         this.dispositivos = [];
+        this.sensores = [];
+        this.sensoresMapa = [];
         this.zonas = [];
         this.zonasMapa = [];
         this.inicializoDispositivo();
 
+        this.borrarSensoresMapa();
         this.borrarZonasMapa();
         this.getCiudades();
         this.getTipoSensores();   
@@ -94,6 +102,13 @@ export class EventosZonasComponent implements OnInit {
             this.zonasMapa[i].setMap(null);
         }
         this.zonasMapa = [];
+    }
+
+    borrarSensoresMapa() {
+        for (let i = 0; i < this.sensoresMapa.length; i++) {
+            this.sensoresMapa[i].setMap(null);
+        }
+        this.sensoresMapa = [];
     }
 
 
@@ -160,6 +175,7 @@ export class EventosZonasComponent implements OnInit {
 
         this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
         this.getZonas(ciudad);
+        this.getSensores(ciudad);
     }
 
     changeTipoSensor(tipoSensor: TipoBaseSensor) {
@@ -214,6 +230,22 @@ export class EventosZonasComponent implements OnInit {
     
     getTipoSensores(): void {
         this.tipoSensoresService.getTipoBaseSensor().then(tipoSensores => this.tipoSensores = tipoSensores);
+    }
+
+    getSensores(ciudad: Ciudad): void {
+        this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(sensores => {
+            this.sensores = sensores
+
+            for (var i = 0; i < this.sensores.length; i++) {
+                let marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(this.sensores[i].Latitude, this.sensores[i].Longitude),
+                    title: this.sensores[i].Tipo,
+                    map: this.map
+                });
+
+                this.sensoresMapa.push(marker);
+            }
+        });
     }
 
     setEvento(nuevo: Evento): void {
