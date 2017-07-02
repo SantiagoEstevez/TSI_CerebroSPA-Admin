@@ -2,6 +2,7 @@ import { Dispositivo } from './dispositivo';
 import { DataSource } from './DataSource';
 
 export class Evento {
+    Name: string;
     Nombre: string;
     Latitude: number;
     Longitude: number;
