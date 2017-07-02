@@ -57,7 +57,7 @@ var MapsComponent = (function () {
     //---> Funciones de servicios <---
     MapsComponent.prototype.getCiudades = function () {
         var _this = this;
-        this.ciudadesService.getCiudades().then(function (ciudades) { return _this.ciudades = ciudades; });
+        this.ciudadesService.getCiudades(localStorage.getItem('username')).then(function (ciudades) { return _this.ciudades = ciudades; });
     };
     MapsComponent.prototype.getSensores = function (ciudad) {
         var _this = this;

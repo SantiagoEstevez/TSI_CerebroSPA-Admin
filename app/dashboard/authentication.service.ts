@@ -7,7 +7,7 @@ import { Usuario } from '../usuarios/usuario'
 @Injectable()
 export class AuthenticationService {
     public token: string;
-    private url = 'http://localhost:6346/api/Usuario/Login/';
+    private url = 'http://localhost:6346/api/Usuario/LoginAdmin/';
     private headers = new Headers({ 'Content-Type': 'application/json' });
 
     constructor(private http: Http) {
@@ -54,6 +54,7 @@ export class AuthenticationService {
             .post(this.url, JSON.stringify(usuario), { headers: this.headers })
             .map(response => {
                 localStorage.setItem('token', response.json() as string);
+                localStorage.setItem('username', usuario.Username);
                 return true;
             });
     }
@@ -62,6 +63,7 @@ export class AuthenticationService {
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
     }
 
     getLoginStatus(): boolean {

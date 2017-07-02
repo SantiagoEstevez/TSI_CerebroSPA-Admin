@@ -33,7 +33,6 @@ var NavbarComponent = (function () {
         return 'Dashboard';
     };
     NavbarComponent.prototype.logout = function () {
-        console.log("deslogin");
         this.authenticationService.logout();
     };
     NavbarComponent.prototype.LoginStatus = function () {

@@ -32,8 +32,15 @@ var CiudadesService = (function () {
     //        setTimeout(() => resolve(this.getUsuarios()), 4000);
     //    });
     //}    
-    CiudadesService.prototype.getCiudades = function () {
-        var url = this.Url + "Ciudad/All/";
+    //getCiudades(): Promise<Ciudad[]> {
+    //    const url = `${this.Url}Ciudad/All/`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json() as Ciudad[])
+    //        .catch(this.handleError);
+    //}
+    CiudadesService.prototype.getCiudades = function (userName) {
+        var url = this.Url + "Ciudad/" + userName + "/";
         return this.http.get(url)
             .toPromise()
             .then(function (response) { return response.json(); })

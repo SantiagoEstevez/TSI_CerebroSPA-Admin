@@ -118,7 +118,7 @@ export class MapsComponent implements OnInit {
 
     //---> Funciones de servicios <---
     getCiudades(): void {
-        this.ciudadesService.getCiudades().then(ciudades => this.ciudades = ciudades);
+        this.ciudadesService.getCiudades(localStorage.getItem('username')).then(ciudades => this.ciudades = ciudades);
     }
 
     getSensores(ciudad: Ciudad): void {

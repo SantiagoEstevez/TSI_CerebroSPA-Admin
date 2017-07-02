@@ -30,8 +30,16 @@ export class CiudadesService {
     //    });
     //}    
 
-    getCiudades(): Promise<Ciudad[]> {
-        const url = `${this.Url}Ciudad/All/`;
+    //getCiudades(): Promise<Ciudad[]> {
+    //    const url = `${this.Url}Ciudad/All/`;
+    //    return this.http.get(url)
+    //        .toPromise()
+    //        .then(response => response.json() as Ciudad[])
+    //        .catch(this.handleError);
+    //}
+
+    getCiudades(userName: string): Promise<Ciudad[]> {
+        const url = `${this.Url}Ciudad/${userName}/`; 
         return this.http.get(url)
             .toPromise()
             .then(response => response.json() as Ciudad[])

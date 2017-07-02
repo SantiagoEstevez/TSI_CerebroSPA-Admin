@@ -90,7 +90,7 @@ var TipoSensoresComponent = (function () {
     TipoSensoresComponent.prototype.getCiudades = function () {
         var _this = this;
         this.ciudadesService
-            .getCiudades()
+            .getCiudades(localStorage.getItem('username'))
             .then(function (ciudades) { return _this.ciudades = ciudades; });
     };
     TipoSensoresComponent.prototype.getTipoSensores = function () {

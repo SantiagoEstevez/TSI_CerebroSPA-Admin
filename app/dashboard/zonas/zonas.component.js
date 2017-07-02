@@ -149,7 +149,7 @@ var ZonasComponent = (function () {
     //---> Funciones de servicios <---
     ZonasComponent.prototype.getCiudades = function () {
         var _this = this;
-        this.ciudadesService.getCiudades().then(function (ciudades) {
+        this.ciudadesService.getCiudades(localStorage.getItem('username')).then(function (ciudades) {
             _this.ciudades = ciudades;
             _this.getZonas();
         });

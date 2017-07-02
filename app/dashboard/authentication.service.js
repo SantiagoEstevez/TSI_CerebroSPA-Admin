@@ -14,7 +14,7 @@ require('rxjs/add/operator/map');
 var AuthenticationService = (function () {
     function AuthenticationService(http) {
         this.http = http;
-        this.url = 'http://localhost:6346/api/Usuario/Login/';
+        this.url = 'http://localhost:6346/api/Usuario/LoginAdmin/';
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         // set token if saved in local storage
         //var currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -54,6 +54,7 @@ var AuthenticationService = (function () {
             .post(this.url, JSON.stringify(usuario), { headers: this.headers })
             .map(function (response) {
             localStorage.setItem('token', response.json());
+            localStorage.setItem('username', usuario.Username);
             return true;
         });
     };
@@ -61,6 +62,7 @@ var AuthenticationService = (function () {
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
     };
     AuthenticationService.prototype.getLoginStatus = function () {
         if (localStorage.getItem('token')) {

@@ -94,7 +94,7 @@ var CiudadesComponent = (function () {
     //---> Funciones de servicios <---
     CiudadesComponent.prototype.getCiudades = function () {
         var _this = this;
-        this.ciudadesService.getCiudades().then(function (ciudades) {
+        this.ciudadesService.getCiudades(localStorage.getItem('username')).then(function (ciudades) {
             if (ciudades) {
                 _this.ciudades = ciudades;
             }

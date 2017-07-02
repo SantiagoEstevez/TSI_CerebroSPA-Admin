@@ -114,7 +114,7 @@ export class CiudadesComponent implements OnInit {
 
     //---> Funciones de servicios <---
     getCiudades(): void {
-        this.ciudadesService.getCiudades().then(ciudades => {
+        this.ciudadesService.getCiudades(localStorage.getItem('username')).then(ciudades => {
             if (ciudades) {
                 this.ciudades = ciudades
             }

@@ -117,7 +117,7 @@ export class SensoresComponent implements OnInit {
 
     //---> Funciones de servicios <---
     getCiudades(): void {
-        this.ciudadesService.getCiudades().then(ciudades => {
+        this.ciudadesService.getCiudades(localStorage.getItem('username')).then(ciudades => {
             this.ciudades = ciudades;
             this.getSensores();
         });

@@ -115,7 +115,7 @@ export class TipoSensoresComponent implements OnInit {
     //---> Funciones de servicios <---
     getCiudades(): void {
         this.ciudadesService
-            .getCiudades()
+            .getCiudades(localStorage.getItem('username'))
             .then(ciudades => this.ciudades = ciudades);
     }
 

@@ -121,7 +121,7 @@ var EventosComponent = (function () {
     //---> Funciones de servicios <---
     EventosComponent.prototype.getCiudades = function () {
         var _this = this;
-        this.CiudadesService.getCiudades().then(function (ciudades) {
+        this.CiudadesService.getCiudades(localStorage.getItem('username')).then(function (ciudades) {
             _this.ciudades = ciudades;
             _this.getEventos();
         });

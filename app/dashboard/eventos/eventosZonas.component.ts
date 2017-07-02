@@ -175,7 +175,7 @@ export class EventosZonasComponent implements OnInit {
 
     //---> Funciones de servicios <---
     getCiudades() {
-        this.CiudadesService.getCiudades().then(ciudades => {
+        this.CiudadesService.getCiudades(localStorage.getItem('username')).then(ciudades => {
             this.ciudades = ciudades;
             this.getEventos();
         });
