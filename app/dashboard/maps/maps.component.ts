@@ -105,6 +105,8 @@ export class MapsComponent implements OnInit {
     }
 
     cargoCiudad(ciudad: Ciudad) {
+        this.borrarSensoresMapa();
+        this.borrarZonasMapa();
         this.getSensores(ciudad);
         this.getZonas(ciudad);
     }

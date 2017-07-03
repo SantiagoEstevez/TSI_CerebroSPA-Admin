@@ -12,10 +12,12 @@ var core_1 = require('@angular/core');
 var ciudades_service_1 = require('../ciudades/ciudades.service');
 var zona_1 = require('./zona');
 var zonas_service_1 = require('./zonas.service');
+var sensores_service_1 = require('../sensores/sensores.service');
 var ZonasComponent = (function () {
-    function ZonasComponent(ciudadesService, zonasService) {
+    function ZonasComponent(ciudadesService, zonasService, SensoresService) {
         this.ciudadesService = ciudadesService;
         this.zonasService = zonasService;
+        this.SensoresService = SensoresService;
         this.nombreCampoCiudad = 'Ciudad de la zona';
         this.CampoCiudad = '';
         this.editar = false;
@@ -99,10 +101,18 @@ var ZonasComponent = (function () {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.nuevaZona = new zona_1.Zona();
         this.zonas = [];
+        this.sensoresMapa = [];
         this.circle.setCenter(null);
         this.circle.setRadius(1000);
         this.editar = false;
+        this.borrarSensoresMapa();
         this.getCiudades();
+    };
+    ZonasComponent.prototype.borrarSensoresMapa = function () {
+        for (var i = 0; i < this.sensoresMapa.length; i++) {
+            this.sensoresMapa[i].setMap(null);
+        }
+        this.sensoresMapa = [];
     };
     //---> Funciones de eventos <---
     ZonasComponent.prototype.changeCiudad = function (ciudad) {
@@ -111,6 +121,7 @@ var ZonasComponent = (function () {
         this.nuevaZona.cLatitude = ciudad.Latitud;
         this.nuevaZona.cLongitude = ciudad.Longitud;
         this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
+        this.getSensores(ciudad);
     };
     ZonasComponent.prototype.agregarZona = function () {
         this.nuevaZona.Latitude = this.circle.getCenter().lat();
@@ -185,6 +196,20 @@ var ZonasComponent = (function () {
             _this.inicializo();
         });
     };
+    ZonasComponent.prototype.getSensores = function (ciudad) {
+        var _this = this;
+        this.borrarSensoresMapa();
+        this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(function (sensores) {
+            for (var i = 0; i < sensores.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(sensores[i].Latitude, sensores[i].Longitude),
+                    title: sensores[i].Tipo,
+                    map: _this.map
+                });
+                _this.sensoresMapa.push(marker);
+            }
+        });
+    };
     ZonasComponent.prototype.updateZona = function (zona) {
         //this.zonasService.update(zona).then(() => {
         //    this.inicializo();
@@ -196,7 +221,7 @@ var ZonasComponent = (function () {
             moduleId: module.id,
             templateUrl: 'zonas.component.html'
         }), 
-        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, zonas_service_1.ZonasService])
+        __metadata('design:paramtypes', [ciudades_service_1.CiudadesService, zonas_service_1.ZonasService, sensores_service_1.SensoresService])
     ], ZonasComponent);
     return ZonasComponent;
 }());

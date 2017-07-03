@@ -233,6 +233,8 @@ export class EventosZonasComponent implements OnInit {
     }
 
     getSensores(ciudad: Ciudad): void {
+        this.borrarSensoresMapa();
+
         this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(sensores => {
             this.sensores = sensores
 

@@ -48,6 +48,8 @@ var MapsComponent = (function () {
         this.getCiudades();
     };
     MapsComponent.prototype.cargoCiudad = function (ciudad) {
+        this.borrarSensoresMapa();
+        this.borrarZonasMapa();
         this.getSensores(ciudad);
         this.getZonas(ciudad);
     };

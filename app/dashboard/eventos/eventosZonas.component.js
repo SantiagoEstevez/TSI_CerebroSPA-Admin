@@ -199,6 +199,7 @@ var EventosZonasComponent = (function () {
     };
     EventosZonasComponent.prototype.getSensores = function (ciudad) {
         var _this = this;
+        this.borrarSensoresMapa();
         this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(function (sensores) {
             _this.sensores = sensores;
             for (var i = 0; i < _this.sensores.length; i++) {

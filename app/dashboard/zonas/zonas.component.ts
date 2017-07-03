@@ -3,6 +3,7 @@ import { CiudadesService } from '../ciudades/ciudades.service';
 import { Ciudad } from '../ciudades/ciudad';
 import { Zona } from './zona';
 import { ZonasService } from './zonas.service';
+import { SensoresService } from '../sensores/sensores.service'
 
 declare var google: any;
 
@@ -16,7 +17,8 @@ export class ZonasComponent implements OnInit {
 
     constructor(
         private ciudadesService: CiudadesService,
-        private zonasService: ZonasService
+        private zonasService: ZonasService,
+        private SensoresService: SensoresService
     ) { };
 
     nombreCampoCiudad: string = 'Ciudad de la zona';
@@ -27,6 +29,7 @@ export class ZonasComponent implements OnInit {
     circle: any;
     editar: boolean = false;
 
+    sensoresMapa: any[];
     ciudades: Ciudad[];
     zonas: Zona[];
     nuevaZona: Zona;
@@ -119,12 +122,21 @@ export class ZonasComponent implements OnInit {
         this.CampoCiudad = this.nombreCampoCiudad;
         this.nuevaZona = new Zona();
         this.zonas = [];
+        this.sensoresMapa = [];
 
         this.circle.setCenter(null);
         this.circle.setRadius(1000);
         this.editar = false;
 
+        this.borrarSensoresMapa();
         this.getCiudades();
+    }
+
+    borrarSensoresMapa() {
+        for (let i = 0; i < this.sensoresMapa.length; i++) {
+            this.sensoresMapa[i].setMap(null);
+        }
+        this.sensoresMapa = [];
     }
 
 
@@ -135,6 +147,8 @@ export class ZonasComponent implements OnInit {
         this.nuevaZona.cLatitude = ciudad.Latitud;
         this.nuevaZona.cLongitude = ciudad.Longitud;
         this.map.setCenter(new google.maps.LatLng(ciudad.Latitud, ciudad.Longitud));
+
+        this.getSensores(ciudad);
     }
 
     agregarZona() {
@@ -209,6 +223,22 @@ export class ZonasComponent implements OnInit {
         nueva.Nombre = "Zona";
         this.zonasService.setZona(nueva).then(() => {
             this.inicializo();
+        });
+    }
+
+    getSensores(ciudad: Ciudad): void {
+        this.borrarSensoresMapa();
+
+        this.SensoresService.getSensoresByCityName(ciudad.Nombre).subscribe(sensores => {
+            for (var i = 0; i < sensores.length; i++) {
+                let marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(sensores[i].Latitude, sensores[i].Longitude),
+                    title: sensores[i].Tipo,
+                    map: this.map
+                });
+
+                this.sensoresMapa.push(marker);
+            }
         });
     }
 
