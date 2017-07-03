@@ -119,6 +119,10 @@ export class EventosZonasComponent implements OnInit {
                 if (!isNaN(this.oEvento.Latitude) && !isNaN(this.oEvento.Longitude)) {
                     this.oEvento.SendoresAsociados = this.dispositivos;
                     //this.oEvento.SendoresAsociados.push({ ID: 1, Tipo: "Agua", Latitude: 1, Longitude: 1, Umbral: "> 900" });
+
+                    this.borrarSensoresMapa();
+                    this.borrarZonasMapa();
+
                     this.setEvento(this.oEvento);
                 } else {
                     alert("Debe seleccionar una zona.");
